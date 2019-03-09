@@ -4,6 +4,14 @@ defmodule Nota.Bible do
   alias Nota.Repo
   alias Nota.Bible.Verse
 
+  def data() do
+    Dataloader.Ecto.new(Repo, query: &query/2)
+  end
+
+  def query(queryable, _params) do
+    queryable
+  end
+
   def get_verse(id), do: Repo.get(Verse, id)
 
   # def get_verses(%{chapter_id: chapter_id, book_id: book_id}) do

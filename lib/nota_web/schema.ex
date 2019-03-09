@@ -1,7 +1,10 @@
 defmodule NotaWeb.Schema do
   use Absinthe.Schema
 
-  alias Nota.Nota
+  alias Nota.Repo
+  alias Nota.Bible
+  alias Nota.Annotations
+
 
   # import_types(__MODULE__.Nota)
   import_types(__MODULE__.Bible)
@@ -22,8 +25,10 @@ defmodule NotaWeb.Schema do
   def context(ctx) do
     loader =
       Dataloader.new
-      |> Dataloader.add_source(Nota.Pet, Nota.data())
-      |> Dataloader.add_source(Nota.Owner, Nota.data())
+      |> Dataloader.add_source(Bible.Verse, Bible.data())
+      |> Dataloader.add_source(Annotations.Annotation, Annotations.data())
+      |> IO.inspect
+      # |> Dataloader.add_source(Nota.Owner, Nota.data())
 
     Map.put(ctx, :loader, loader)
   end

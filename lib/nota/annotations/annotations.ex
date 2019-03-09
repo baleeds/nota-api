@@ -8,6 +8,14 @@ defmodule Nota.Annotations do
 
   alias Nota.Annotations.Annotation
 
+  def data() do
+    Dataloader.Ecto.new(Repo, query: &query/2)
+  end
+
+  def query(queryable, _params) do
+    queryable
+  end
+
   @doc """
   Returns the list of annotation.
 

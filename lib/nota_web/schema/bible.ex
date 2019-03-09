@@ -1,11 +1,12 @@
 defmodule NotaWeb.Schema.Bible do
   use Absinthe.Schema.Notation
 
-  alias NotaWeb.Resolvers.Bible.Verse
   alias Nota.Bible
+  alias Nota.Annotations
 
-  # # alias Absinthe.Middleware.Dataloader
-  # import Absinthe.Resolution.Helpers, only: [dataloader: 1]
+  alias NotaWeb.Resolvers.Bible.Verse
+
+  import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
   object :bible_queries do
     field :verse, non_null(:verse) do
@@ -28,5 +29,7 @@ defmodule NotaWeb.Schema.Bible do
     field(:chapter_id, non_null(:integer))
     field(:verse_id, non_null(:integer))
     field(:text, :string)
+    
+    field(:annotations, list_of(non_null(:annotation)), resolve: dataloader(Annotations.Annotation))
   end
 end

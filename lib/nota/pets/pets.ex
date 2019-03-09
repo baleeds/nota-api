@@ -9,14 +9,6 @@ defmodule Nota.Nota do
 
   alias Nota.Nota.Pet
 
-  def data() do
-    Dataloader.Ecto.new(Repo, query: &query/2)
-  end
-
-  def query(queryable, _params) do
-    queryable
-  end
-
   def list_pets do
     Repo.all(Pet)
   end
