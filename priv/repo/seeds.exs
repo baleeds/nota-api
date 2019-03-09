@@ -1,20 +1,17 @@
 alias Nota.Repo
-# alias Nota.Nota.{
-#   Pet,
-#   Owner,
-# }
+alias Nota.Nota.{
+  Annotation
+}
 
-# Repo.insert!(%Owner{
-#   name: "Ben",
-# })
+Repo.insert!(%Annotation{
+  text: "First annotation",
+  verse_id: 01001001
+})
 
-# Repo.insert!(%Owner{
-#   name: "Erica",
-# })
-
-# Repo.insert!(%Owner{
-#   name: "Marie",
-# })
+Repo.insert!(%Annotation{
+  text: "Second annotation",
+  verse_id: 01001001
+})
 
 # Repo.insert!(%Pet{
 #   name: "Snow",
@@ -26,5 +23,5 @@ alias Nota.Repo
 #   breed: "Dog",
 # })
 
-query = "copy verses(id, book, chapter, verse, text) from 'C:\\Code\\biblenotate\\bn-ex\\priv\\repo\\data\\t_web.csv' DELIMITER ',' CSV HEADER;"
+query = "copy verses(id, book_id, chapter_id, verse_id, text) from 'C:\\Code\\biblenotate\\bn-ex\\priv\\repo\\data\\t_web.csv' DELIMITER ',' CSV HEADER;"
 Ecto.Adapters.SQL.query(Repo, query)

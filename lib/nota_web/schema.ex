@@ -3,17 +3,21 @@ defmodule NotaWeb.Schema do
 
   alias Nota.Nota
 
-  import_types(__MODULE__.Nota)
+  # import_types(__MODULE__.Nota)
+  import_types(__MODULE__.Bible)
+  import_types(__MODULE__.Annotations)
 
   query do
-    import_fields(:pets_queries)
+    # import_fields(:pets_queries)
+    import_fields(:bible_queries)
+    import_fields(:annotations_queries)
     # import_fields(:galleries_queries)
   end
 
-  mutation do
-    import_fields(:pets_mutations)
-    # import_fields(:galleries_mutations)
-  end
+  # mutation do
+  #   # import_fields(:pets_mutations)
+  #   # import_fields(:galleries_mutations)
+  # end
 
   def context(ctx) do
     loader =
