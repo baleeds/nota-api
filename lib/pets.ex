@@ -1,6 +1,6 @@
-defmodule Pets do
+defmodule Nota do
   @moduledoc """
-  Pets keeps the contexts that define your domain
+  Nota keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

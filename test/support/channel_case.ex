@@ -1,4 +1,4 @@
-defmodule PetsWeb.ChannelCase do
+defmodule NotaWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -21,15 +21,15 @@ defmodule PetsWeb.ChannelCase do
       use Phoenix.ChannelTest
 
       # The default endpoint for testing
-      @endpoint PetsWeb.Endpoint
+      @endpoint NotaWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Pets.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Nota.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Pets.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Nota.Repo, {:shared, self()})
     end
 
     :ok

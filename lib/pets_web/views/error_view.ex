@@ -1,5 +1,5 @@
-defmodule PetsWeb.ErrorView do
-  use PetsWeb, :view
+defmodule NotaWeb.ErrorView do
+  use NotaWeb, :view
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.

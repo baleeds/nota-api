@@ -1,4 +1,4 @@
-defmodule PetsWeb.ErrorHelpers do
+defmodule NotaWeb.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
@@ -25,9 +25,9 @@ defmodule PetsWeb.ErrorHelpers do
     # should be written to the errors.po file. The :count option is
     # set by Ecto and indicates we should also apply plural rules.
     if count = opts[:count] do
-      Gettext.dngettext(PetsWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(NotaWeb.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(PetsWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(NotaWeb.Gettext, "errors", msg, opts)
     end
   end
 end

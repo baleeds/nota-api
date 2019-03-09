@@ -1,4 +1,4 @@
-defmodule Pets.Repo.Migrations.CreatePetOwners do
+defmodule Nota.Repo.Migrations.CreatePetOwners do
   use Ecto.Migration
 
   @table :pet_owners

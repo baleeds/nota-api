@@ -1,8 +1,8 @@
-defmodule Pets.Pets.PetOwner do
+defmodule Nota.Nota.PetOwner do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Pets.Pets.{Owner, Pet}
+  alias Nota.Nota.{Owner, Pet}
 
   @required_fields ~w(
     owner_id

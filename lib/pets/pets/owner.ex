@@ -1,8 +1,8 @@
-defmodule Pets.Pets.Owner do
+defmodule Nota.Nota.Owner do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Pets.Pets.Pet
+  alias Nota.Nota.Pet
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id

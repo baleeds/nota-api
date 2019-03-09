@@ -1,4 +1,4 @@
-# Pets
+# Nota
 
 To start your Phoenix server:
 

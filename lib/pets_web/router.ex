@@ -1,5 +1,5 @@
-defmodule PetsWeb.Router do
-  use PetsWeb, :router
+defmodule NotaWeb.Router do
+  use NotaWeb, :router
 
   pipeline :api do
     plug(:accepts, ["json"])
@@ -8,7 +8,7 @@ defmodule PetsWeb.Router do
   scope "/graphql" do
     pipe_through(:api)
 
-    forward("/", Absinthe.Plug, schema: PetsWeb.Schema)
+    forward("/", Absinthe.Plug, schema: NotaWeb.Schema)
   end
 
   scope "/graphiql" do
@@ -17,7 +17,7 @@ defmodule PetsWeb.Router do
     forward(
       "/",
       Absinthe.Plug.GraphiQL,
-      schema: PetsWeb.Schema,
+      schema: NotaWeb.Schema,
       interface: :playground
     )
   end

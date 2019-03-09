@@ -1,5 +1,5 @@
-alias Pets.Repo
-alias Pets.Pets.{
+alias Nota.Repo
+alias Nota.Nota.{
   Pet,
   Owner,
 }

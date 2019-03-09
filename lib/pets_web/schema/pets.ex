@@ -1,12 +1,12 @@
-defmodule PetsWeb.Schema.Pets do
+defmodule NotaWeb.Schema.Nota do
   use Absinthe.Schema.Notation
 
-  alias PetsWeb.Resolvers.Pets.{
+  alias NotaWeb.Resolvers.Nota.{
     Pet,
     Owner
   }
 
-  alias Pets.Pets
+  alias Nota.Nota
 
   # # alias Absinthe.Middleware.Dataloader
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
@@ -57,13 +57,13 @@ defmodule PetsWeb.Schema.Pets do
     field(:id, non_null(:id))
     field(:name, non_null(:string))
     field(:breed, non_null(:string))
-    field(:owners, list_of(:owner), resolve: dataloader(Pets.Owner))
+    field(:owners, list_of(:owner), resolve: dataloader(Nota.Owner))
   end
 
   object :owner do
     field(:id, non_null(:id))
     field(:name, non_null(:string))
-    field(:pets, list_of(:pet), resolve: dataloader(Pets.Pet))
+    field(:pets, list_of(:pet), resolve: dataloader(Nota.Pet))
   end
 
   input_object :create_pet_input do

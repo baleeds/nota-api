@@ -1,4 +1,4 @@
-defmodule PetsWeb.ConnCase do
+defmodule NotaWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -19,18 +19,18 @@ defmodule PetsWeb.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
-      import PetsWeb.Router.Helpers
+      import NotaWeb.Router.Helpers
 
       # The default endpoint for testing
-      @endpoint PetsWeb.Endpoint
+      @endpoint NotaWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Pets.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Nota.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Pets.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Nota.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

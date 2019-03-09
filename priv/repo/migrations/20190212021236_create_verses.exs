@@ -1,13 +1,12 @@
-defmodule Pets.Repo.Migrations.CreatePets do
+defmodule Nota.Repo.Migrations.CreateVerses do
   use Ecto.Migration
 
   def change do
-    create table(:pets, primary_key: false) do
-      add :id, :uuid, primary_key: true
-      add :name, :string
-      add :breed, :string
-
-      timestamps()
+    create table(:verses, primary_key: false) do
+      add :id, :integer, primary_key: true
+      add :book, :string
+      add :chapter, :string
+      add :verse, :text
     end
 
   end

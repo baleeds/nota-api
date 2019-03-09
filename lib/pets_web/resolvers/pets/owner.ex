@@ -1,14 +1,14 @@
-defmodule PetsWeb.Resolvers.Pets.Owner do
-  alias Pets.{Pets}
+defmodule NotaWeb.Resolvers.Nota.Owner do
+  alias Nota.{Nota}
 
   def all(_, _, _) do
-    {:ok, Pets.list_owners()}
+    {:ok, Nota.list_owners()}
   end
 
   def create(_, %{input: create_subject_input}, _) do
     create_subject_input
     |> IO.inspect
-    |> Pets.create_pet
+    |> Nota.create_pet
     |> IO.inspect
     |> case do
       {:ok, pet} -> {:ok, %{

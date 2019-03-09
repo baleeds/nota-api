@@ -1,4 +1,4 @@
-defmodule Pets.Application do
+defmodule Nota.Application do
   use Application
 
   # See https://hexdocs.pm/elixir/Application.html
@@ -9,23 +9,23 @@ defmodule Pets.Application do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
-      supervisor(Pets.Repo, []),
+      supervisor(Nota.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(PetsWeb.Endpoint, [])
-      # Start your own worker by calling: Pets.Worker.start_link(arg1, arg2, arg3)
-      # worker(Pets.Worker, [arg1, arg2, arg3]),
+      supervisor(NotaWeb.Endpoint, [])
+      # Start your own worker by calling: Nota.Worker.start_link(arg1, arg2, arg3)
+      # worker(Nota.Worker, [arg1, arg2, arg3]),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Pets.Supervisor]
+    opts = [strategy: :one_for_one, name: Nota.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    PetsWeb.Endpoint.config_change(changed, removed)
+    NotaWeb.Endpoint.config_change(changed, removed)
     :ok
   end
 end

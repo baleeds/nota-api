@@ -1,9 +1,9 @@
-defmodule PetsWeb.Schema do
+defmodule NotaWeb.Schema do
   use Absinthe.Schema
 
-  alias Pets.Pets
+  alias Nota.Nota
 
-  import_types(__MODULE__.Pets)
+  import_types(__MODULE__.Nota)
 
   query do
     import_fields(:pets_queries)
@@ -18,8 +18,8 @@ defmodule PetsWeb.Schema do
   def context(ctx) do
     loader =
       Dataloader.new
-      |> Dataloader.add_source(Pets.Pet, Pets.data())
-      |> Dataloader.add_source(Pets.Owner, Pets.data())
+      |> Dataloader.add_source(Nota.Pet, Nota.data())
+      |> Dataloader.add_source(Nota.Owner, Nota.data())
 
     Map.put(ctx, :loader, loader)
   end

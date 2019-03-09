@@ -1,4 +1,4 @@
-defmodule Pets.Repo.Migrations.CreateOwners do
+defmodule Nota.Repo.Migrations.CreateOwners do
   use Ecto.Migration
 
   def change do

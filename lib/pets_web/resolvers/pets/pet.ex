@@ -1,15 +1,15 @@
-defmodule PetsWeb.Resolvers.Pets.Pet do
-  alias Pets.{Pets}
-  alias Pets.Pet
+defmodule NotaWeb.Resolvers.Nota.Pet do
+  alias Nota.{Nota}
+  alias Nota.Pet
 
   def all(_, _, _) do
-    {:ok, Pets.list_pets()}
+    {:ok, Nota.list_pets()}
   end
 
   def create(_, %{input: create_pet_input}, _) do
     create_pet_input
     |> IO.inspect
-    |> Pets.create_pet
+    |> Nota.create_pet
     |> IO.inspect
     |> case do
       {:ok, pet} -> {:ok, %{
@@ -23,7 +23,7 @@ defmodule PetsWeb.Resolvers.Pets.Pet do
 
   def add_owner_to_pet(_, %{input: add_owner_to_pet_input}, _) do
     add_owner_to_pet_input
-    |> Pets.add_owner_to_pet
+    |> Nota.add_owner_to_pet
     |> case do
       {:ok, pet} -> {:ok, %{
         pet: pet
@@ -34,10 +34,10 @@ defmodule PetsWeb.Resolvers.Pets.Pet do
   end
 
   def update_pet(_, %{input: update_pet_input}, _) do
-    with %Pet{} = pet <- Pets.get_pet!(update_pet_input.id) do
+    with %Pet{} = pet <- Nota.get_pet!(update_pet_input.id) do
       pet
       |> IO.inspect
-      |> Pets.update_pet(update_pet_input)
+      |> Nota.update_pet(update_pet_input)
       |> IO.inspect
       |> case do
         {:ok, pet} -> {:ok, %{

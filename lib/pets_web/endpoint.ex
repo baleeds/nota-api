@@ -1,7 +1,7 @@
-defmodule PetsWeb.Endpoint do
+defmodule NotaWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :pictures
 
-  socket("/socket", PetsWeb.UserSocket)
+  socket("/socket", NotaWeb.UserSocket)
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -48,7 +48,7 @@ defmodule PetsWeb.Endpoint do
     max_age: 86400
   )
 
-  plug(PetsWeb.Router)
+  plug(NotaWeb.Router)
 
   @doc """
   Callback invoked for dynamically configuring the endpoint.

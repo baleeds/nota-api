@@ -1,4 +1,4 @@
-defmodule Pets.Repo do
+defmodule Nota.Repo do
   use Ecto.Repo, otp_app: :pictures
 
   @doc """

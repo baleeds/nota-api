@@ -1,10 +1,10 @@
-defmodule Pets.ClassesTest do
-  use Pets.DataCase
+defmodule Nota.ClassesTest do
+  use Nota.DataCase
 
-  alias Pets.Classes
+  alias Nota.Classes
 
   describe "teachers" do
-    alias Pets.Classes.Teacher
+    alias Nota.Classes.Teacher
 
     @valid_attrs %{name: "some name"}
     @update_attrs %{name: "some updated name"}
@@ -64,7 +64,7 @@ defmodule Pets.ClassesTest do
   end
 
   describe "subjects" do
-    alias Pets.Classes.Subject
+    alias Nota.Classes.Subject
 
     @valid_attrs %{name: "some name"}
     @update_attrs %{name: "some updated name"}

@@ -1,4 +1,4 @@
-defmodule Pets.DataCase do
+defmodule Nota.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -16,20 +16,20 @@ defmodule Pets.DataCase do
 
   using do
     quote do
-      alias Pets.Repo
+      alias Nota.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Pets.DataCase
+      import Nota.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Pets.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Nota.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Pets.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Nota.Repo, {:shared, self()})
     end
 
     :ok

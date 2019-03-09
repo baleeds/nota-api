@@ -1,13 +1,13 @@
-defmodule Pets.Pets do
+defmodule Nota.Nota do
   @moduledoc """
-  The Pets context.
+  The Nota context.
   """
 
   import Ecto.Query, warn: false
   alias Ecto.Multi
-  alias Pets.Repo
+  alias Nota.Repo
 
-  alias Pets.Pets.Pet
+  alias Nota.Nota.Pet
 
   def data() do
     Dataloader.Ecto.new(Repo, query: &query/2)
@@ -44,7 +44,7 @@ defmodule Pets.Pets do
   end
 
 
-  alias Pets.Pets.Owner
+  alias Nota.Nota.Owner
 
   def list_owners do
     Repo.all(Owner)
@@ -73,7 +73,7 @@ defmodule Pets.Pets do
   end
 
 
-  alias Pets.Pets.PetOwner
+  alias Nota.Nota.PetOwner
 
   def get_pet_owner!(id), do: Repo.get!(PetOwner, id)
 

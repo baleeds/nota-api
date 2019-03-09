@@ -1,12 +1,12 @@
-defmodule PetsWeb do
+defmodule NotaWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, views, channels and so on.
 
   This can be used in your application as:
 
-      use PetsWeb, :controller
-      use PetsWeb, :view
+      use NotaWeb, :controller
+      use NotaWeb, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -19,10 +19,10 @@ defmodule PetsWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: PetsWeb
+      use Phoenix.Controller, namespace: NotaWeb
       import Plug.Conn
-      import PetsWeb.Router.Helpers
-      import PetsWeb.Gettext
+      import NotaWeb.Router.Helpers
+      import NotaWeb.Gettext
     end
   end
 
@@ -30,14 +30,14 @@ defmodule PetsWeb do
     quote do
       use Phoenix.View,
         root: "lib/pictures_web/templates",
-        namespace: PetsWeb
+        namespace: NotaWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
 
-      import PetsWeb.Router.Helpers
-      import PetsWeb.ErrorHelpers
-      import PetsWeb.Gettext
+      import NotaWeb.Router.Helpers
+      import NotaWeb.ErrorHelpers
+      import NotaWeb.Gettext
     end
   end
 
@@ -52,7 +52,7 @@ defmodule PetsWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import PetsWeb.Gettext
+      import NotaWeb.Gettext
     end
   end
 
