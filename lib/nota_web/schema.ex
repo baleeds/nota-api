@@ -17,10 +17,10 @@ defmodule NotaWeb.Schema do
     # import_fields(:galleries_queries)
   end
 
-  # mutation do
-  #   # import_fields(:pets_mutations)
-  #   # import_fields(:galleries_mutations)
-  # end
+  mutation do
+    import_fields(:annotations_mutations)
+    # import_fields(:galleries_mutations)
+  end
 
   def context(ctx) do
     loader =

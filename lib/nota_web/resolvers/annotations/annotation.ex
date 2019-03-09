@@ -17,6 +17,15 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     end
   end
 
+  def save(_, %{input: input}, _) do
+    Annotations.save_annotation(input)
+    |> IO.inspect
+    |> case do
+      {:ok, %{updated_annotation: annotation}} -> {:ok, %{annotation: annotation}}
+      e -> e
+    end
+  end
+
   # defp transform_errors(changeset) do
   #   changeset
   #   |> Ecto.Changeset.traverse_errors(&format_error/1)

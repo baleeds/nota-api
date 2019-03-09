@@ -4,6 +4,8 @@ defmodule Nota.Annotations do
   """
 
   import Ecto.Query, warn: false
+  alias Ecto.Multi
+
   alias Nota.Repo
 
   alias Nota.Annotations.Annotation
@@ -81,6 +83,19 @@ defmodule Nota.Annotations do
     |> Repo.update()
   end
 
+  def update_annotation(%{id: id} = attrs) do
+    Multi.new()
+    |> Multi.run(:annotation_id, fn _ -> {:ok, id} end)
+    |> Multi.run(:old_annotation, fn _ -> 
+      case get_annotation!(id) do
+        nil -> {:error, %{key: :annotation, message: "not found"}}
+        annotation -> {:ok, annotation}
+      end
+    end)
+    |> Multi.run(:updated_annotation, fn %{old_annotation: old_annotation} -> update_annotation(old_annotation, attrs) end)
+    |> Repo.transaction()
+  end
+
   @doc """
   Deletes a Annotation.
 
@@ -108,5 +123,13 @@ defmodule Nota.Annotations do
   """
   def change_annotation(%Annotation{} = annotation) do
     Annotation.changeset(annotation, %{})
+  end
+
+  def save_annotation(%{id: id} = attrs) do
+    update_annotation(attrs)
+  end
+
+  def save_annotation(attrs) do
+    create_annotation(attrs)
   end
 end

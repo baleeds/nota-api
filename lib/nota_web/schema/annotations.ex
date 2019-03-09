@@ -35,8 +35,8 @@ defmodule NotaWeb.Schema.Annotations do
     field(:verse, non_null(:verse), resolve: dataloader(Bible.Verse))
   end
 
-  object :save_annotation_input do
-    field :id, non_null(:id)
+  input_object :save_annotation_input do
+    field :id, :id
     field :text, non_null(:string)
     field :verse_id, non_null(:id)
   end
