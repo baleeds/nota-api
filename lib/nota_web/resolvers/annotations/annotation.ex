@@ -9,6 +9,14 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     end
   end
 
+  def get_all(_, _, _) do
+    Annotations.list_annotation()
+    |> case do
+      nil -> {:error, "Error retrieving annotations"}
+      annotations -> {:ok, annotations}
+    end
+  end
+
   # defp transform_errors(changeset) do
   #   changeset
   #   |> Ecto.Changeset.traverse_errors(&format_error/1)

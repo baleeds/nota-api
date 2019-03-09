@@ -18,7 +18,7 @@ defmodule Nota.Annotations.Annotation do
   schema "annotation" do
     field :text, :string
 
-    belongs_to :verse, Verse, type: :binary_id
+    belongs_to :verse, Verse, type: :integer
 
     timestamps()
   end

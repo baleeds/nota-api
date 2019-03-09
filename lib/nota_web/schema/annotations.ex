@@ -12,11 +12,16 @@ defmodule NotaWeb.Schema.Annotations do
 
       resolve(&Annotation.get/3)
     end
+
+    field :annotations, list_of(non_null(:annotation)) do
+      resolve(&Annotation.get_all/3)
+    end
   end
 
   object :annotation do
     field(:id, non_null(:id))
     field(:text, non_null(:string))
+    field(:verse_id, non_null(:id))
     field(:verse, non_null(:verse))
   end
 end
