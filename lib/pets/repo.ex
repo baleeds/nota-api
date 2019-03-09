@@ -1,5 +1,5 @@
 defmodule Nota.Repo do
-  use Ecto.Repo, otp_app: :pictures
+  use Ecto.Repo, otp_app: :nota
 
   @doc """
   Dynamically loads the repository url from the

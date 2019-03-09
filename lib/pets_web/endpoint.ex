@@ -1,5 +1,5 @@
 defmodule NotaWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :pictures
+  use Phoenix.Endpoint, otp_app: :nota
 
   socket("/socket", NotaWeb.UserSocket)
 
@@ -9,7 +9,7 @@ defmodule NotaWeb.Endpoint do
   # when deploying your static files in production.
   # plug(Plug.Static,
   #   at: "/",
-  #   from: :pictures,
+  #   from: :nota,
   #   gzip: false,
   #   only: ~w(css fonts images js favicon.ico robots.txt)
   # )

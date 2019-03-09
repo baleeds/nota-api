@@ -4,9 +4,10 @@ defmodule Nota.Repo.Migrations.CreateVerses do
   def change do
     create table(:verses, primary_key: false) do
       add :id, :integer, primary_key: true
-      add :book, :string
-      add :chapter, :string
-      add :verse, :text
+      add :book, :integer
+      add :chapter, :integer
+      add :verse, :integer
+      add :text, :text
     end
 
   end
