@@ -9,7 +9,9 @@ defmodule Nota.Annotations.Annotation do
     text
   )a
 
-  @optional_fields ~w()a
+  @optional_fields ~w(
+    id
+  )a
 
   @all_fields @required_fields ++ @optional_fields
 

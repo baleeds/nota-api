@@ -21,7 +21,7 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     Annotations.save_annotation(input)
     |> IO.inspect
     |> case do
-      {:ok, %{updated_annotation: annotation}} -> {:ok, %{annotation: annotation}}
+      {:ok, annotation} -> {:ok, %{annotation: annotation}}
       e -> e
     end
   end

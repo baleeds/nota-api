@@ -47,6 +47,8 @@ defmodule Nota.Annotations do
   """
   def get_annotation!(id), do: Repo.get!(Annotation, id)
 
+  def get_annotation(id), do: Repo.get(Annotation, id)
+
   @doc """
   Creates a annotation.
 
@@ -126,7 +128,11 @@ defmodule Nota.Annotations do
   end
 
   def save_annotation(%{id: id} = attrs) do
-    update_annotation(attrs)
+    get_annotation(id)
+    |> case do
+      nil -> create_annotation(attrs)
+      annotation -> update_annotation(annotation, attrs)
+    end
   end
 
   def save_annotation(attrs) do
