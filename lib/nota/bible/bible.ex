@@ -14,18 +14,18 @@ defmodule Nota.Bible do
 
   def get_verse(id), do: Repo.get(Verse, id)
 
-  # def get_verses(%{chapter_id: chapter_id, book_id: book_id}) do
+  # def get_verses(%{chapter_number: chapter_number, book_number: book_number}) do
   #   query = from v in Verse,
-  #     where: v.chapter == chapter_id,
-  #     where: v.book == book_id
+  #     where: v.chapter == chapter_number,
+  #     where: v.book == book_number
 
   #   Repo.all(query)
   # end
 
-  def get_verses(%{chapter_id: chapter_id, book_id: book_id}) do
+  def get_verses(%{chapter_number: chapter_number, book_number: book_number}) do
     Verse
-    |> where([v], v.book_id == ^book_id)
-    |> where([v], v.chapter_id == ^chapter_id)
+    |> where([v], v.book_number == ^book_number)
+    |> where([v], v.chapter_number == ^chapter_number)
     |> Repo.all
   end
 

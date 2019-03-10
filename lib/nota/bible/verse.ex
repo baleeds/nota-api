@@ -4,9 +4,9 @@ defmodule Nota.Bible.Verse do
   alias Nota.Annotations.Annotation
   
   schema "verses" do
-    field :book_id, :integer
-    field :chapter_id, :integer
-    field :verse_id, :integer
+    field :book_number, :integer
+    field :chapter_number, :integer
+    field :verse_number, :integer
     field :text, :string
 
     has_many :annotations, Annotation

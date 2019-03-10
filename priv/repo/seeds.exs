@@ -11,7 +11,7 @@ alias Nota.Annotations.Annotation
 #   breed: "Dog",
 # })
 
-query = "copy verses(id, book_id, chapter_id, verse_id, text) from 'C:\\Code\\biblenotate\\bn-ex\\priv\\repo\\data\\t_web.csv' DELIMITER ',' CSV HEADER;"
+query = "copy verses(id, book_number, chapter_number, verse_number, text) from 'C:\\Code\\biblenotate\\bn-ex\\priv\\repo\\data\\t_web.csv' DELIMITER ',' CSV HEADER;"
 Ecto.Adapters.SQL.query(Repo, query)
 
 Repo.insert!(%Annotation{
