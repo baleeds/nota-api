@@ -42,7 +42,8 @@ defmodule NotaWeb.Endpoint do
 
   plug(Corsica,
     origins: [
-      ~r{^https?://localhost(:[0-9]+)?$}
+      ~r{^https?://localhost(:[0-9]+)?$},
+      ~r{^https?://192.[0-9]+.[0-9]+.[0-9]+(:[0-9]+)?$}
     ],
     allow_headers: ["accept", "authorization", "content-type"],
     max_age: 86400
