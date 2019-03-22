@@ -27,7 +27,6 @@ defmodule NotaWeb.Schema do
       Dataloader.new
       |> Dataloader.add_source(Bible.Verse, Bible.data())
       |> Dataloader.add_source(Annotations.Annotation, Annotations.data())
-      |> IO.inspect
       # |> Dataloader.add_source(Nota.Owner, Nota.data())
 
     Map.put(ctx, :loader, loader)
