@@ -17,7 +17,7 @@ defmodule Nota.Annotations.Annotation do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-  schema "annotation" do
+  schema "annotations" do
     field :text, :string
 
     belongs_to :verse, Verse, type: :integer

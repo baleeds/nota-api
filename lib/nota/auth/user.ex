@@ -40,6 +40,7 @@ defmodule Nota.Auth.User do
     |> validate_length(:last_name, min: 0, max: 255)
     |> validate_length(:email, min: 0, max: 255)
     |> validate_length(:password_hash, min: 0, max: 255)
-    # |> unique_constraint(:jti, name: :users_jti_key)
+    |> unique_constraint(:email, name: :users_email_key)
+    |> unique_constraint(:jti, name: :users_jti_key)
   end
 end
