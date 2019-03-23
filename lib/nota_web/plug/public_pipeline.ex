@@ -1,4 +1,4 @@
-defmodule NotaWeb.Auth.PublicPipeline do
+defmodule NotaWeb.Plug.PublicPipeline do
   @moduledoc false
 
   use Guardian.Plug.Pipeline,

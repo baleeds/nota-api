@@ -1,7 +1,6 @@
 defmodule NotaWeb.Schema.Bible do
   use Absinthe.Schema.Notation
 
-  alias Nota.Bible
   alias Nota.Annotations
 
   alias NotaWeb.Resolvers.Bible.Verse

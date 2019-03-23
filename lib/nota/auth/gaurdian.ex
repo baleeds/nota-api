@@ -4,9 +4,6 @@ defmodule Nota.Auth.Guardian do
   use Guardian, otp_app: :nota
 
   alias Nota.Auth
-  alias Nota.Repo
-
-  import Ecto.Query, only: [preload: 2]
 
   require Ecto
 
@@ -18,11 +15,11 @@ defmodule Nota.Auth.Guardian do
 
   def resource_from_claims(%{"sub" => %{"user_id" => user_id}}) do
     case Auth.get_user(user_id) do
-      user ->
-        {:ok, tenant_user}
-
       nil ->
         {:error, :unauthenticated}
+
+      user ->
+        {:ok, user}
     end
   end
 

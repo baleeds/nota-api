@@ -1,4 +1,4 @@
-defmodule Nota.Repo.Migrations.CreateAnnotation do
+defmodule Nota.Repo.Migrations.CreateUsers do
   use Ecto.Migration
 
   @table :users
@@ -12,10 +12,25 @@ defmodule Nota.Repo.Migrations.CreateAnnotation do
       add(:email, :string)
       add(:password_hash, :string, null: false)
 
-      add(:jti, :binary_id, null: false, default: fragment("gen_random_uuid()"))
+      add(:jti, :binary_id, null: false)
+
+      # Omniauthable
+      add(:oauth_provider, :string)
+      add(:oauth_uid, :string)
+      add(:oauth_token, :string)
+      add(:oauth_refresh_token, :string)
+      add(:oauth_expires_at, :integer)
+      add(:oauth_expires, :boolean)
 
       timestamps()
     end
+
+    create(
+      unique_index(@table, [:oauth_provider, :oauth_uid],
+        name: :users_oauth_provider_oauth_uid_key
+        # where: "deleted_at IS NULL"
+      )
+    )
 
     create(unique_index(@table, [:email], name: :users_email_key))
     # create(unique_index(@table, [:email], name: :users_email_key, where: "deleted_at IS NULL"))

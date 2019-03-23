@@ -50,8 +50,8 @@ defmodule Nota.Mixfile do
       {:dataloader, "~> 1.0.0"},
       {:ueberauth, "~> 0.6.1"},
       {:ueberauth_google, "~> 0.8"},
-      {:ja_serializer, "~> 0.14.0"},
-      {:guardian, "~> 0.14.2"}
+      # {:ja_serializer, "~> 0.14.0"},
+      {:guardian, "~> 1.2.1"}
     ]
   end
 
