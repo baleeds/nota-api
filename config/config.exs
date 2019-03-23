@@ -16,6 +16,27 @@ config :nota, NotaWeb.Endpoint,
   render_errors: [view: NotaWeb.ErrorView, accepts: ~w(json)],
   pubsub: [name: Nota.PubSub, adapter: Phoenix.PubSub.PG2]
 
+# Guardian
+config :nota, Nota.Auth.Guardian,
+  issuer: "nota",
+  secret_key: System.get_env("JWT_SECRET_KEY"),
+  ttl: {12, :hours},
+  allowed_algos: ["HS256"]
+
+config :nota, Nota.Auth.AccessPipeline,
+  module: Nota.Auth.Guardian,
+  error_handler: Nota.Auth.ErrorHandler
+
+# Ueberauth
+config :ueberauth, Ueberauth,
+  providers: [
+    google: {Ueberauth.Strategy.Google, []}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+  client_id: System.get_env("GOOGLE_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

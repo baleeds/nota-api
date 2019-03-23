@@ -20,7 +20,12 @@ defmodule Nota.Mixfile do
   def application do
     [
       mod: {Nota.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [
+        :logger,
+        :runtime_tools,
+        :ueberauth,
+        :ueberauth_google,
+      ]
     ]
   end
 
@@ -42,7 +47,11 @@ defmodule Nota.Mixfile do
       {:corsica, "~> 1.1.2"},
       {:absinthe, "~> 1.4"},
       {:absinthe_plug, "~> 1.4"},
-      {:dataloader, "~> 1.0.0"}
+      {:dataloader, "~> 1.0.0"},
+      {:ueberauth, "~> 0.6.1"},
+      {:ueberauth_google, "~> 0.8"},
+      {:ja_serializer, "~> 0.14.0"},
+      {:guardian, "~> 0.14.2"}
     ]
   end
 

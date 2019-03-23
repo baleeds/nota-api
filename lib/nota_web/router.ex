@@ -5,6 +5,18 @@ defmodule NotaWeb.Router do
     plug(:accepts, ["json"])
   end
 
+  pipeline :public do
+    plug(NotaWeb.Plug.PublicPipeline)
+  end
+
+  pipeline :private do
+    plug(NotaWeb.Plug.PrivatePipeline)
+  end
+
+  pipeline :absinthe do
+    plug(NotaWeb.Plug.AbsintheContext)
+  end
+
   scope "/graphql" do
     pipe_through(:api)
 
