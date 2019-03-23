@@ -1,6 +1,8 @@
 defmodule NotaWeb.Router do
   use NotaWeb, :router
 
+  alias NotaWeb.Controllers.AuthController
+
   pipeline :api do
     plug(:accepts, ["json"])
   end
@@ -15,6 +17,14 @@ defmodule NotaWeb.Router do
 
   pipeline :absinthe do
     plug(NotaWeb.Plug.AbsintheContext)
+  end
+
+  scope "/auth" do
+    pipe_through([:ueberauth])
+
+    get("/:provider", AuthController, :request)
+    get("/:provider/callback", AuthController, :callback)
+    post("/:provider/callback", AuthController, :callback)
   end
 
   scope "/graphql" do
