@@ -5,10 +5,8 @@ defmodule NotaWeb.Controllers.AuthController do
 
   use NotaWeb, :controller
 
-  alias Ecto.Multi
   alias Nota.Auth
-  alias Nota.Auth.{Guardian, User}
-  alias Nota.Repo
+  alias Nota.Auth.{Guardian}
 
   # import Nota.Helpers, only: [utc_now: 0]
   # import NotaWeb.Resolvers.Helpers, only: [transform_errors: 1]
@@ -22,7 +20,7 @@ defmodule NotaWeb.Controllers.AuthController do
     conn |> redirect(external: "#{frontend_url()}/error?failure=#{Poison.encode!(failure)}")
   end
 
-  def callback(%{assigns: %{ueberauth_auth: auth}} = conn, params) do
+  def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     with {:ok, user} <- Auth.upsert_user(auth),
          {:ok, %{token: token}} <- get_user_authorization_token(user) do
       conn |> redirect(external: "#{frontend_url()}/login?authorization=#{token}")

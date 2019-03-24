@@ -19,6 +19,10 @@ defmodule NotaWeb.Router do
     plug(NotaWeb.Plug.AbsintheContext)
   end
 
+  pipeline :ueberauth do
+    plug(Ueberauth)
+  end
+
   scope "/auth" do
     pipe_through([:ueberauth])
 

@@ -10,9 +10,9 @@ defmodule Nota.Repo.Migrations.CreateUsers do
       add :last_name, :string
 
       add(:email, :string)
-      add(:password_hash, :string, null: false)
+      # add(:password_hash, :string, null: false)
 
-      add(:jti, :binary_id, null: false)
+      add(:jti, :binary_id)
 
       # Omniauthable
       add(:oauth_provider, :string)
@@ -22,7 +22,7 @@ defmodule Nota.Repo.Migrations.CreateUsers do
       add(:oauth_expires_at, :integer)
       add(:oauth_expires, :boolean)
 
-      timestamps()
+      # timestamps()
     end
 
     create(

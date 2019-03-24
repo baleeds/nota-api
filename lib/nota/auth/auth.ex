@@ -5,6 +5,7 @@ defmodule Nota.Auth do
 
   import Ecto.Query, warn: false
 
+  alias Ecto.Multi
   alias Nota.Repo
   alias Nota.Auth.User
 
@@ -33,11 +34,13 @@ defmodule Nota.Auth do
   end
 
   def upsert_user(auth) do
+    IO.inspect(auth)
     Multi.new()
-    |> Multi.run(:auth, fn _, _ -> {:ok, auth} end)
-    |> Multi.run(:existing_user, &find_user_by_oauth/2)
-    |> Multi.run(:user, &upsert_oauth_user/2)
+    |> Multi.run(:auth, fn _ -> {:ok, auth} end)
+    |> Multi.run(:existing_user, &find_user_by_oauth/1)
+    |> Multi.run(:user, &upsert_oauth_user/1)
     |> Repo.transaction()
+    |> IO.inspect()
     |> case do
       {:ok, %{user: user}} ->
         {:ok, user}
@@ -46,28 +49,41 @@ defmodule Nota.Auth do
         {:error, reason}
 
       {:error, _error_atom, error_changeset, _} ->
-        {:error, transform_errors(error_changeset)}
+        {:error, error_changeset}
     end
   end
 
-  defp find_user_by_oauth(_, %{auth: %{oauth_provider: oauth_provider, oauth_uid: oauth_uid} }) do
+  defp find_user_by_oauth(%{auth: %{provider: oauth_provider, uid: oauth_uid} }) do
+    stringified_oauth_provider = Atom.to_string(oauth_provider)
     User
-    |> where([u], u.oauth_provider == ^oauth_provider and u.oauth_uid == ^oauth_uid)
+    |> where([u], u.oauth_provider == ^stringified_oauth_provider and u.oauth_uid == ^oauth_uid)
     |> Repo.one()
+    |> IO.inspect()
+    |> case do
+      user -> {:ok, user}
     end
   end
 
-  defp upsert_oauth_user(_, %{existing_user: %User{} = existing_user} = changes) do
-    existing_user
-    |> User.update(get_user_changes(changes), nil)
-    |> Repo.update()
+  defp find_user_by_oauth(_) do
+    {:error, "Not sure whats happening"}
   end
 
-  defp upsert_oauth_user(_, %{existing_user: nil} = changes) do
-    changes
-    |> get_user_changes()
-    |> User.create(nil)
+  defp upsert_oauth_user(%{existing_user: nil} = changes) do
+    %User{}
+    |> User.changeset(get_user_changes(changes))
     |> Repo.insert()
+  
+    # changes
+    # |> IO.inspect()
+    # |> get_user_changes()
+    # |> User.changeset()
+    # |> Repo.insert()
+  end
+
+  defp upsert_oauth_user(%{existing_user: existing_user} = changes) do
+    existing_user
+    |> User.changeset(get_user_changes(changes))
+    |> Repo.update()
   end
 
   defp get_user_changes(%{
@@ -98,5 +114,9 @@ defmodule Nota.Auth do
       oauth_expires_at: expires_at,
       oauth_expires: expires,
     }
+  end
+
+  defp get_user_changes(_) do
+    {:error, "Changes are invalid"}
   end
 end

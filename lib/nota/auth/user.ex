@@ -7,9 +7,12 @@ defmodule Nota.Auth.User do
   import Ecto.Changeset
 
   @required_fields ~w(
+    email
+  )a
+
+  @optional_fields ~w(
     first_name
     last_name
-    email
     oauth_provider
     oauth_uid
     oauth_token
@@ -17,9 +20,6 @@ defmodule Nota.Auth.User do
     oauth_expires_at
     oauth_expires
     jti
-  )a
-
-  @optional_fields ~w(
   )a
 
   @all_fields @required_fields ++ @optional_fields
@@ -56,7 +56,7 @@ defmodule Nota.Auth.User do
     |> validate_length(:first_name, min: 0, max: 255)
     |> validate_length(:last_name, min: 0, max: 255)
     |> validate_length(:email, min: 0, max: 255)
-    |> validate_length(:password_hash, min: 0, max: 255)
+    # |> validate_length(:password_hash, min: 0, max: 255)
     |> unique_constraint(:oauth_uid, name: :users_oauth_provider_oauth_uid_key)
     |> unique_constraint(:email, name: :users_email_key)
     |> unique_constraint(:jti, name: :users_jti_key)
