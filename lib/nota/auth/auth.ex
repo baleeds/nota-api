@@ -34,13 +34,11 @@ defmodule Nota.Auth do
   end
 
   def upsert_user(auth) do
-    IO.inspect(auth)
     Multi.new()
     |> Multi.run(:auth, fn _ -> {:ok, auth} end)
     |> Multi.run(:existing_user, &find_user_by_oauth/1)
     |> Multi.run(:user, &upsert_oauth_user/1)
     |> Repo.transaction()
-    |> IO.inspect()
     |> case do
       {:ok, %{user: user}} ->
         {:ok, user}
@@ -58,7 +56,7 @@ defmodule Nota.Auth do
     User
     |> where([u], u.oauth_provider == ^stringified_oauth_provider and u.oauth_uid == ^oauth_uid)
     |> Repo.one()
-    |> IO.inspect()
+    |> IO.inspect(label: "found user")
     |> case do
       user -> {:ok, user}
     end
@@ -72,12 +70,6 @@ defmodule Nota.Auth do
     %User{}
     |> User.changeset(get_user_changes(changes))
     |> Repo.insert()
-  
-    # changes
-    # |> IO.inspect()
-    # |> get_user_changes()
-    # |> User.changeset()
-    # |> Repo.insert()
   end
 
   defp upsert_oauth_user(%{existing_user: existing_user} = changes) do

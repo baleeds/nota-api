@@ -7,13 +7,10 @@ defmodule NotaWeb.Plug.AbsintheContext do
 
   def init(opts), do: opts
 
-  def call(%{remote_ip: remote_ip} = conn, _) do
-    case Guardian.Plug.current_resource(conn) do
-      nil ->
-        put_private(conn, :absinthe, %{context: %{remote_ip: remote_ip}})
-
+  def call(conn, _) do
+    case Guardian.Plug.current_resource(conn) |> IO.inspect do
       user ->
-        put_private(conn, :absinthe, %{context: %{current_user: user, remote_ip: remote_ip}})
+        put_private(conn, :absinthe, %{context: %{current_user: user}})
     end
   end
 end

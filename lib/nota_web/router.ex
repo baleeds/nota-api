@@ -32,13 +32,13 @@ defmodule NotaWeb.Router do
   end
 
   scope "/graphql" do
-    pipe_through(:api)
+    pipe_through([:api, :public, :absinthe])
 
     forward("/", Absinthe.Plug, schema: NotaWeb.Schema)
   end
 
   scope "/graphiql" do
-    pipe_through(:api)
+    pipe_through([:api, :absinthe])
 
     forward(
       "/",
