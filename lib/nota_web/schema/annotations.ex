@@ -2,6 +2,7 @@ defmodule NotaWeb.Schema.Annotations do
   use Absinthe.Schema.Notation
 
   alias Nota.Bible
+  alias Nota.Auth
 
   alias NotaWeb.Resolvers.Annotations.Annotation
 
@@ -33,6 +34,8 @@ defmodule NotaWeb.Schema.Annotations do
     field(:text, non_null(:string))
     field(:verse_id, non_null(:id))
     field(:verse, non_null(:verse), resolve: dataloader(Bible.Verse))
+    field(:user_id, non_null(:id))
+    field(:user, non_null(:user), resolve: dataloader(Auth.User))
   end
 
   input_object :save_annotation_input do

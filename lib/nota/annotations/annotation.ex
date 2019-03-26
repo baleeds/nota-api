@@ -3,9 +3,11 @@ defmodule Nota.Annotations.Annotation do
   import Ecto.Changeset
 
   alias Nota.Bible.Verse
+  alias Nota.Auth.User
 
   @required_fields ~w(
     verse_id
+    user_id
     text
   )a
 
@@ -21,6 +23,7 @@ defmodule Nota.Annotations.Annotation do
     field :text, :string
 
     belongs_to :verse, Verse, type: :integer
+    belongs_to :user, User
 
     timestamps()
   end
@@ -31,5 +34,6 @@ defmodule Nota.Annotations.Annotation do
     |> cast(attrs, @all_fields)
     |> validate_required(@required_fields)
     |> foreign_key_constraint(:verse_id)
+    |> foreign_key_constraint(:user_id)
   end
 end

@@ -3,10 +3,12 @@ defmodule NotaWeb.Schema do
 
   alias Nota.Bible
   alias Nota.Annotations
+  alias Nota.Auth
 
 
   import_types(__MODULE__.Bible)
   import_types(__MODULE__.Annotations)
+  import_types(__MODULE__.Users)
 
   query do
     import_fields(:bible_queries)
@@ -22,6 +24,7 @@ defmodule NotaWeb.Schema do
       Dataloader.new
       |> Dataloader.add_source(Bible.Verse, Bible.data())
       |> Dataloader.add_source(Annotations.Annotation, Annotations.data())
+      |> Dataloader.add_source(Auth.User, Auth.data())
 
     Map.put(ctx, :loader, loader)
   end
