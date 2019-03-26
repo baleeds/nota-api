@@ -27,8 +27,14 @@ defmodule Nota.Annotations do
       [%Annotation{}, ...]
 
   """
-  def list_annotation do
+  def list_annotations do
     Repo.all(Annotation)
+  end
+
+  def list_annotations(%{user_id: user_id}) do
+    Annotation
+    |> where([a], a.user_id == ^user_id)
+    |> Repo.all
   end
 
   @doc """

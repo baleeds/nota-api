@@ -17,6 +17,8 @@ defmodule NotaWeb.Schema.Annotations do
     end
 
     field :annotations, list_of(non_null(:annotation)) do
+      arg(:user_id, :id)
+    
       resolve(&Annotation.get_all/3)
     end
   end

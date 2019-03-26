@@ -9,9 +9,17 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     end
   end
 
+  def get_all(_, %{user_id: user_id} = args, context) do
+    Annotations.list_annotations(args)
+    |> case do
+      nil -> {:error, "Error retrieving annotations"}
+      annotations -> {:ok, annotations}
+    end
+  end
+
   def get_all(_, _, context) do
     inspect_user(context)
-    Annotations.list_annotation()
+    Annotations.list_annotations()
     |> case do
       nil -> {:error, "Error retrieving annotations"}
       annotations -> {:ok, annotations}
