@@ -8,7 +8,7 @@ defmodule NotaWeb.Plug.AbsintheContext do
   def init(opts), do: opts
 
   def call(conn, _) do
-    case Guardian.Plug.current_resource(conn) |> IO.inspect do
+    case Guardian.Plug.current_resource(conn) do
       user ->
         put_private(conn, :absinthe, %{context: %{current_user: user}})
     end

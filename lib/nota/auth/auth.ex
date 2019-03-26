@@ -56,9 +56,8 @@ defmodule Nota.Auth do
     User
     |> where([u], u.oauth_provider == ^stringified_oauth_provider and u.oauth_uid == ^oauth_uid)
     |> Repo.one()
-    |> IO.inspect(label: "found user")
     |> case do
-      user -> {:ok, user}
+      user_or_nil -> {:ok, user_or_nil}
     end
   end
 

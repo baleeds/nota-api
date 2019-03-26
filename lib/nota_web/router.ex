@@ -38,7 +38,7 @@ defmodule NotaWeb.Router do
   end
 
   scope "/graphiql" do
-    pipe_through([:api, :absinthe])
+    pipe_through([:api, :public, :absinthe])
 
     forward(
       "/",
