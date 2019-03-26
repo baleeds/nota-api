@@ -29,6 +29,10 @@ defmodule NotaWeb.Schema.Bible do
     field(:verse_number, non_null(:integer))
     field(:text, non_null(:string))
     
-    field(:annotations, list_of(non_null(:annotation)), resolve: dataloader(Annotations.Annotation))
+    field :annotations, list_of(non_null(:annotation)) do
+      arg(:user_id, :id)
+
+      resolve(dataloader(Annotations.Annotation))
+    end
   end
 end

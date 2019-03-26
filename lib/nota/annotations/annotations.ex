@@ -14,7 +14,14 @@ defmodule Nota.Annotations do
     Dataloader.Ecto.new(Repo, query: &query/2)
   end
 
-  def query(queryable, _params) do
+  def query(queryable, %{user_id: user_id}) do
+    Annotation
+    |> where([a], a.user_id == ^user_id)
+  end
+
+  def query(queryable, params) do
+    IO.inspect(queryable, label: "Queryable")
+    IO.inspect(params, label: "Params")
     queryable
   end
 
