@@ -19,7 +19,7 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
   end
 
   def inspect_user(%{context: %{ current_user: user } }) do
-    IO.inspect(user)
+    IO.inspect(user, label: "contextual user")
   end
 
   def inspect_user(_) do
