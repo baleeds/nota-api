@@ -34,8 +34,10 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     IO.inspect("NO USER")
   end
 
-  def save(_, %{input: input}, _) do
-    Annotations.save_annotation(input)
+  def save(_, %{input: input}, %{context: %{ current_user: user }}) do
+    input
+    |> Map.put(:user_id, user.id)
+    |> Annotations.save_annotation()
     |> IO.inspect
     |> case do
       {:ok, annotation} -> {:ok, %{annotation: annotation}}

@@ -1,7 +1,8 @@
 defmodule NotaWeb.Resolvers.Bible.Verse do
   alias Nota.Bible
 
-  def get(_, %{id: id}, _) do
+  def get(_, %{id: id}, context) do
+    IO.inspect(context)
     Bible.get_verse(id)
     |> case do
       nil -> {:error, "Error retrieving verse"}
