@@ -13,6 +13,7 @@ defmodule NotaWeb.Schema do
   query do
     import_fields(:bible_queries)
     import_fields(:annotations_queries)
+    import_fields(:user_queries)
   end
 
   mutation do
