@@ -45,6 +45,8 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     end
   end
 
+  def save(_, _, _), do: {:error, "Unauthorized"}
+
   # defp transform_errors(changeset) do
   #   changeset
   #   |> Ecto.Changeset.traverse_errors(&format_error/1)
