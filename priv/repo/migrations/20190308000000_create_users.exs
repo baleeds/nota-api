@@ -22,7 +22,7 @@ defmodule Nota.Repo.Migrations.CreateUsers do
       add(:oauth_expires_at, :integer)
       add(:oauth_expires, :boolean)
 
-      # timestamps()
+      timestamps(type: :utc_datetime)
     end
 
     create(

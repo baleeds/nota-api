@@ -44,6 +44,10 @@ defmodule NotaWeb.Schema.Annotations do
     field(:verse, non_null(:verse), resolve: dataloader(Bible.Verse))
     field(:user_id, non_null(:id))
     field(:user, non_null(:user), resolve: dataloader(Auth.User))
+
+    field(:inserted_at, non_null(:datetime))
+    field(:updated_at, non_null(:datetime))
+    field(:deleted_at, :datetime)
   end
 
   input_object :save_annotation_input do

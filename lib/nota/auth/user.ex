@@ -46,7 +46,7 @@ defmodule Nota.Auth.User do
     field(:oauth_expires_at, :integer)
     field(:oauth_expires, :boolean)
 
-    # has_many :annotations, Annotation
+    timestamps(type: :utc_datetime)
   end
 
   def changeset(%User{} = struct, attrs \\ %{}) do

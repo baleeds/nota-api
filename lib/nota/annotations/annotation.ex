@@ -13,6 +13,7 @@ defmodule Nota.Annotations.Annotation do
 
   @optional_fields ~w(
     id
+    deleted_at
   )a
 
   @all_fields @required_fields ++ @optional_fields
@@ -21,11 +22,12 @@ defmodule Nota.Annotations.Annotation do
   @foreign_key_type :binary_id
   schema "annotations" do
     field :text, :string
+    field :deleted_at, :utc_datetime
 
     belongs_to :verse, Verse, type: :integer
     belongs_to :user, User
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

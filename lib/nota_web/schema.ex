@@ -6,6 +6,8 @@ defmodule NotaWeb.Schema do
   alias Nota.Auth
 
 
+  import_types(Absinthe.Type.Custom)
+
   import_types(__MODULE__.Bible)
   import_types(__MODULE__.Annotations)
   import_types(__MODULE__.Users)
