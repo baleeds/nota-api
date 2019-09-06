@@ -95,7 +95,7 @@ defmodule Nota.Auth do
         last_name: last_name
       }
     },
-  } = stuff) do
+  }) do
     %{
       email: email,
       first_name: first_name,
