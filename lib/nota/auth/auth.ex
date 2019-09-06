@@ -95,7 +95,8 @@ defmodule Nota.Auth do
         last_name: last_name
       }
     },
-  }) do
+  } = stuff) do
+    IO.inspect(stuff)
     %{
       email: email,
       first_name: first_name,

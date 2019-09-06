@@ -17,6 +17,14 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     end
   end
 
+  def get_all(_, %{verse_id: verse_id} = args, context) do
+    Annotations.list_annotations(args)
+    |> case do
+      nil -> {:error, "Error retreiving annotations"}
+      annotations -> {:ok, annotations}
+    end
+  end
+
   def get_all(_, _, context) do
     inspect_user(context)
     Annotations.list_annotations()
@@ -34,9 +42,9 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     IO.inspect("NO USER")
   end
 
-  def save(_, %{input: input}, %{context: %{ current_user: user }}) do
+  def save(_, %{input: input}, %{context: %{ current_user: %{id: user_id} }}) do
     input
-    |> Map.put(:user_id, user.id)
+    |> Map.put(:user_id, user_id)
     |> Annotations.save_annotation()
     |> IO.inspect
     |> case do

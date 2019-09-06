@@ -44,6 +44,12 @@ defmodule Nota.Annotations do
     |> Repo.all
   end
 
+  def list_annotations(%{verse_id: verse_id}) do
+    Annotation
+    |> where([a], a.verse_id == ^verse_id)
+    |> Repo.all
+  end
+
   @doc """
   Gets a single annotation.
 
