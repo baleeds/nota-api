@@ -6,7 +6,7 @@ defmodule NotaWeb.Plug.PublicPipeline do
     module: Nota.Auth.Guardian,
     error_handler: Nota.Auth.ErrorHandler
 
-  plug(Guardian.Plug.VerifyHeader, [%{"typ" => "access"}])
+  plug(Guardian.Plug.VerifyHeader, claims: %{typ: "access"})
   # if there isn't anyone logged in we don't want to return an error
   plug(Guardian.Plug.LoadResource, allow_blank: true)
 end

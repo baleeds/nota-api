@@ -2,7 +2,7 @@ alias Nota.Repo
 alias Nota.Annotations.Annotation
 alias Nota.Auth.User
 
-query = "copy verses(id, book_number, chapter_number, verse_number, text) from 'C:\\Code\\biblenotate\\bn-ex\\priv\\repo\\data\\t_web.csv' DELIMITER ',' CSV HEADER;"
+query = "copy verses(id, book_number, chapter_number, verse_number, text) from 'C:\\Code\\nota-api\\priv\\repo\\data\\t_web.csv' DELIMITER ',' CSV HEADER;"
 Ecto.Adapters.SQL.query(Repo, query)
 
 luke = Repo.insert!(%User{

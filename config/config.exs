@@ -20,7 +20,7 @@ config :nota, NotaWeb.Endpoint,
 config :nota, Nota.Auth.Guardian,
   issuer: "nota",
   secret_key: System.get_env("JWT_SECRET_KEY"),
-  ttl: {12, :hours},
+  ttl: {12, :weeks},
   allowed_algos: ["HS256"]
 
 config :nota, Nota.Auth.AccessPipeline,
