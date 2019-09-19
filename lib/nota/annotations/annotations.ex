@@ -157,4 +157,31 @@ defmodule Nota.Annotations do
   def save_annotation(attrs) do
     create_annotation(attrs)
   end
+
+  def save_annotations(annotations, user_id) do
+    annotations = Enum.map(annotations, &Map.put(&1, :user_id, user_id))
+
+    Multi.new()
+    |> Multi.run(:annotations, fn _ -> {:ok, annotations} end)
+    |> Multi.run(:upserted_annotations, &upsert_annotations/1)
+    |> Repo.transaction()
+  end
+
+  def upsert_annotations(%{annotations: annotations}) do
+    annotations
+    |> Enum.reduce_while([], fn annotation, acc -> upsert_annotation(annotation, acc) end)
+    |> handle_upsert_annotations()
+  end
+
+  defp handle_upsert_annotations(annotations) when is_list(annotations), do: {:ok, annotations}
+  defp handle_upsert_annotations(other), do: {:error, other}
+
+  defp upsert_annotation(annotation, acc) do
+    annotation
+    |> save_annotation()
+    |> handle_upsert_annotation(acc)
+  end
+
+  defp handle_upsert_annotation({:ok, annotation}, acc), do: {:cont, [annotation | acc]}
+  defp handle_upsert_annotation(other, _acc), do: {:halt, other}
 end

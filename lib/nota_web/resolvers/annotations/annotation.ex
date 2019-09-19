@@ -46,7 +46,6 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     input
     |> Map.put(:user_id, user_id)
     |> Annotations.save_annotation()
-    |> IO.inspect
     |> case do
       {:ok, annotation} -> {:ok, %{annotation: annotation}}
       e -> e
@@ -54,6 +53,17 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
   end
 
   def save(_, _, _), do: {:error, "Unauthorized"}
+
+  def save_all(_, %{input: input}, %{context: %{ current_user: %{ id: user_id } }}) do
+    input
+    |> Annotations.save_annotations(user_id)
+    |> case do
+      {:ok, %{upserted_annotations: annotations}} -> {:ok, %{annotations: annotations}}
+      e -> e
+    end
+  end
+
+  def save_all(_, _, _), do: {:error, "Unauthorized"}
 
   # defp transform_errors(changeset) do
   #   changeset

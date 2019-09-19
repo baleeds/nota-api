@@ -35,6 +35,12 @@ defmodule NotaWeb.Schema.Annotations do
 
       resolve(&Annotation.save/3)
     end
+
+    field :save_annotations, non_null(:save_annotations_paylaod) do
+      arg(:input, non_null(list_of(non_null(:save_annotation_input))))
+
+      resolve(&Annotation.save_all/3)
+    end
   end
 
   object :annotation do
@@ -58,5 +64,9 @@ defmodule NotaWeb.Schema.Annotations do
 
   object :save_annotation_payload do
     field :annotation, non_null(:annotation)
+  end
+
+  object :save_annotations_paylaod do
+    field :annotations, non_null(list_of(:annotation))
   end
 end
