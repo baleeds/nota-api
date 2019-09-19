@@ -237,6 +237,18 @@ defmodule Nota.Annotations do
       nil -> {:error, "Error in get_latest_changes"}
     end
   end
+  
+  # defp get_latest_changes(%{total_changes: total_changes}) do
+  #   with {:ok, sorted_list} <- is_item_more_recent(total_changes),
+  #         reversed_list <- Enum.reverse(sorted_list), 
+  #         uniqued_list <- Enum.uniq_by(&Map.get(&1, :id)) do
+  #           uniqued_list
+  #         end
+  #   else
+  #   {:error, :inserted_at} -> {:error, "inserted at not provided"}
+  #   {:error, reason} -> {:error, reason}
+  #   end
+  # end
 
   defp get_latest_changes(arg), do: {:error, "Failed to pattern match on get_latest_changes: #{arg}"}
 
