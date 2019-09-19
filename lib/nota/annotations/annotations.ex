@@ -185,6 +185,7 @@ defmodule Nota.Annotations do
   defp handle_upsert_annotation({:ok, annotation}, acc), do: {:cont, [annotation | acc]}
   defp handle_upsert_annotation(other, _acc), do: {:halt, other}
 
+  # I can upsert annotations that I didn't author
   def sync_annotations(annotations, user_id, last_synced_at) do
     annotations = Enum.map(annotations, &Map.put(&1, :user_id, user_id))
 
