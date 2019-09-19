@@ -184,4 +184,27 @@ defmodule Nota.Annotations do
 
   defp handle_upsert_annotation({:ok, annotation}, acc), do: {:cont, [annotation | acc]}
   defp handle_upsert_annotation(other, _acc), do: {:halt, other}
+
+  def sync_annotations(annotations, user_id, last_synced_at) do
+    annotations = Enum.map(annotations, &Map.put(&1, :user_id, user_id))
+
+    Multi.new()
+    |> Multi.run(:user_id, fn _ -> {:ok, user_id} end)
+    |> Multi.run(:new_annotations, fn _ -> {:ok, annotations} end)
+    |> Multi.run(:last_synced_at, fn _ -> {:ok, last_synced_at} end)
+    |> Multi.run(:backend_annotations, &list_annotations_since/1)
+    # |> Multi.run(:total_changes, &combine_changes/1)
+    # |> Multi.run(:latest_changes, &get_latest_changes/1)
+    # |> Multi.run(:affected_items, &get_affected_items/1)
+    # |> Multi.run(:upserted_annotations, &upsert_affected_annotations/1)
+    |> Repo.transaction()
+  end
+
+  def list_annotations_since(%{last_synced_at: date, user_id: user_id}) do
+    Annotation
+    |> where([a], a.user_id == ^user_id)
+    |> where([a], a.inserted_at > ^date)
+    |> Repo.all
+  end
+  
 end

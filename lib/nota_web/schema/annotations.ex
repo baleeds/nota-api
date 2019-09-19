@@ -27,6 +27,12 @@ defmodule NotaWeb.Schema.Annotations do
 
       resolve(&Annotation.get_all/3)
     end
+
+    field :annotations_since, list_of(non_null(:annotation)) do
+      arg(:date, :datetime)
+
+      resolve(&Annotation.get_since/3)
+    end
   end
 
   object :annotations_mutations do
@@ -60,7 +66,7 @@ defmodule NotaWeb.Schema.Annotations do
     field :id, :id
     field :text, non_null(:string)
     field :verse_id, non_null(:id)
-    
+
     field :inserted_at, :datetime
     field :updated_at, :datetime
     field :deleted_at, :datetime

@@ -34,6 +34,17 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     end
   end
 
+  def get_since(_, %{date: date}, %{context: %{current_user: %{id: user_id}}}) do
+    %{last_synced_at: date, user_id: user_id}
+    |> Annotations.list_annotations_since()
+    |> case do
+      nil -> {:error, "Error retrieving annotations"}
+      annotations -> {:ok, annotations}
+    end
+  end
+
+  def get_since(_, _, _), do: {:error, "Unauthorized"}
+
   def inspect_user(%{context: %{ current_user: user } }) do
     IO.inspect(user, label: "contextual user")
   end
