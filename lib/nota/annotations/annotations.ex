@@ -186,11 +186,7 @@ defmodule Nota.Annotations do
   defp handle_upsert_annotation(other, _acc), do: {:halt, other}
 
   def sync_annotations(annotations, user_id, last_synced_at) do
-    IO.inspect("0")
     annotations = Enum.map(annotations, &Map.put(&1, :user_id, user_id))
-    IO.inspect(annotations)
-
-    # {:ok, %{affected_items: %{affected_frontend_annotations: []}}}
 
     Multi.new()
     |> Multi.run(:user_id, fn _ -> {:ok, user_id} end)
@@ -222,22 +218,37 @@ defmodule Nota.Annotations do
   defp get_total_changes(%{backend_annotations: backend_annotations, new_annotations: new_annotations}) do
     tagged_backend_annotations = Enum.map(backend_annotations, &Map.put(&1, :source, :backend))
     tagged_frontend_annotations = Enum.map(new_annotations, &Map.put(&1, :source, :frontend))
-  
+
     {:ok, tagged_backend_annotations ++ tagged_frontend_annotations}
   end
 
+  # TODO: how to handle errors in piped Enum functions?  See line 240
   defp get_latest_changes(%{total_changes: total_changes}) do
     total_changes
     |> Enum.sort(&is_item_more_recent/2)
-    |> Enum.uniq
+    |> IO.inspect(label: "Sorted")
+    |> Enum.reverse
+    |> IO.inspect(label: "Reversed")
+    |> Enum.uniq_by(&Map.get(&1, :id))
+    |> IO.inspect(label: "Uniq")
     |> case do
       latest_changes -> {:ok, latest_changes}
       nil -> {:error, "Error in get_latest_changes"}
     end
   end
 
-  defp is_item_more_recent(%{inserted_at: a_inserted_at}, %{inserted_at: b_inserted_at}), do: a_inserted_at > b_inserted_at
-  defp is_item_more_recent(_, _), do: nil
+  defp get_latest_changes(arg), do: {:error, "Failed to pattern match on get_latest_changes: #{arg}"}
+
+  defp date_sorter(date1, date2) do
+    result = Date.compare(date1, date2)
+    case result do
+      r when r == :lt or r == :eq -> true
+      _ -> false
+    end
+  end
+
+  defp is_item_more_recent(%{inserted_at: a_inserted_at}, %{inserted_at: b_inserted_at}), do: date_sorter(a_inserted_at, b_inserted_at)
+  defp is_item_more_recent(_, _), do: {:error, "inserted_at not provided"}
 
   defp get_affected_items(%{latest_changes: latest_changes}) do
     latest_changes

@@ -77,14 +77,18 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
   def save_all(_, _, _), do: {:error, "Unauthorized"}
 
   def sync(_, %{input: %{last_synced_at: last_synced_at, annotations: annotations}} = input, %{context: %{current_user: %{id: user_id}}}) do
-    IO.inspect([last_synced_at, annotations, user_id])
     Annotations.sync_annotations(annotations, user_id, last_synced_at)
     |> IO.inspect
-    |> case do
-      {:ok, %{backend_annotations: backend_annotations}} -> {:ok, %{annotations: backend_annotations}}
-      e -> {:error, e}
-    end
+    |> handle_sync
   end
+
+  def sync(_, _, _), do: {:error, "Unauthorizard"}
+
+  defp handle_sync({:ok, %{affected_items: %{affected_backend_annotations: new_annotations}, upserted_annotations: upserted_annotations}}) do
+    {:ok, %{annotations: new_annotations, upserted_annotations: upserted_annotations}}
+  end
+
+  defp handle_sync(_other), do: {:error, "Error saving annotations"}
 
   # def sync(_, args, %{context: %{current_user: %{id: user_id}}}) do
   #   IO.inspect(args)

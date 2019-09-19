@@ -93,5 +93,6 @@ defmodule NotaWeb.Schema.Annotations do
 
   object :sync_annotations_payload do
     field :annotations, non_null(list_of(:annotation))
+    field :upserted_annotations, non_null(list_of(:annotation))
   end
 end
