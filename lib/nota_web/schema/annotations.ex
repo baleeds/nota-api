@@ -47,6 +47,12 @@ defmodule NotaWeb.Schema.Annotations do
 
       resolve(&Annotation.save_all/3)
     end
+
+    field :sync_annotations, non_null(:sync_annotations_payload) do
+      arg(:input, non_null(:sync_annotations_input))
+
+      resolve(&Annotation.sync/3)
+    end
   end
 
   object :annotation do
@@ -72,11 +78,20 @@ defmodule NotaWeb.Schema.Annotations do
     field :deleted_at, :datetime
   end
 
+  input_object :sync_annotations_input do
+    field :annotations, non_null(list_of(:save_annotation_input))
+    field :last_synced_at, non_null(:datetime) 
+  end
+
   object :save_annotation_payload do
     field :annotation, non_null(:annotation)
   end
 
   object :save_annotations_paylaod do
+    field :annotations, non_null(list_of(:annotation))
+  end
+
+  object :sync_annotations_payload do
     field :annotations, non_null(list_of(:annotation))
   end
 end

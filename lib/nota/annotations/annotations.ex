@@ -186,25 +186,74 @@ defmodule Nota.Annotations do
   defp handle_upsert_annotation(other, _acc), do: {:halt, other}
 
   def sync_annotations(annotations, user_id, last_synced_at) do
+    IO.inspect("0")
     annotations = Enum.map(annotations, &Map.put(&1, :user_id, user_id))
+    IO.inspect(annotations)
+
+    # {:ok, %{affected_items: %{affected_frontend_annotations: []}}}
 
     Multi.new()
     |> Multi.run(:user_id, fn _ -> {:ok, user_id} end)
     |> Multi.run(:new_annotations, fn _ -> {:ok, annotations} end)
     |> Multi.run(:last_synced_at, fn _ -> {:ok, last_synced_at} end)
     |> Multi.run(:backend_annotations, &list_annotations_since/1)
-    # |> Multi.run(:total_changes, &combine_changes/1)
-    # |> Multi.run(:latest_changes, &get_latest_changes/1)
-    # |> Multi.run(:affected_items, &get_affected_items/1)
-    # |> Multi.run(:upserted_annotations, &upsert_affected_annotations/1)
+    |> Multi.run(:total_changes, &get_total_changes/1)
+    |> Multi.run(:latest_changes, &get_latest_changes/1)
+    |> Multi.run(:affected_items, &get_affected_items/1)
+    |> Multi.run(:upserted_annotations, &upsert_affected_annotations/1)
     |> Repo.transaction()
   end
 
-  def list_annotations_since(%{last_synced_at: date, user_id: user_id}) do
+  defp list_annotations_since(%{last_synced_at: date, user_id: user_id}) do
     Annotation
     |> where([a], a.user_id == ^user_id)
     |> where([a], a.inserted_at > ^date)
     |> Repo.all
+    |> case do
+      backend_annotations -> {:ok, backend_annotations}
+      nil -> {:error, "Error getting annotations since #{date}"}
+    end
   end
+
+  defp list_annotations_since(__tx) do
+    {:error, "Error with list_annotations_since"}
+  end
+
+  defp get_total_changes(%{backend_annotations: backend_annotations, new_annotations: new_annotations}) do
+    tagged_backend_annotations = Enum.map(backend_annotations, &Map.put(&1, :source, :backend))
+    tagged_frontend_annotations = Enum.map(new_annotations, &Map.put(&1, :source, :frontend))
   
+    {:ok, tagged_backend_annotations ++ tagged_frontend_annotations}
+  end
+
+  defp get_latest_changes(%{total_changes: total_changes}) do
+    total_changes
+    |> Enum.sort(&is_item_more_recent/2)
+    |> Enum.uniq
+    |> case do
+      latest_changes -> {:ok, latest_changes}
+      nil -> {:error, "Error in get_latest_changes"}
+    end
+  end
+
+  defp is_item_more_recent(%{inserted_at: a_inserted_at}, %{inserted_at: b_inserted_at}), do: a_inserted_at > b_inserted_at
+  defp is_item_more_recent(_, _), do: nil
+
+  defp get_affected_items(%{latest_changes: latest_changes}) do
+    latest_changes
+    |> Enum.reduce(%{affected_backend_annotations: [], affected_frontend_annotations: []}, &split_changes/2)
+    |> case do
+      affected_items -> {:ok, affected_items}
+      nil -> {:error, "Error in get_affected_items"}
+    end
+  end
+
+  defp split_changes(%{source: :frontend} = item, %{affected_frontend_annotations: affected_frontend_annotations} = acc), do: Map.put(acc, :affected_frontend_annotations, [item | affected_frontend_annotations])
+  defp split_changes(item, %{affected_backend_annotations: affected_backend_annotations} = acc), do: Map.put(acc, :affected_backend_annotations, [item | affected_backend_annotations])
+
+  defp upsert_affected_annotations(%{affected_items: %{affected_frontend_annotations: affected_frontend_annotations}}) do
+    pruned_annotations = Enum.map(affected_frontend_annotations, &Map.drop(&1, [:source]))
+
+    upsert_annotations(%{annotations: pruned_annotations})
+  end
 end
