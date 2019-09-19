@@ -13,6 +13,7 @@ defmodule Nota.Annotations.Annotation do
 
   @optional_fields ~w(
     id
+    inserted_at
     deleted_at
   )a
 

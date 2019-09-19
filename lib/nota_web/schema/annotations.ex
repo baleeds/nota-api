@@ -60,6 +60,7 @@ defmodule NotaWeb.Schema.Annotations do
     field :id, :id
     field :text, non_null(:string)
     field :verse_id, non_null(:id)
+    field :inserted_at, :datetime
   end
 
   object :save_annotation_payload do
