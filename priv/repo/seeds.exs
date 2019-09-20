@@ -18,13 +18,13 @@ yoda = Repo.insert!(%User{
 })
 
 Repo.insert!(%Annotation{
-  text: "First annotation",
+  text: "<p>First annotation</p>",
   verse_id: 01001001,
   user_id: luke.id
 })
 
 Repo.insert!(%Annotation{
-  text: "Second annotation",
+  text: "<p>Second annotation</p>",
   verse_id: 01001001,
   user_id: yoda.id
 })
