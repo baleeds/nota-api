@@ -201,18 +201,18 @@ defmodule Nota.Annotations do
     |> Repo.transaction()
   end
 
-  defp list_annotations_since(%{last_synced_at: date, user_id: user_id}) do
+  def list_annotations_since(%{last_synced_at: date, user_id: user_id}) do
     Annotation
     |> where([a], a.user_id == ^user_id)
-    |> where([a], a.inserted_at > ^date)
+    |> where([a], a.last_synced_at > ^date)
     |> Repo.all
     |> case do
-      backend_annotations -> {:ok, backend_annotations}
       nil -> {:error, "Error getting annotations since #{date}"}
+      backend_annotations -> {:ok, backend_annotations}
     end
   end
 
-  defp list_annotations_since(__tx) do
+  def list_annotations_since(__tx) do
     {:error, "Error with list_annotations_since"}
   end
 
@@ -227,11 +227,8 @@ defmodule Nota.Annotations do
   defp get_latest_changes(%{total_changes: total_changes}) do
     total_changes
     |> Enum.sort(&is_item_more_recent/2)
-    |> IO.inspect(label: "Sorted")
     |> Enum.reverse
-    |> IO.inspect(label: "Reversed")
     |> Enum.uniq_by(&Map.get(&1, :id))
-    |> IO.inspect(label: "Uniq")
     |> case do
       latest_changes -> {:ok, latest_changes}
       nil -> {:error, "Error in get_latest_changes"}
@@ -245,7 +242,7 @@ defmodule Nota.Annotations do
   #           uniqued_list
   #         end
   #   else
-  #   {:error, :inserted_at} -> {:error, "inserted at not provided"}
+  #   {:error, :updated_at} -> {:error, "inserted at not provided"}
   #   {:error, reason} -> {:error, reason}
   #   end
   # end
@@ -260,8 +257,8 @@ defmodule Nota.Annotations do
     end
   end
 
-  defp is_item_more_recent(%{inserted_at: a_inserted_at}, %{inserted_at: b_inserted_at}), do: date_sorter(a_inserted_at, b_inserted_at)
-  defp is_item_more_recent(_, _), do: {:error, "inserted_at not provided"}
+  defp is_item_more_recent(%{updated_at: a_updated_at}, %{updated_at: b_updated_at}), do: date_sorter(a_updated_at, b_updated_at)
+  defp is_item_more_recent(_, _), do: {:error, "updated_at not provided"}
 
   defp get_affected_items(%{latest_changes: latest_changes}) do
     latest_changes
@@ -275,8 +272,15 @@ defmodule Nota.Annotations do
   defp split_changes(%{source: :frontend} = item, %{affected_frontend_annotations: affected_frontend_annotations} = acc), do: Map.put(acc, :affected_frontend_annotations, [item | affected_frontend_annotations])
   defp split_changes(item, %{affected_backend_annotations: affected_backend_annotations} = acc), do: Map.put(acc, :affected_backend_annotations, [item | affected_backend_annotations])
 
+  defp prep_annotations_for_upsert(annotation) do
+    annotation
+    |> Map.put(:last_synced_at, DateTime.utc_now())
+    |> Map.drop([:source])
+    |> IO.inspect
+  end
+
   defp upsert_affected_annotations(%{affected_items: %{affected_frontend_annotations: affected_frontend_annotations}}) do
-    pruned_annotations = Enum.map(affected_frontend_annotations, &Map.drop(&1, [:source]))
+    pruned_annotations = Enum.map(affected_frontend_annotations, &prep_annotations_for_upsert/1)
 
     upsert_annotations(%{annotations: pruned_annotations})
   end

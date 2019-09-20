@@ -9,6 +9,7 @@ defmodule Nota.Repo.Migrations.CreateAnnotation do
       add :verse_id, references(:verses, type: :integer), null: false
       add :user_id, references(:users, type: :uuid), null: false
 
+      add :last_synced_at, :utc_datetime
       add :deleted_at, :utc_datetime
 
       timestamps(type: :utc_datetime)

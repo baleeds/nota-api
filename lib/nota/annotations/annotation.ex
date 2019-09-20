@@ -13,6 +13,7 @@ defmodule Nota.Annotations.Annotation do
 
   @optional_fields ~w(
     id
+    last_synced_at
     inserted_at
     updated_at
     deleted_at
@@ -24,6 +25,7 @@ defmodule Nota.Annotations.Annotation do
   @foreign_key_type :binary_id
   schema "annotations" do
     field :text, :string
+    field :last_synced_at, :utc_datetime
     field :deleted_at, :utc_datetime
 
     belongs_to :verse, Verse, type: :integer
