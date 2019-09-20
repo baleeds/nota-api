@@ -22,10 +22,10 @@ defmodule NotaWeb.Schema.Annotations do
       resolve(&Annotation.get_all/3)
     end
 
-    field :verse_annotations, list_of(non_null(:annotation)) do
-      arg(:verse_id, :id)
+    field :public_annotations, list_of(non_null(:annotation)) do
+      arg :verse_id, non_null(:id)
 
-      resolve(&Annotation.get_all/3)
+      resolve(&Annotation.get_public/3)
     end
 
     field :annotations_since, list_of(non_null(:annotation)) do

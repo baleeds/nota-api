@@ -38,6 +38,13 @@ defmodule Nota.Annotations do
     Repo.all(Annotation)
   end
 
+  def list_public_annotations(verse_id, user_id) do
+    Annotation
+    |> where([a], a.user_id != ^user_id)
+    |> where([a], a.verse_id == ^verse_id)
+    |> Repo.all
+  end
+
   def list_annotations(%{user_id: user_id}) do
     Annotation
     |> where([a], a.user_id == ^user_id)
