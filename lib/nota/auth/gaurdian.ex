@@ -15,6 +15,11 @@ defmodule Nota.Auth.Guardian do
   #   {:error, "wut"}
   # end
 
+  # def logout(conn, _) do
+  #   conn
+  #   |> Guardian.Plug.sign_out(Guardian, _opts = [])
+  # end
+
   def subject_for_token(%{user_id: _} = resource, _), do: {:ok, resource}
 
   def subject_for_token(_resource, _claims), do: {:error, "invalid JWT resource"}
