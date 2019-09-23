@@ -8,6 +8,7 @@ defmodule Nota.Auth do
   alias Ecto.Multi
   alias Nota.Repo
   alias Nota.Auth.User
+  alias Nota.Auth.Guardian
 
   def data() do
     Dataloader.Ecto.new(Repo, query: &query/2)
@@ -111,5 +112,31 @@ defmodule Nota.Auth do
 
   defp get_user_changes(_) do
     {:error, "Changes are invalid"}
+  end
+
+  # TODO: this is duplicate from user resolver
+  # TODO: also, rename this authorization_token so it's clearer
+  def get_user_authorization_token(%{id: user_id}) do
+    %{
+      user_id: user_id
+    }
+    |> Guardian.encode_and_sign()
+    |> case do
+      {:ok, token, claims} ->
+        # TODO: perist JTI from claims on user
+        {:ok, %{token: token, claims: claims}}
+
+      _ ->
+        {:error, "unable to get user authorization"}
+    end
+  end
+
+  def refresh_user_authorization_token(token) do
+    Guardian.refresh(token)
+    |> case do
+      {:ok, _old_stuff, {new_token, _new_claims}} -> {:ok, new_token}
+      
+      _ -> {:error, "unable to refresh token"}
+    end
   end
 end

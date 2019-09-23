@@ -16,4 +16,9 @@ defmodule NotaWeb.Resolvers.Auth.User do
       user -> {:ok, user}
     end
   end
+
+  def refresh_auth(_, %{token: token}, _) do
+    Auth.refresh_user_authorization_token(token)
+    |> IO.inspect()
+  end
 end

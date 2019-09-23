@@ -20,6 +20,7 @@ defmodule NotaWeb.Schema do
 
   mutation do
     import_fields(:annotations_mutations)
+    import_fields(:user_mutations)
   end
 
   def context(ctx) do

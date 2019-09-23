@@ -19,6 +19,14 @@ defmodule NotaWeb.Schema.Users do
     end
   end
 
+  object :user_mutations do
+    field :refresh_auth, non_null(:string) do
+      arg :token, non_null(:string)
+      
+      resolve(&User.refresh_auth/3)
+    end
+  end
+
   object :user do
     field(:id, non_null(:id))
     field(:first_name, :string)

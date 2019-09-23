@@ -6,7 +6,6 @@ defmodule NotaWeb.Controllers.AuthController do
   use NotaWeb, :controller
 
   alias Nota.Auth
-  alias Nota.Auth.{Guardian}
 
   # import Nota.Helpers, only: [utc_now: 0]
   # import NotaWeb.Resolvers.Helpers, only: [transform_errors: 1]
@@ -22,7 +21,7 @@ defmodule NotaWeb.Controllers.AuthController do
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     with {:ok, user} <- Auth.upsert_user(auth),
-         {:ok, %{token: token}} <- get_user_authorization_token(user) do
+         {:ok, %{token: token}} <- Auth.get_user_authorization_token(user) do
       conn |> redirect(external: "#{frontend_url()}/login?authorization=#{token}")
     else
       {:error, errors} ->
@@ -39,23 +38,6 @@ defmodule NotaWeb.Controllers.AuthController do
           end
 
         conn |> redirect(external: "#{frontend_url()}/error?messages=#{Poison.encode!(messages)}")
-    end
-  end
-
-  # TODO: this is duplicate from user resolver
-  # TODO: also, rename this authorization_token so it's clearer
-  defp get_user_authorization_token(user) do
-    %{
-      user_id: user.id
-    }
-    |> Guardian.encode_and_sign()
-    |> case do
-      {:ok, token, claims} ->
-        # TODO: perist JTI from claims on user
-        {:ok, %{token: token, claims: claims}}
-
-      _ ->
-        {:error, "unable to get user authorization"}
     end
   end
 end
