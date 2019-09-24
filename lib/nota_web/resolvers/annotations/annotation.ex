@@ -34,8 +34,16 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     end
   end
 
-  def get_public(_, %{verse_id: verse_id} = args, %{context: %{current_user: %{id: user_id}}}) do
+  def get_public(_, %{verse_id: verse_id}, %{context: %{current_user: %{id: user_id}}}) do
     Annotations.list_public_annotations(verse_id, user_id)
+    |> case do
+      nil -> {:error, "Error retrieving annotations"}
+      annotations -> {:ok, annotations}
+    end
+  end
+
+  def get_public(_, %{verse_id: verse_id}, _) do
+    Annotations.list_annotations()
     |> case do
       nil -> {:error, "Error retrieving annotations"}
       annotations -> {:ok, annotations}
