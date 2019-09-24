@@ -27,12 +27,6 @@ defmodule NotaWeb.Schema.Annotations do
 
       resolve(&Annotation.get_public/3)
     end
-
-    field :annotations_since, list_of(non_null(:annotation)) do
-      arg(:date, :datetime)
-
-      resolve(&Annotation.get_since/3)
-    end
   end
 
   object :annotations_mutations do
