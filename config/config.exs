@@ -20,7 +20,7 @@ config :nota, NotaWeb.Endpoint,
 config :nota, Nota.Auth.Guardian,
   issuer: "nota",
   secret_key: System.get_env("JWT_SECRET_KEY"),
-  ttl: {12, :weeks},
+  ttl: {4, :weeks},
   allowed_algos: ["HS256"]
 
 config :nota, Nota.Auth.AccessPipeline,
@@ -35,8 +35,7 @@ config :ueberauth, Ueberauth,
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
   client_id: System.get_env("GOOGLE_CLIENT_ID"),
-  client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
-  ttl: {12, :weeks}
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
 
 # Configures Elixir's Logger
 config :logger, :console,
