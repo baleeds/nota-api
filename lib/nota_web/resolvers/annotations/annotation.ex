@@ -9,7 +9,7 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     end
   end
 
-  def get_all(_, %{user_id: user_id} = args, context) do
+  def get_all(_, %{user_id: _user_id} = args, _) do
     Annotations.list_annotations(args)
     |> case do
       nil -> {:error, "Error retrieving annotations"}
@@ -17,7 +17,7 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     end
   end
 
-  def get_all(_, %{verse_id: verse_id} = args, context) do
+  def get_all(_, %{verse_id: _verse_id} = args, _) do
     Annotations.list_annotations(args)
     |> case do
       nil -> {:error, "Error retreiving annotations"}
@@ -25,8 +25,7 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     end
   end
 
-  def get_all(_, _, context) do
-    inspect_user(context)
+  def get_all(_, _, _) do
     Annotations.list_annotations()
     |> case do
       nil -> {:error, "Error retrieving annotations"}
@@ -42,8 +41,8 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     end
   end
 
-  def get_public(_, %{verse_id: verse_id}, _) do
-    Annotations.list_annotations()
+  def get_public(_, %{verse_id: _verse_id} = args, _) do
+    Annotations.list_annotations(args)
     |> case do
       nil -> {:error, "Error retrieving annotations"}
       annotations -> {:ok, annotations}
@@ -94,7 +93,7 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
 
   def save_all(_, _, _), do: {:error, "Unauthorized"}
 
-  def sync(_, %{input: %{last_synced_at: last_synced_at, annotations: annotations}} = input, %{context: %{current_user: %{id: user_id}}}) do
+  def sync(_, %{input: %{last_synced_at: last_synced_at, annotations: annotations}}, %{context: %{current_user: %{id: user_id}}}) do
     Annotations.sync_annotations(annotations, user_id, last_synced_at)
     |> IO.inspect
     |> handle_sync

@@ -14,7 +14,7 @@ defmodule Nota.Annotations do
     Dataloader.Ecto.new(Repo, query: &query/2)
   end
 
-  def query(queryable, %{user_id: user_id}) do
+  def query(_queryable, %{user_id: user_id}) do
     Annotation
     |> where([a], a.user_id == ^user_id)
   end
@@ -237,8 +237,8 @@ defmodule Nota.Annotations do
     |> Enum.reverse
     |> Enum.uniq_by(&Map.get(&1, :id))
     |> case do
-      latest_changes -> {:ok, latest_changes}
       nil -> {:error, "Error in get_latest_changes"}
+      latest_changes -> {:ok, latest_changes}
     end
   end
   
@@ -271,8 +271,8 @@ defmodule Nota.Annotations do
     latest_changes
     |> Enum.reduce(%{affected_backend_annotations: [], affected_frontend_annotations: []}, &split_changes/2)
     |> case do
-      affected_items -> {:ok, affected_items}
       nil -> {:error, "Error in get_affected_items"}
+      affected_items -> {:ok, affected_items}
     end
   end
 
