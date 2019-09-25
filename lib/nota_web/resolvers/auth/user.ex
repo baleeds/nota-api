@@ -21,4 +21,14 @@ defmodule NotaWeb.Resolvers.Auth.User do
     Auth.refresh_user_authorization_token(token)
     |> IO.inspect()
   end
+
+  def me(_, _, %{context: %{ current_user: %{ id: user_id } }}) do
+    Auth.get_user(user_id)
+    |> case do
+      nil -> {:error, "Error retrieving user"}
+      user -> {:ok, user}
+    end
+  end
+
+  def me(_, _, _), do: {:error, "Unauthorized"}
 end

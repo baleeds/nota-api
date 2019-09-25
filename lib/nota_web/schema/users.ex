@@ -17,6 +17,10 @@ defmodule NotaWeb.Schema.Users do
     field :users, list_of(non_null(:user)) do      
       resolve(&User.get_all/3)
     end
+
+    field :me, non_null(:user) do
+      resolve(&User.me/3)
+    end
   end
 
   object :user_mutations do
