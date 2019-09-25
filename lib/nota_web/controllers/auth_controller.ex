@@ -22,7 +22,7 @@ defmodule NotaWeb.Controllers.AuthController do
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     with {:ok, user} <- Auth.upsert_user(auth),
          {:ok, %{token: token}} <- Auth.get_user_authorization_token(user) do
-      conn |> redirect(external: "#{frontend_url()}/login?authorization=#{token}")
+      conn |> redirect(external: "#{frontend_url()}/login?authorization=#{token}&userId=#{user.id}")
     else
       {:error, errors} ->
         messages =
