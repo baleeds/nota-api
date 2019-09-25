@@ -80,7 +80,7 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     |> handle_sync
   end
 
-  def sync(_, _, _), do: {:error, "Unauthorizard"}
+  def sync(_, _, _), do: {:error, "Unauthorized"}
 
   defp handle_sync({:ok, %{affected_items: %{affected_backend_annotations: new_annotations}, upserted_annotations: upserted_annotations}}) do
     {:ok, %{annotations: new_annotations, upserted_annotations: upserted_annotations}}
