@@ -5,7 +5,7 @@ defmodule Nota.Mixfile do
     [
       app: :nota,
       version: "0.0.1",
-      elixir: "~> 1.4",
+      elixir: "~> 1.9",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -24,7 +24,7 @@ defmodule Nota.Mixfile do
         :logger,
         :runtime_tools,
         :ueberauth,
-        :ueberauth_google,
+        :ueberauth_google
       ]
     ]
   end
@@ -48,8 +48,9 @@ defmodule Nota.Mixfile do
       {:absinthe, "~> 1.4"},
       {:absinthe_plug, "~> 1.4"},
       {:dataloader, "~> 1.0.0"},
-      {:ueberauth, "~> 0.6.1"},
-      {:ueberauth_google, "~> 0.8"},
+      {:ueberauth, "~> 0.6.2"},
+      {:ueberauth_google, "~> 0.9"},
+      {:jason, "~> 1.1.2"},
       # {:ja_serializer, "~> 0.14.0"},
       {:guardian, "~> 1.2.1"}
     ]
