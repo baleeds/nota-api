@@ -1,5 +1,6 @@
 defmodule NotaWeb.Schema.Annotations do
   use Absinthe.Schema.Notation
+  use Absinthe.Relay.Schema.Notation, :modern
 
   alias Nota.Bible
   alias Nota.Auth
@@ -9,6 +10,21 @@ defmodule NotaWeb.Schema.Annotations do
   # # alias Absinthe.Middleware.Dataloader
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
+  connection(node_type: :annotation)
+
+  node object(:annotation) do
+    field(:text, non_null(:string))
+    field(:verse_id, non_null(:id))
+    field(:verse, non_null(:verse), resolve: dataloader(Bible.Verse))
+    field(:user_id, non_null(:id))
+    field(:user, non_null(:user), resolve: dataloader(Auth.User))
+
+    field(:last_synced_at, :datetime)
+    field(:inserted_at, non_null(:datetime))
+    field(:updated_at, non_null(:datetime))
+    field(:deleted_at, :datetime)
+  end
+
   object :annotations_queries do
     field :annotation, non_null(:annotation) do
       arg(:id, non_null(:id))
@@ -16,14 +32,15 @@ defmodule NotaWeb.Schema.Annotations do
       resolve(&Annotation.get/3)
     end
 
-    field :annotations, list_of(non_null(:annotation)) do
+    connection field(:annotations, node_type: :annotation) do
       arg(:user_id, :id)
-    
+      arg(:verse_id, :id)
+
       resolve(&Annotation.get_all/3)
     end
 
     field :public_annotations, list_of(non_null(:annotation)) do
-      arg :verse_id, non_null(:id)
+      arg(:verse_id, non_null(:id))
 
       resolve(&Annotation.get_public/3)
     end
@@ -49,45 +66,31 @@ defmodule NotaWeb.Schema.Annotations do
     end
   end
 
-  object :annotation do
-    field(:id, non_null(:id))
+  input_object :save_annotation_input do
+    field(:id, :id)
     field(:text, non_null(:string))
     field(:verse_id, non_null(:id))
-    field(:verse, non_null(:verse), resolve: dataloader(Bible.Verse))
-    field(:user_id, non_null(:id))
-    field(:user, non_null(:user), resolve: dataloader(Auth.User))
 
-    field(:last_synced_at, :datetime)
-    field(:inserted_at, non_null(:datetime))
-    field(:updated_at, non_null(:datetime))
+    field(:inserted_at, :datetime)
+    field(:updated_at, :datetime)
     field(:deleted_at, :datetime)
   end
 
-  input_object :save_annotation_input do
-    field :id, :id
-    field :text, non_null(:string)
-    field :verse_id, non_null(:id)
-
-    field :inserted_at, :datetime
-    field :updated_at, :datetime
-    field :deleted_at, :datetime
-  end
-
   input_object :sync_annotations_input do
-    field :annotations, non_null(list_of(:save_annotation_input))
-    field :last_synced_at, non_null(:datetime) 
+    field(:annotations, non_null(list_of(:save_annotation_input)))
+    field(:last_synced_at, non_null(:datetime))
   end
 
   object :save_annotation_payload do
-    field :annotation, non_null(:annotation)
+    field(:annotation, non_null(:annotation))
   end
 
   object :save_annotations_paylaod do
-    field :annotations, non_null(list_of(:annotation))
+    field(:annotations, non_null(list_of(:annotation)))
   end
 
   object :sync_annotations_payload do
-    field :annotations, non_null(list_of(:annotation))
-    field :upserted_annotations, non_null(list_of(:annotation))
+    field(:annotations, non_null(list_of(:annotation)))
+    field(:upserted_annotations, non_null(list_of(:annotation)))
   end
 end

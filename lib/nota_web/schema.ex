@@ -1,10 +1,11 @@
 defmodule NotaWeb.Schema do
   use Absinthe.Schema
+  use Absinthe.Relay.Schema, flavor: :modern
+  use Absinthe.Relay.Schema.Notation, :modern
 
   alias Nota.Bible
   alias Nota.Annotations
   alias Nota.Auth
-
 
   import_types(Absinthe.Type.Custom)
 
@@ -23,9 +24,19 @@ defmodule NotaWeb.Schema do
     import_fields(:user_mutations)
   end
 
+  node interface do
+    resolve_type(fn
+      %Nota.Annotations.Annotation{}, _ ->
+        :annotation
+
+      _, _ ->
+        nil
+    end)
+  end
+
   def context(ctx) do
     loader =
-      Dataloader.new
+      Dataloader.new()
       |> Dataloader.add_source(Bible.Verse, Bible.data())
       |> Dataloader.add_source(Annotations.Annotation, Annotations.data())
       |> Dataloader.add_source(Auth.User, Auth.data())

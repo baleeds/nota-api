@@ -38,21 +38,21 @@ defmodule Nota.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:absinthe, "~> 1.4"},
+      {:absinthe_plug, "~> 1.4"},
+      {:absinthe_relay, "~> 1.4"},
+      {:corsica, "~> 1.1.2"},
+      {:dataloader, "~> 1.0.0"},
+      {:guardian, "~> 1.2.1"},
+      {:gettext, "~> 0.11"},
+      {:jason, "~> 1.1.2"},
       {:phoenix, "~> 1.3.2"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
-      {:gettext, "~> 0.11"},
-      {:postgrex, ">= 0.0.0"},
       {:plug_cowboy, "~> 1.0"},
-      {:corsica, "~> 1.1.2"},
-      {:absinthe, "~> 1.4"},
-      {:absinthe_plug, "~> 1.4"},
-      {:dataloader, "~> 1.0.0"},
+      {:postgrex, ">= 0.0.0"},
       {:ueberauth, "~> 0.6.2"},
-      {:ueberauth_google, "~> 0.9"},
-      {:jason, "~> 1.1.2"},
-      # {:ja_serializer, "~> 0.14.0"},
-      {:guardian, "~> 1.2.1"}
+      {:ueberauth_google, "~> 0.9"}
     ]
   end
 

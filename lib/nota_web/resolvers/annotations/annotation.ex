@@ -1,5 +1,7 @@
 defmodule NotaWeb.Resolvers.Annotations.Annotation do
   alias Nota.Annotations
+  alias Nota.Repo
+  alias Absinthe.Relay.Connection
 
   def get(_, %{id: id}, _) do
     Annotations.get_annotation!(id)
@@ -9,28 +11,9 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     end
   end
 
-  def get_all(_, %{user_id: _user_id} = args, _) do
+  def get_all(_, args, _) do
     Annotations.list_annotations(args)
-    |> case do
-      nil -> {:error, "Error retrieving annotations"}
-      annotations -> {:ok, annotations}
-    end
-  end
-
-  def get_all(_, %{verse_id: _verse_id} = args, _) do
-    Annotations.list_annotations(args)
-    |> case do
-      nil -> {:error, "Error retreiving annotations"}
-      annotations -> {:ok, annotations}
-    end
-  end
-
-  def get_all(_, _, _) do
-    Annotations.list_annotations()
-    |> case do
-      nil -> {:error, "Error retrieving annotations"}
-      annotations -> {:ok, annotations}
-    end
+    |> Connection.from_query(&Repo.all/1, args)
   end
 
   def get_public(_, %{verse_id: verse_id}, %{context: %{current_user: %{id: user_id}}}) do
@@ -51,7 +34,7 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
 
   def get_public(_, _, _), do: {:error, "Unauthorized"}
 
-  def save(_, %{input: input}, %{context: %{ current_user: %{id: user_id} }}) do
+  def save(_, %{input: input}, %{context: %{current_user: %{id: user_id}}}) do
     input
     |> Map.put(:user_id, user_id)
     |> Annotations.save_annotation()
@@ -63,7 +46,7 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
 
   def save(_, _, _), do: {:error, "Unauthorized"}
 
-  def save_all(_, %{input: input}, %{context: %{ current_user: %{ id: user_id } }}) do
+  def save_all(_, %{input: input}, %{context: %{current_user: %{id: user_id}}}) do
     input
     |> Annotations.save_annotations(user_id)
     |> case do
@@ -74,15 +57,23 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
 
   def save_all(_, _, _), do: {:error, "Unauthorized"}
 
-  def sync(_, %{input: %{last_synced_at: last_synced_at, annotations: annotations}}, %{context: %{current_user: %{id: user_id}}}) do
+  def sync(_, %{input: %{last_synced_at: last_synced_at, annotations: annotations}}, %{
+        context: %{current_user: %{id: user_id}}
+      }) do
     Annotations.sync_annotations(annotations, user_id, last_synced_at)
-    |> IO.inspect
+    |> IO.inspect()
     |> handle_sync
   end
 
   def sync(_, _, _), do: {:error, "Unauthorized"}
 
-  defp handle_sync({:ok, %{affected_items: %{affected_backend_annotations: new_annotations}, upserted_annotations: upserted_annotations}}) do
+  defp handle_sync(
+         {:ok,
+          %{
+            affected_items: %{affected_backend_annotations: new_annotations},
+            upserted_annotations: upserted_annotations
+          }}
+       ) do
     {:ok, %{annotations: new_annotations, upserted_annotations: upserted_annotations}}
   end
 
