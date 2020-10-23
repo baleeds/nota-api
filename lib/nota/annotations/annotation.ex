@@ -1,9 +1,11 @@
 defmodule Nota.Annotations.Annotation do
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
 
   alias Nota.Bible.Verse
   alias Nota.Auth.User
+  alias Nota.Annotations.AnnotationFavorite
 
   @required_fields ~w(
     verse_id
@@ -24,12 +26,12 @@ defmodule Nota.Annotations.Annotation do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "annotations" do
-    field :text, :string
-    field :last_synced_at, :utc_datetime
-    field :deleted_at, :utc_datetime
+    field(:text, :string)
+    field(:last_synced_at, :utc_datetime)
+    field(:deleted_at, :utc_datetime)
 
-    belongs_to :verse, Verse, type: :integer
-    belongs_to :user, User
+    belongs_to(:verse, Verse, type: :integer)
+    belongs_to(:user, User)
 
     timestamps(type: :utc_datetime)
   end
@@ -41,5 +43,21 @@ defmodule Nota.Annotations.Annotation do
     |> validate_required(@required_fields)
     |> foreign_key_constraint(:verse_id)
     |> foreign_key_constraint(:user_id)
+  end
+
+  def projection(user_id \\ 0) do
+    from(a in __MODULE__,
+      left_join: f in AnnotationFavorite,
+      on: f.user_id == ^user_id and f.annotation_id == a.id,
+      select: %{
+        id: a.id,
+        text: a.text,
+        verse_id: a.verse_id,
+        user_id: a.user_id,
+        inserted_at: a.inserted_at,
+        updated_at: a.updated_at,
+        is_favorite: fragment("? IS NOT NULL", f.id)
+      }
+    )
   end
 end

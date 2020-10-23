@@ -26,5 +26,5 @@ defmodule NotaWeb.Resolvers.Auth.User do
     end
   end
 
-  def me(_, _, _), do: {:error, "Unauthorized"}
+  def get_me(_, _, _), do: {:error, "Unauthorized"}
 end

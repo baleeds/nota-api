@@ -27,7 +27,7 @@ defmodule NotaWeb.Schema.Users do
       resolve(&User.get_users/3)
     end
 
-    field :me, non_null(:user) do
+    field :me, :user do
       resolve(&User.get_me/3)
     end
   end

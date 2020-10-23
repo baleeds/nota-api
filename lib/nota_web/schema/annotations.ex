@@ -6,6 +6,7 @@ defmodule NotaWeb.Schema.Annotations do
   alias Nota.Auth
 
   alias NotaWeb.Resolvers.Annotations.Annotation
+  alias NotaWeb.Resolvers.Annotations.Favorite
 
   # # alias Absinthe.Middleware.Dataloader
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
@@ -15,14 +16,13 @@ defmodule NotaWeb.Schema.Annotations do
   node object(:annotation) do
     field(:text, non_null(:string))
     field(:verse_id, non_null(:id))
-    field(:verse, non_null(:verse), resolve: dataloader(Bible.Verse))
     field(:user_id, non_null(:id))
-    field(:user, non_null(:user), resolve: dataloader(Auth.User))
-
-    field(:last_synced_at, :datetime)
+    field(:is_favorite, non_null(:boolean))
     field(:inserted_at, non_null(:datetime))
     field(:updated_at, non_null(:datetime))
-    field(:deleted_at, :datetime)
+
+    field(:verse, non_null(:verse), resolve: dataloader(Bible.Verse))
+    field(:user, non_null(:user), resolve: dataloader(Auth.User))
   end
 
   object :annotations_queries do
@@ -52,6 +52,22 @@ defmodule NotaWeb.Schema.Annotations do
       arg(:input, non_null(:save_annotation_input))
 
       resolve(&Annotation.save/3)
+    end
+
+    field :favorite_annotation, non_null(:favorite_annotation_payload) do
+      arg(:annotation_id, non_null(:id))
+
+      middleware(Absinthe.Relay.Node.ParseIDs, annotation_id: :annotation)
+
+      resolve(&Favorite.favorite_annotation/3)
+    end
+
+    field :unfavorite_annotation, non_null(:unfavorite_annotation_payload) do
+      arg(:annotation_id, non_null(:id))
+
+      middleware(Absinthe.Relay.Node.ParseIDs, annotation_id: :annotation)
+
+      resolve(&Favorite.unfavorite_annotation/3)
     end
 
     # field :save_annotations, non_null(:save_annotations_paylaod) do
@@ -84,6 +100,14 @@ defmodule NotaWeb.Schema.Annotations do
 
   object :save_annotation_payload do
     field(:annotation, non_null(:annotation))
+  end
+
+  object :favorite_annotation_payload do
+    field(:success, non_null(:boolean))
+  end
+
+  object :unfavorite_annotation_payload do
+    field(:success, non_null(:boolean))
   end
 
   # object :save_annotations_paylaod do
