@@ -1,15 +1,11 @@
 defmodule NotaWeb.Resolvers.Auth.User do
   alias Nota.Auth
 
-  def get_all(_, _, _) do
+  def get_users(_, _, _) do
     Auth.get_users()
-    |> case do
-      nil -> {:error, "Error retrieving users"}
-      users -> {:ok, users}
-    end
   end
 
-  def get(_, %{id: id}, _) do
+  def get_user(_, %{id: id}, _) do
     Auth.get_user(id)
     |> case do
       nil -> {:error, "Error retrieving user"}
@@ -22,7 +18,7 @@ defmodule NotaWeb.Resolvers.Auth.User do
     |> IO.inspect()
   end
 
-  def me(_, _, %{context: %{ current_user: %{ id: user_id } }}) do
+  def get_me(_, _, %{context: %{current_user: %{id: user_id}}}) do
     Auth.get_user(user_id)
     |> case do
       nil -> {:error, "Error retrieving user"}

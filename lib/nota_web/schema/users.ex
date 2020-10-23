@@ -1,42 +1,42 @@
 defmodule NotaWeb.Schema.Users do
   use Absinthe.Schema.Notation
-
-  # alias Nota.Annotations
+  use Absinthe.Relay.Schema.Notation, :modern
 
   alias NotaWeb.Resolvers.Auth.User
 
   # import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
+  connection(node_type: :user)
+
+  node object(:user) do
+    field(:first_name, :string)
+    field(:last_name, :string)
+    field(:email, non_null(:string))
+
+    # field(:annotations, list_of(non_null(:annotation)), resolve: dataloader(Annotations.Annotation))
+  end
+
   object :user_queries do
     field :user, non_null(:user) do
       arg(:id, non_null(:id))
 
-      resolve(&User.get/3)
+      resolve(&User.get_user/3)
     end
 
-    field :users, list_of(non_null(:user)) do      
-      resolve(&User.get_all/3)
+    connection field(:users, node_type: :user) do
+      resolve(&User.get_users/3)
     end
 
     field :me, non_null(:user) do
-      resolve(&User.me/3)
+      resolve(&User.get_me/3)
     end
   end
 
   object :user_mutations do
     field :refresh_token, non_null(:string) do
-      arg :token, non_null(:string)
-      
+      arg(:token, non_null(:string))
+
       resolve(&User.refresh_token/3)
     end
-  end
-
-  object :user do
-    field(:id, non_null(:id))
-    field(:first_name, :string)
-    field(:last_name, :string)
-    field(:email, non_null(:string))
-    
-    # field(:annotations, list_of(non_null(:annotation)), resolve: dataloader(Annotations.Annotation))
   end
 end

@@ -22,7 +22,7 @@ defmodule Nota.Auth do
 
   def get_user(id), do: Repo.get(User, id)
 
-  def get_users(), do: Repo.all(User)
+  def get_users(), do: User
 
   def create_user(attrs \\ %{}) do
     %User{}
@@ -54,8 +54,9 @@ defmodule Nota.Auth do
     end
   end
 
-  defp find_user_by_oauth(%{auth: %{provider: oauth_provider, uid: oauth_uid} }) do
+  defp find_user_by_oauth(%{auth: %{provider: oauth_provider, uid: oauth_uid}}) do
     stringified_oauth_provider = Atom.to_string(oauth_provider)
+
     User
     |> where([u], u.oauth_provider == ^stringified_oauth_provider and u.oauth_uid == ^oauth_uid)
     |> Repo.one()
@@ -81,22 +82,22 @@ defmodule Nota.Auth do
   end
 
   defp get_user_changes(%{
-    auth: %{
-      provider: provider,
-      uid: uid,
-      credentials: %{
-        token: token,
-        refresh_token: refresh_token,
-        expires: expires,
-        expires_at: expires_at
-      },
-      info: %{
-        email: email,
-        first_name: first_name,
-        last_name: last_name
-      }
-    },
-  }) do
+         auth: %{
+           provider: provider,
+           uid: uid,
+           credentials: %{
+             token: token,
+             refresh_token: refresh_token,
+             expires: expires,
+             expires_at: expires_at
+           },
+           info: %{
+             email: email,
+             first_name: first_name,
+             last_name: last_name
+           }
+         }
+       }) do
     %{
       email: email,
       first_name: first_name,
@@ -106,7 +107,7 @@ defmodule Nota.Auth do
       oauth_token: token,
       oauth_refresh_token: refresh_token,
       oauth_expires_at: expires_at,
-      oauth_expires: expires,
+      oauth_expires: expires
     }
   end
 
@@ -135,7 +136,6 @@ defmodule Nota.Auth do
     Guardian.refresh(token)
     |> case do
       {:ok, _old_stuff, {new_token, _new_claims}} -> {:ok, new_token}
-      
       _ -> {:error, "unable to refresh token"}
     end
   end

@@ -17,7 +17,7 @@ defmodule NotaWeb.Schema.Bible do
     field :verses, list_of(non_null(:verse)) do
       arg(:book_number, non_null(:integer))
       arg(:chapter_number, non_null(:integer))
-      
+
       resolve(&Verse.get_by/3)
     end
   end
@@ -28,7 +28,7 @@ defmodule NotaWeb.Schema.Bible do
     field(:chapter_number, non_null(:integer))
     field(:verse_number, non_null(:integer))
     field(:text, non_null(:string))
-    
+
     field :annotations, list_of(non_null(:annotation)) do
       arg(:user_id, :id)
 

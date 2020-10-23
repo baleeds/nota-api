@@ -32,17 +32,18 @@ defmodule NotaWeb.Schema.Annotations do
       resolve(&Annotation.get/3)
     end
 
-    connection field(:annotations, node_type: :annotation) do
+    connection field(:my_annotations, node_type: :annotation) do
       arg(:user_id, :id)
       arg(:verse_id, :id)
 
-      resolve(&Annotation.get_all/3)
+      resolve(&Annotation.get_my_annotations/3)
     end
 
-    field :public_annotations, list_of(non_null(:annotation)) do
-      arg(:verse_id, non_null(:id))
+    connection field(:public_annotations, node_type: :annotation) do
+      arg(:user_id, :id)
+      arg(:verse_id, :id)
 
-      resolve(&Annotation.get_public/3)
+      resolve(&Annotation.get_public_annotations/3)
     end
   end
 
@@ -53,17 +54,17 @@ defmodule NotaWeb.Schema.Annotations do
       resolve(&Annotation.save/3)
     end
 
-    field :save_annotations, non_null(:save_annotations_paylaod) do
-      arg(:input, non_null(list_of(non_null(:save_annotation_input))))
+    # field :save_annotations, non_null(:save_annotations_paylaod) do
+    #   arg(:input, non_null(list_of(non_null(:save_annotation_input))))
 
-      resolve(&Annotation.save_all/3)
-    end
+    #   resolve(&Annotation.save_all/3)
+    # end
 
-    field :sync_annotations, non_null(:sync_annotations_payload) do
-      arg(:input, non_null(:sync_annotations_input))
+    # field :sync_annotations, non_null(:sync_annotations_payload) do
+    #   arg(:input, non_null(:sync_annotations_input))
 
-      resolve(&Annotation.sync/3)
-    end
+    #   resolve(&Annotation.sync/3)
+    # end
   end
 
   input_object :save_annotation_input do
@@ -76,21 +77,21 @@ defmodule NotaWeb.Schema.Annotations do
     field(:deleted_at, :datetime)
   end
 
-  input_object :sync_annotations_input do
-    field(:annotations, non_null(list_of(:save_annotation_input)))
-    field(:last_synced_at, non_null(:datetime))
-  end
+  # input_object :sync_annotations_input do
+  #   field(:annotations, non_null(list_of(:save_annotation_input)))
+  #   field(:last_synced_at, non_null(:datetime))
+  # end
 
   object :save_annotation_payload do
     field(:annotation, non_null(:annotation))
   end
 
-  object :save_annotations_paylaod do
-    field(:annotations, non_null(list_of(:annotation)))
-  end
+  # object :save_annotations_paylaod do
+  #   field(:annotations, non_null(list_of(:annotation)))
+  # end
 
-  object :sync_annotations_payload do
-    field(:annotations, non_null(list_of(:annotation)))
-    field(:upserted_annotations, non_null(list_of(:annotation)))
-  end
+  # object :sync_annotations_payload do
+  #   field(:annotations, non_null(list_of(:annotation)))
+  #   field(:upserted_annotations, non_null(list_of(:annotation)))
+  # end
 end

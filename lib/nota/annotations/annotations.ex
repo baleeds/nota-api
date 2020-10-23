@@ -25,16 +25,21 @@ defmodule Nota.Annotations do
     queryable
   end
 
-  def list_annotations(args) do
+  def get_my_annotations(user_id, args) do
+    Annotation
+    |> where([a], a.user_id == ^user_id)
+    |> QueryHelpers.where_from_args(args, [:verse_id])
+  end
+
+  def get_public_annotations(args) do
     Annotation
     |> QueryHelpers.where_from_args(args, [:user_id, :verse_id])
   end
 
-  def list_public_annotations(verse_id, user_id) do
+  def get_public_annotations(user_id, args) do
     Annotation
     |> where([a], a.user_id != ^user_id)
-    |> where([a], a.verse_id == ^verse_id)
-    |> Repo.all()
+    |> QueryHelpers.where_from_args(args, [:user_id, :verse_id])
   end
 
   def get_annotation!(id), do: Repo.get!(Annotation, id)

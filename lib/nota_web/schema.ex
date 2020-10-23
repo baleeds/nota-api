@@ -29,6 +29,9 @@ defmodule NotaWeb.Schema do
       %Nota.Annotations.Annotation{}, _ ->
         :annotation
 
+      %Nota.Auth.User{}, _ ->
+        :user
+
       _, _ ->
         nil
     end)

@@ -11,28 +11,24 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     end
   end
 
-  def get_all(_, args, _) do
-    Annotations.list_annotations(args)
+  def get_my_annotations(_, args, %{context: %{current_user: %{id: user_id}}}) do
+    Annotations.get_my_annotations(user_id, args)
     |> Connection.from_query(&Repo.all/1, args)
   end
 
-  def get_public(_, %{verse_id: verse_id}, %{context: %{current_user: %{id: user_id}}}) do
-    Annotations.list_public_annotations(verse_id, user_id)
-    |> case do
-      nil -> {:error, "Error retrieving annotations"}
-      annotations -> {:ok, annotations}
-    end
+  def get_my_annotations(_, _, _) do
+    {:error, "You must be logged in to view your annotations"}
   end
 
-  def get_public(_, %{verse_id: _verse_id} = args, _) do
-    Annotations.list_annotations(args)
-    |> case do
-      nil -> {:error, "Error retrieving annotations"}
-      annotations -> {:ok, annotations}
-    end
+  def get_public_annotations(_, args, %{context: %{current_user: %{id: user_id}}}) do
+    Annotations.get_public_annotations(user_id, args)
+    |> Connection.from_query(&Repo.all/1, args)
   end
 
-  def get_public(_, _, _), do: {:error, "Unauthorized"}
+  def get_public_annotations(_, args, _) do
+    Annotations.get_public_annotations(args)
+    |> Connection.from_query(&Repo.all/1, args)
+  end
 
   def save(_, %{input: input}, %{context: %{current_user: %{id: user_id}}}) do
     input
