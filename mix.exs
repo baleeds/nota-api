@@ -5,7 +5,7 @@ defmodule Nota.Mixfile do
     [
       app: :nota,
       version: "0.0.1",
-      elixir: "~> 1.9",
+      elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -24,7 +24,9 @@ defmodule Nota.Mixfile do
         :logger,
         :runtime_tools,
         :ueberauth,
-        :ueberauth_google
+        :ueberauth_google,
+        :corsica,
+        :guardian
       ]
     ]
   end
@@ -38,20 +40,27 @@ defmodule Nota.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:absinthe, "~> 1.4"},
-      {:absinthe_plug, "~> 1.4"},
-      {:absinthe_relay, "~> 1.4"},
-      {:corsica, "~> 1.1.2"},
+      {:absinthe, ">= 1.5.0"},
+      {:absinthe_error_payload, "~> 1.0"},
+      {:absinthe_phoenix, "~> 2.0"},
+      {:absinthe_plug, ">= 1.5.0"},
+      {:absinthe_relay, ">= 1.5.0"},
+      {:corsica, "~> 1.0"},
       {:dataloader, "~> 1.0.0"},
-      {:guardian, "~> 1.2.1"},
+      {:ecto_sql, "~> 3.4"},
+      {:guardian, "~> 2.1.1"},
       {:gettext, "~> 0.11"},
-      {:jason, "~> 1.1.2"},
-      {:phoenix, "~> 1.3.2"},
-      {:phoenix_pubsub, "~> 1.0"},
-      {:phoenix_ecto, "~> 3.2"},
-      {:plug_cowboy, "~> 1.0"},
+      {:jason, "~> 1.0"},
+      {:phoenix, "~> 1.5.3"},
+      {:phoenix_ecto, "~> 4.1"},
+      {:plug_cowboy, "~> 2.0"},
+      {:poison, "~> 4.0.1"},
       {:postgrex, ">= 0.0.0"},
+      {:phoenix_live_dashboard, "~> 0.2.0"},
+      {:telemetry_metrics, "~> 0.4"},
+      {:telemetry_poller, "~> 0.4"},
       {:ueberauth, "~> 0.6.2"},
+      {:ueberauth_facebook, "~> 0.8"},
       {:ueberauth_google, "~> 0.9"}
     ]
   end

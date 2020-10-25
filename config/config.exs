@@ -14,7 +14,11 @@ config :nota, NotaWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "HmbY4BSibMF8QYcHGeG7xHhj0BHle+OiCsoT0vsx5+S8kpqPBsOsobCzDhOOCuch",
   render_errors: [view: NotaWeb.ErrorView, accepts: ~w(json)],
-  pubsub: [name: Nota.PubSub, adapter: Phoenix.PubSub.PG2]
+  # pubsub: Nota.PubSub,
+  live_view: [signing_salt: "LFzSDAuJ"]
+
+# Use Jason for JSON parsing in Phoenix
+config :phoenix, :json_library, Jason
 
 # Guardian
 config :nota, Nota.Auth.Guardian,
