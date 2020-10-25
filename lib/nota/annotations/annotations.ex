@@ -74,19 +74,30 @@ defmodule Nota.Annotations do
     |> Repo.transaction()
   end
 
+  # def delete_annotation(annotation_id, user_id) do
+  #   Annotation
+  #   |> where(id: ^annotation_id)
+  #   |> where(user_id: ^user_id)
+  #   |> Repo.one()
+  #   |> case do
+  #     nil -> {:error, "Not found"}
+  #     annotation -> delete_annotation(annotation)
+  #   end
+  # end
+
+  # def delete_annotation(%Annotation{} = annotation) do
+  #   Repo.delete(annotation)
+  # end
+
   def delete_annotation(annotation_id, user_id) do
     Annotation
-    |> where(id: ^annotation_id)
-    |> where(user_id: ^user_id)
-    |> Repo.one()
-    |> case do
-      nil -> {:error, "Not found"}
-      annotation -> delete_annotation(annotation)
-    end
-  end
-
-  def delete_annotation(%Annotation{} = annotation) do
-    Repo.delete(annotation)
+    |> where(id: ^annotation_id, user_id: ^user_id)
+    # |> Repo.delete_all()
+    # |> case do
+    #   {0, _nothing} -> {:error, "Not found"}
+    #   {_, _} -> {:ok, true}
+    # end
+    |> Repo.Extensions.delete_one()
   end
 
   def favorite_annotation(annotation_id, user_id) do
@@ -113,9 +124,9 @@ defmodule Nota.Annotations do
     {:error, "Unknown"}
   end
 
-  def delete_annotation(%Annotation{} = annotation) do
-    Repo.delete(annotation)
-  end
+  # def delete_annotation(%Annotation{} = annotation) do
+  #   Repo.delete(annotation)
+  # end
 
   def change_annotation(%Annotation{} = annotation) do
     Annotation.changeset(annotation, %{})

@@ -70,7 +70,7 @@ defmodule NotaWeb.Schema.Annotations do
 
   payload_object(:unfavorite_annotation_payload, :boolean)
 
-  payload_object(:delete_annotation_payload, :annotation)
+  payload_object(:delete_annotation_payload, :boolean)
 
   object :annotations_mutations do
     field :save_annotation, non_null(:save_annotation_payload) do
