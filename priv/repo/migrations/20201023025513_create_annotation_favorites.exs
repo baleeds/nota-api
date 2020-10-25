@@ -13,7 +13,11 @@ defmodule Nota.Repo.Migrations.CreateAnnotationFavorites do
       timestamps(type: :utc_datetime)
     end
 
-    create(unique_index(@table, [:user_id, :annotation_id]))
+    create(
+      unique_index(@table, [:user_id, :annotation_id],
+        name: :annotation_favorites_user_id_annotation_id_index
+      )
+    )
 
     create(index(@table, [:user_id]))
     create(index(@table, [:annotation_id]))

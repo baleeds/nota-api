@@ -1,4 +1,6 @@
 defmodule NotaWeb.Schema do
+  import AbsintheErrorPayload.Payload
+
   use Absinthe.Schema
   use Absinthe.Relay.Schema, flavor: :modern
   use Absinthe.Relay.Schema.Notation, :modern
@@ -7,6 +9,7 @@ defmodule NotaWeb.Schema do
   alias Nota.Annotations
   alias Nota.Auth
 
+  import_types(AbsintheErrorPayload.ValidationMessageTypes)
   import_types(Absinthe.Type.Custom)
 
   import_types(__MODULE__.Bible)
@@ -49,5 +52,14 @@ defmodule NotaWeb.Schema do
 
   def plugins do
     [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
+  end
+
+  def middleware(middleware, _field, %Absinthe.Type.Object{identifier: :mutation}) do
+    middleware ++
+      [&build_payload/2]
+  end
+
+  def middleware(middleware, _field, _object) do
+    middleware
   end
 end

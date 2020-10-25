@@ -5,8 +5,9 @@ defmodule NotaWeb.Resolvers.Annotations.Favorite do
         context: %{current_user: %{id: user_id}}
       }) do
     Annotations.favorite_annotation(annotation_id, user_id)
+    # |> IO.puts()
     |> case do
-      {:ok, _favorite_annotation} -> {:ok, %{success: true}}
+      {:ok, _favorite_annotation} -> {:ok, true}
       {:error, error} -> {:error, error}
     end
   end
@@ -20,7 +21,7 @@ defmodule NotaWeb.Resolvers.Annotations.Favorite do
       }) do
     Annotations.unfavorite_annotation(annotation_id, user_id)
     |> case do
-      {:ok, _unfavorite_annotation} -> {:ok, %{success: true}}
+      {:ok, _unfavorite_annotation} -> {:ok, true}
       {:error, error} -> {:error, error}
     end
   end

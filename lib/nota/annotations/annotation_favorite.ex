@@ -15,6 +15,7 @@ defmodule Nota.Annotations.AnnotationFavorite do
   def changeset(annotation_favorite, attrs) do
     annotation_favorite
     |> cast(attrs, [:annotation_id, :user_id])
+    |> unique_constraint([:user_id, :annotation_id], message: "already been favorited")
     |> validate_required([:annotation_id, :user_id])
   end
 end

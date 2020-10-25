@@ -1,4 +1,6 @@
 defmodule NotaWeb.Schema.Annotations do
+  import AbsintheErrorPayload.Payload
+
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :modern
 
@@ -98,17 +100,23 @@ defmodule NotaWeb.Schema.Annotations do
   #   field(:last_synced_at, non_null(:datetime))
   # end
 
-  object :save_annotation_payload do
-    field(:annotation, non_null(:annotation))
-  end
+  payload_object(:save_annotation_payload, :annotation)
 
-  object :favorite_annotation_payload do
-    field(:success, non_null(:boolean))
-  end
+  payload_object(:favorite_annotation_payload, :boolean)
 
-  object :unfavorite_annotation_payload do
-    field(:success, non_null(:boolean))
-  end
+  payload_object(:unfavorite_annotation_payload, :boolean)
+
+  # object :save_annotation_payload do
+  #   field(:annotation, non_null(:annotation))
+  # end
+
+  # object :favorite_annotation_payload do
+  #   field(:success, non_null(:boolean))
+  # end
+
+  # object :unfavorite_annotation_payload do
+  #   field(:success, non_null(:boolean))
+  # end
 
   # object :save_annotations_paylaod do
   #   field(:annotations, non_null(list_of(:annotation)))
