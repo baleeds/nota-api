@@ -35,45 +35,55 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     |> Map.put(:user_id, user_id)
     |> Annotations.save_annotation()
     |> case do
-      {:ok, annotation} -> {:ok, %{annotation: annotation}}
+      {:ok, annotation} -> {:ok, annotation}
       e -> e
     end
   end
 
   def save(_, _, _), do: {:error, "Unauthorized"}
 
-  def save_all(_, %{input: input}, %{context: %{current_user: %{id: user_id}}}) do
-    input
-    |> Annotations.save_annotations(user_id)
-    |> case do
-      {:ok, %{upserted_annotations: annotations}} -> {:ok, %{annotations: annotations}}
-      e -> e
-    end
-  end
-
-  def save_all(_, _, _), do: {:error, "Unauthorized"}
-
-  def sync(_, %{input: %{last_synced_at: last_synced_at, annotations: annotations}}, %{
+  def delete_annotation(_, %{annotation_id: annotation_id}, %{
         context: %{current_user: %{id: user_id}}
       }) do
-    Annotations.sync_annotations(annotations, user_id, last_synced_at)
-    |> IO.inspect()
-    |> handle_sync
+    Annotations.delete_annotation(annotation_id, user_id)
   end
 
-  def sync(_, _, _), do: {:error, "Unauthorized"}
-
-  defp handle_sync(
-         {:ok,
-          %{
-            affected_items: %{affected_backend_annotations: new_annotations},
-            upserted_annotations: upserted_annotations
-          }}
-       ) do
-    {:ok, %{annotations: new_annotations, upserted_annotations: upserted_annotations}}
+  def delete_annotation(_, _, _) do
+    {:error, "You must be logged in to delete your annotation"}
   end
 
-  defp handle_sync(_other), do: {:error, "Error saving annotations"}
+  # def save_all(_, %{input: input}, %{context: %{current_user: %{id: user_id}}}) do
+  #   input
+  #   |> Annotations.save_annotations(user_id)
+  #   |> case do
+  #     {:ok, %{upserted_annotations: annotations}} -> {:ok, %{annotations: annotations}}
+  #     e -> e
+  #   end
+  # end
+
+  # def save_all(_, _, _), do: {:error, "Unauthorized"}
+
+  # def sync(_, %{input: %{last_synced_at: last_synced_at, annotations: annotations}}, %{
+  #       context: %{current_user: %{id: user_id}}
+  #     }) do
+  #   Annotations.sync_annotations(annotations, user_id, last_synced_at)
+  #   |> IO.inspect()
+  #   |> handle_sync
+  # end
+
+  # def sync(_, _, _), do: {:error, "Unauthorized"}
+
+  # defp handle_sync(
+  #        {:ok,
+  #         %{
+  #           affected_items: %{affected_backend_annotations: new_annotations},
+  #           upserted_annotations: upserted_annotations
+  #         }}
+  #      ) do
+  #   {:ok, %{annotations: new_annotations, upserted_annotations: upserted_annotations}}
+  # end
+
+  # defp handle_sync(_other), do: {:error, "Error saving annotations"}
 
   # def sync(_, args, %{context: %{current_user: %{id: user_id}}}) do
   #   IO.inspect(args)

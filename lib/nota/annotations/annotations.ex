@@ -16,7 +16,7 @@ defmodule Nota.Annotations do
   end
 
   def query(_queryable, %{user_id: user_id}) do
-    Annotation
+    Annotation.projection(user_id)
     |> where([a], a.user_id == ^user_id)
   end
 
@@ -74,6 +74,21 @@ defmodule Nota.Annotations do
     |> Repo.transaction()
   end
 
+  def delete_annotation(annotation_id, user_id) do
+    Annotation
+    |> where(id: ^annotation_id)
+    |> where(user_id: ^user_id)
+    |> Repo.one()
+    |> case do
+      nil -> {:error, "Not found"}
+      annotation -> delete_annotation(annotation)
+    end
+  end
+
+  def delete_annotation(%Annotation{} = annotation) do
+    Repo.delete(annotation)
+  end
+
   def favorite_annotation(annotation_id, user_id) do
     %AnnotationFavorite{}
     |> AnnotationFavorite.changeset(%{annotation_id: annotation_id, user_id: user_id})
@@ -106,17 +121,17 @@ defmodule Nota.Annotations do
     Annotation.changeset(annotation, %{})
   end
 
-  # def save_annotation(%{id: id} = attrs) do
-  #   get_annotation(id)
-  #   |> case do
-  #     nil -> create_annotation(attrs)
-  #     annotation -> update_annotation(annotation, attrs)
-  #   end
-  # end
+  def save_annotation(%{id: id} = attrs) do
+    get_annotation(id)
+    |> case do
+      nil -> create_annotation(attrs)
+      annotation -> update_annotation(annotation, attrs)
+    end
+  end
 
-  # def save_annotation(attrs) do
-  #   create_annotation(attrs)
-  # end
+  def save_annotation(attrs) do
+    create_annotation(attrs)
+  end
 
   # def save_annotations(annotations, user_id) do
   #   annotations = Enum.map(annotations, &Map.put(&1, :user_id, user_id))

@@ -49,11 +49,42 @@ defmodule NotaWeb.Schema.Annotations do
     end
   end
 
+  input_object :save_annotation_input do
+    field(:id, :id)
+    field(:text, non_null(:string))
+    field(:verse_id, non_null(:id))
+
+    field(:inserted_at, :datetime)
+    field(:updated_at, :datetime)
+    field(:deleted_at, :datetime)
+  end
+
+  # input_object :sync_annotations_input do
+  #   field(:annotations, non_null(list_of(:save_annotation_input)))
+  #   field(:last_synced_at, non_null(:datetime))
+  # end
+
+  payload_object(:save_annotation_payload, :annotation)
+
+  payload_object(:favorite_annotation_payload, :boolean)
+
+  payload_object(:unfavorite_annotation_payload, :boolean)
+
+  payload_object(:delete_annotation_payload, :annotation)
+
   object :annotations_mutations do
     field :save_annotation, non_null(:save_annotation_payload) do
       arg(:input, non_null(:save_annotation_input))
 
       resolve(&Annotation.save/3)
+    end
+
+    field :delete_annotation, non_null(:delete_annotation_payload) do
+      arg(:annotation_id, non_null(:id))
+
+      middleware(Absinthe.Relay.Node.ParseIDs, annotation_id: :annotation)
+
+      resolve(&Annotation.delete_annotation/3)
     end
 
     field :favorite_annotation, non_null(:favorite_annotation_payload) do
@@ -84,27 +115,6 @@ defmodule NotaWeb.Schema.Annotations do
     #   resolve(&Annotation.sync/3)
     # end
   end
-
-  input_object :save_annotation_input do
-    field(:id, :id)
-    field(:text, non_null(:string))
-    field(:verse_id, non_null(:id))
-
-    field(:inserted_at, :datetime)
-    field(:updated_at, :datetime)
-    field(:deleted_at, :datetime)
-  end
-
-  # input_object :sync_annotations_input do
-  #   field(:annotations, non_null(list_of(:save_annotation_input)))
-  #   field(:last_synced_at, non_null(:datetime))
-  # end
-
-  payload_object(:save_annotation_payload, :annotation)
-
-  payload_object(:favorite_annotation_payload, :boolean)
-
-  payload_object(:unfavorite_annotation_payload, :boolean)
 
   # object :save_annotation_payload do
   #   field(:annotation, non_null(:annotation))
