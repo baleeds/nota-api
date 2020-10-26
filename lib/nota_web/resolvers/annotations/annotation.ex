@@ -4,11 +4,7 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
   alias Absinthe.Relay.Connection
 
   def get(_, %{id: id}, _) do
-    Annotations.get_annotation!(id)
-    |> case do
-      nil -> {:error, "Error retrieving annotation"}
-      annotation -> {:ok, annotation}
-    end
+    Annotations.get_annotation(id)
   end
 
   def get_my_annotations(_, args, %{context: %{current_user: %{id: user_id}}}) do

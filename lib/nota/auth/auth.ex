@@ -37,24 +37,18 @@ defmodule Nota.Auth do
   end
 
   def upsert_user(auth) do
-    Multi.new()
-    |> Multi.run(:auth, fn _ -> {:ok, auth} end)
-    |> Multi.run(:existing_user, &find_user_by_oauth/1)
-    |> Multi.run(:user, &upsert_oauth_user/1)
-    |> Repo.transaction()
-    |> case do
-      {:ok, %{user: user}} ->
-        {:ok, user}
-
-      {:error, _error_atom, reason, _} when is_binary(reason) ->
-        {:error, reason}
-
-      {:error, _error_atom, error_changeset, _} ->
-        {:error, error_changeset}
+    with {:ok, user_or_nil} <- find_user_by_oauth(auth),
+         attrs <- get_user_changes(auth) do
+      case user_or_nil do
+        nil -> create_user(attrs)
+        user -> update_user(user, attrs)
+      end
+    else
+      {:error, error} -> {:error, error}
     end
   end
 
-  defp find_user_by_oauth(%{auth: %{provider: oauth_provider, uid: oauth_uid}}) do
+  defp find_user_by_oauth(%{provider: oauth_provider, uid: oauth_uid}) do
     stringified_oauth_provider = Atom.to_string(oauth_provider)
 
     User
@@ -65,37 +59,21 @@ defmodule Nota.Auth do
     end
   end
 
-  defp find_user_by_oauth(_) do
-    {:error, "Not sure whats happening"}
-  end
-
-  defp upsert_oauth_user(%{existing_user: nil} = changes) do
-    %User{}
-    |> User.changeset(get_user_changes(changes))
-    |> Repo.insert()
-  end
-
-  defp upsert_oauth_user(%{existing_user: existing_user} = changes) do
-    existing_user
-    |> User.changeset(get_user_changes(changes))
-    |> Repo.update()
-  end
+  defp find_user_by_oauth(_), do: {:error, "Invalid oauth information"}
 
   defp get_user_changes(%{
-         auth: %{
-           provider: provider,
-           uid: uid,
-           credentials: %{
-             token: token,
-             refresh_token: refresh_token,
-             expires: expires,
-             expires_at: expires_at
-           },
-           info: %{
-             email: email,
-             first_name: first_name,
-             last_name: last_name
-           }
+         provider: provider,
+         uid: uid,
+         credentials: %{
+           token: token,
+           refresh_token: refresh_token,
+           expires: expires,
+           expires_at: expires_at
+         },
+         info: %{
+           email: email,
+           first_name: first_name,
+           last_name: last_name
          }
        }) do
     %{
@@ -109,10 +87,7 @@ defmodule Nota.Auth do
       oauth_expires_at: expires_at,
       oauth_expires: expires
     }
-  end
-
-  defp get_user_changes(_) do
-    {:error, "Changes are invalid"}
+    |> IO.inspect()
   end
 
   # TODO: this is duplicate from user resolver

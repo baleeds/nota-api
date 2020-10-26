@@ -23,18 +23,18 @@ defmodule Nota.Auth.User do
   )a
 
   @all_fields @required_fields ++ @optional_fields
-  
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "users" do
-    field :first_name, :string
-    field :last_name, :string
+    field(:first_name, :string)
+    field(:last_name, :string)
 
     # Authenticatable
     field(:email, Ecto.Email)
     # field(:password, :string, virtual: true)
     # field(:password_hash, :string, null: false, default: "")
-    
+
     # JWT Authenticatable
     field(:jti, :binary_id, null: false)
 

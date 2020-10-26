@@ -21,6 +21,22 @@ defmodule Ecto.Email do
 
   def dump(value), do: Type.dump(:string, value)
 
+  def equal?(nil, email1) do
+    false
+  end
+
+  def equal?(email1, nil) do
+    false
+  end
+
+  def equal?(nil, nil) do
+    true
+  end
+
+  def equal?(email1, email2) do
+    String.equivalent?(email1, email2)
+  end
+
   @email_regex ~r/^(?<user>[^\s]+)@(?<domain>[^\s]+\.[^\s]+)$/
 
   def is_valid_email?(email) when is_binary(email) do

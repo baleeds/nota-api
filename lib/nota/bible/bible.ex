@@ -24,9 +24,8 @@ defmodule Nota.Bible do
 
   def get_verses(%{chapter_number: chapter_number, book_number: book_number}) do
     Verse
-    |> where([v], v.book_number == ^book_number)
-    |> where([v], v.chapter_number == ^chapter_number)
-    |> Repo.all
+    |> where(book_number: ^book_number, chapter_number: ^chapter_number)
+    |> Repo.all()
   end
 
   def get_verses(_) do

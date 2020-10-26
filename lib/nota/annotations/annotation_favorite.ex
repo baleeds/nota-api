@@ -8,14 +8,14 @@ defmodule Nota.Annotations.AnnotationFavorite do
     belongs_to(:annotation, Nota.Annotations.Annotation)
     belongs_to(:user, Nota.Auth.User)
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false
   def changeset(annotation_favorite, attrs) do
     annotation_favorite
     |> cast(attrs, [:annotation_id, :user_id])
-    |> unique_constraint([:user_id, :annotation_id], message: "already been favorited")
     |> validate_required([:annotation_id, :user_id])
+    |> unique_constraint([:user_id, :annotation_id], message: "already been favorited")
   end
 end

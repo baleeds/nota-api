@@ -5,8 +5,10 @@ defmodule NotaWeb.Schema do
   use Absinthe.Relay.Schema, flavor: :modern
   use Absinthe.Relay.Schema.Notation, :modern
 
-  alias Nota.Bible
+  alias NotaWeb.Schema.Helpers
   alias Nota.Annotations
+  alias Nota.Bible
+  alias Nota.AnnotationReplies
   alias Nota.Auth
 
   import_types(AbsintheErrorPayload.ValidationMessageTypes)
@@ -15,25 +17,31 @@ defmodule NotaWeb.Schema do
   import_types(__MODULE__.Bible)
   import_types(__MODULE__.Annotations)
   import_types(__MODULE__.Users)
+  import_types(__MODULE__.AnnotationReplies)
 
   query do
     import_fields(:bible_queries)
     import_fields(:annotations_queries)
     import_fields(:user_queries)
+    import_fields(:annotation_reply_queries)
   end
 
   mutation do
     import_fields(:annotations_mutations)
     import_fields(:user_mutations)
+    import_fields(:annotation_reply_mutations)
   end
 
   node interface do
     resolve_type(fn
-      %Nota.Annotations.Annotation{}, _ ->
+      %Annotations.Annotation{}, _ ->
         :annotation
 
-      %Nota.Auth.User{}, _ ->
+      %Auth.User{}, _ ->
         :user
+
+      %AnnotationReplies.AnnotationReply{}, _ ->
+        :annotation_reply
 
       _, _ ->
         nil
@@ -56,7 +64,7 @@ defmodule NotaWeb.Schema do
 
   def middleware(middleware, _field, %Absinthe.Type.Object{identifier: :mutation}) do
     middleware ++
-      [&build_payload/2]
+      [&Helpers.format_error_tuples/2, &build_payload/2]
   end
 
   def middleware(middleware, _field, _object) do
