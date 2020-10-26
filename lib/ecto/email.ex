@@ -21,11 +21,11 @@ defmodule Ecto.Email do
 
   def dump(value), do: Type.dump(:string, value)
 
-  def equal?(nil, email1) do
+  def equal?(nil, _email1) do
     false
   end
 
-  def equal?(email1, nil) do
+  def equal?(_email1, nil) do
     false
   end
 

@@ -5,7 +5,6 @@ defmodule Nota.Auth do
 
   import Ecto.Query, warn: false
 
-  alias Ecto.Multi
   alias Nota.Repo
   alias Nota.Auth.User
   alias Nota.Auth.Guardian

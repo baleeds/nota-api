@@ -16,9 +16,6 @@ defmodule Nota.AnnotationReplies do
   end
 
   def save_annotation_reply(attrs) do
-    IO.puts("here")
-    # IO.inspect(attrs)
-
     %AnnotationReply{}
     |> AnnotationReply.changeset(attrs)
     |> IO.inspect()

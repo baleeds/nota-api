@@ -5,7 +5,6 @@ defmodule Nota.Annotations do
 
   import Ecto.Query, warn: false
 
-  alias Ecto.Multi
   alias Nota.Repo
   alias Nota.Annotations.Annotation
   alias Nota.Annotations.AnnotationFavorite
@@ -20,7 +19,7 @@ defmodule Nota.Annotations do
     |> where([a], a.user_id == ^user_id)
   end
 
-  def query(queryable, params) do
+  def query(queryable, _params) do
     # IO.inspect(queryable, label: "Queryable")
     # IO.inspect(params, label: "Params")
     queryable
@@ -47,7 +46,7 @@ defmodule Nota.Annotations do
 
   def save_annotation(%{id: id, user_id: user_id} = attrs) do
     Annotation
-    |> where(user_id: ^user_id)
+    |> where(id: ^id, user_id: ^user_id)
     |> Repo.Extensions.update_one(attrs)
   end
 
@@ -55,7 +54,7 @@ defmodule Nota.Annotations do
     create_annotation(attrs)
   end
 
-  defp create_annotation(attrs \\ %{}) do
+  defp create_annotation(attrs) do
     %Annotation{}
     |> Annotation.changeset(attrs)
     |> Repo.insert()
