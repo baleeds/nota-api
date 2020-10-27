@@ -1,5 +1,6 @@
 defmodule NotaWeb.Resolvers.Auth.User do
   alias Nota.Auth
+  alias Nota.Auth.Guardian
 
   def get_users(_, _, _) do
     Auth.get_users()
@@ -26,5 +27,5 @@ defmodule NotaWeb.Resolvers.Auth.User do
     end
   end
 
-  def get_me(_, _, _), do: {:error, "Unauthorized"}
+  def get_me(_, _, _), do: {:error, :unknown}
 end

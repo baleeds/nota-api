@@ -4,6 +4,8 @@ defmodule Nota.Auth.Guardian do
   use Guardian, otp_app: :nota
 
   alias Nota.Auth
+  alias Nota.Auth.User
+  alias Nota.Repo
 
   require Ecto
 

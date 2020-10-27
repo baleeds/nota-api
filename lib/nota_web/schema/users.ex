@@ -1,4 +1,6 @@
 defmodule NotaWeb.Schema.Users do
+  import AbsintheErrorPayload.Payload
+
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :modern
 
@@ -23,9 +25,9 @@ defmodule NotaWeb.Schema.Users do
       resolve(&User.get_user/3)
     end
 
-    connection field(:users, node_type: :user) do
-      resolve(&User.get_users/3)
-    end
+    # connection field(:users, node_type: :user) do
+    #   resolve(&User.get_users/3)
+    # end
 
     field :me, :user do
       resolve(&User.get_me/3)
