@@ -9,6 +9,12 @@ defmodule Nota.AnnotationReplies do
     |> where(annotation_id: ^annotation_id)
   end
 
+  def get_number_of_replies(annotation_id) do
+    AnnotationReply
+    |> where(annotation_id: ^annotation_id)
+    |> Repo.aggregate(:count)
+  end
+
   def save_annotation_reply(%{id: id, user_id: user_id} = attrs) do
     AnnotationReply
     |> where(id: ^id, user_id: ^user_id)

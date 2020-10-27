@@ -1,5 +1,6 @@
 defmodule NotaWeb.Resolvers.Annotations.Annotation do
   alias Nota.Annotations
+  alias Nota.AnnotationReplies
   alias Nota.Repo
   alias Absinthe.Relay.Connection
 
@@ -25,6 +26,26 @@ defmodule NotaWeb.Resolvers.Annotations.Annotation do
     Annotations.get_public_annotations(args)
     |> Connection.from_query(&Repo.all/1, args)
   end
+
+  def get_number_of_replies(%{id: annotation_id}, _, _) do
+    AnnotationReplies.get_number_of_replies(annotation_id)
+    |> case do
+      number when is_integer(number) -> {:ok, number}
+      {:error, error} -> {:error, error}
+    end
+  end
+
+  def get_number_of_replies(_, _, _), do: {:error, :unknown}
+
+  def get_number_of_favorites(%{id: annotation_id}, _, _) do
+    Annotations.get_number_of_favorites(annotation_id)
+    |> case do
+      number when is_integer(number) -> {:ok, number}
+      {:error, error} -> {:error, error}
+    end
+  end
+
+  def get_number_of_favorites(_, _, _), do: {:error, :unknown}
 
   def save(_, %{input: input}, %{context: %{current_user: %{id: user_id}}}) do
     input

@@ -44,6 +44,12 @@ defmodule Nota.Annotations do
 
   def get_annotation(id), do: Repo.Extensions.one(Annotation.projection(), id)
 
+  def get_number_of_favorites(annotation_id) do
+    AnnotationFavorite
+    |> where(annotation_id: ^annotation_id)
+    |> Repo.aggregate(:count)
+  end
+
   def save_annotation(%{id: id, user_id: user_id} = attrs) do
     Annotation
     |> where(id: ^id, user_id: ^user_id)

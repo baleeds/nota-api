@@ -23,6 +23,14 @@ defmodule NotaWeb.Schema.Annotations do
     field(:inserted_at, non_null(:datetime))
     field(:updated_at, non_null(:datetime))
 
+    field(:number_of_replies, non_null(:integer)) do
+      resolve(&Annotation.get_number_of_replies/3)
+    end
+
+    field(:number_of_favorites, non_null(:integer)) do
+      resolve(&Annotation.get_number_of_favorites/3)
+    end
+
     field(:verse, non_null(:verse), resolve: dataloader(Bible.Verse))
     field(:user, non_null(:user), resolve: dataloader(Auth.User))
   end
@@ -35,7 +43,6 @@ defmodule NotaWeb.Schema.Annotations do
     end
 
     connection field(:my_annotations, node_type: :annotation) do
-      arg(:user_id, :id)
       arg(:verse_id, :id)
 
       resolve(&Annotation.get_my_annotations/3)
