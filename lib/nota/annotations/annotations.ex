@@ -84,6 +84,11 @@ defmodule Nota.Annotations do
     |> Repo.Extensions.delete_one()
   end
 
+  def get_favorite_annotations(user_id) do
+    Annotation.projection(user_id)
+    |> where([a, f], fragment("? IS NOT NULL", f.id))
+  end
+
   # def delete_annotation(%Annotation{} = annotation) do
   #   Repo.delete(annotation)
   # end

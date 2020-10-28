@@ -4,6 +4,7 @@ defmodule NotaWeb.Schema.Helpers do
   @doc """
   Converts a regular ID to a global ID.  Parameter is the atom representing the schema node type.
   """
+  @spec to_global_id(atom() | binary()) :: fun()
   def to_global_id(node_type) do
     fn parent, args, %{definition: %{name: external_field_name}} ->
       IO.inspect(args)

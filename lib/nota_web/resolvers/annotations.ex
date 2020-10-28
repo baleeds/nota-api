@@ -98,6 +98,16 @@ defmodule NotaWeb.Resolvers.Annotations do
     {:error, "You must be logged in to unfavorite an annotation"}
   end
 
+  def get_favorite_annotations(_, %{user_id: user_id} = args, _) do
+    Annotations.get_favorite_annotations(user_id)
+    |> Connection.from_query(&Repo.all/1, args)
+  end
+
+  def get_favorite_annotations(_, args, %{context: %{current_user: %{id: user_id}}}) do
+    Annotations.get_favorite_annotations(user_id)
+    |> Connection.from_query(&Repo.all/1, args)
+  end
+
   # def save_all(_, %{input: input}, %{context: %{current_user: %{id: user_id}}}) do
   #   input
   #   |> Annotations.save_annotations(user_id)
