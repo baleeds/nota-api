@@ -23,7 +23,7 @@ defmodule NotaWeb.Schema.AnnotationReplies do
     field(:user, non_null(:user), resolve: dataloader(Auth.User))
   end
 
-  object :annotation_reply_queries do
+  object :annotation_replies_queries do
     connection field(:annotation_replies, node_type: :annotation_reply) do
       arg(:annotation_id, :id)
 
@@ -43,7 +43,7 @@ defmodule NotaWeb.Schema.AnnotationReplies do
 
   payload_object(:delete_annotation_reply_payload, :boolean)
 
-  object :annotation_reply_mutations do
+  object :annotation_replies_mutations do
     field :save_annotation_reply, non_null(:save_annotation_reply_payload) do
       arg(:input, non_null(:save_annotation_reply_input))
 

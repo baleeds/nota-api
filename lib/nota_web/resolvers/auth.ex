@@ -1,6 +1,5 @@
-defmodule NotaWeb.Resolvers.Auth.User do
+defmodule NotaWeb.Resolvers.Auth do
   alias Nota.Auth
-  alias Nota.Auth.Guardian
 
   def get_users(_, _, _) do
     Auth.get_users()

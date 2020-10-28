@@ -6,6 +6,7 @@ defmodule NotaWeb.Schema do
   use Absinthe.Relay.Schema.Notation, :modern
 
   alias NotaWeb.Schema.Helpers
+
   alias Nota.Annotations
   alias Nota.Bible
   alias Nota.AnnotationReplies
@@ -16,20 +17,20 @@ defmodule NotaWeb.Schema do
 
   import_types(__MODULE__.Bible)
   import_types(__MODULE__.Annotations)
-  import_types(__MODULE__.Users)
+  import_types(__MODULE__.Auth)
   import_types(__MODULE__.AnnotationReplies)
 
   query do
     import_fields(:bible_queries)
     import_fields(:annotations_queries)
-    import_fields(:user_queries)
-    import_fields(:annotation_reply_queries)
+    import_fields(:auth_queries)
+    import_fields(:annotation_replies_queries)
   end
 
   mutation do
     import_fields(:annotations_mutations)
-    import_fields(:user_mutations)
-    import_fields(:annotation_reply_mutations)
+    import_fields(:auth_mutations)
+    import_fields(:annotation_replies_mutations)
   end
 
   node interface do

@@ -1,10 +1,10 @@
-defmodule NotaWeb.Schema.Users do
-  import AbsintheErrorPayload.Payload
+defmodule NotaWeb.Schema.Auth do
+  # import AbsintheErrorPayload.Payload
 
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :modern
 
-  alias NotaWeb.Resolvers.Auth.User
+  alias NotaWeb.Resolvers.Auth
 
   # import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
@@ -18,11 +18,11 @@ defmodule NotaWeb.Schema.Users do
     # field(:annotations, list_of(non_null(:annotation)), resolve: dataloader(Annotations.Annotation))
   end
 
-  object :user_queries do
+  object :auth_queries do
     field :user, non_null(:user) do
       arg(:id, non_null(:id))
 
-      resolve(&User.get_user/3)
+      resolve(&Auth.get_user/3)
     end
 
     # connection field(:users, node_type: :user) do
@@ -30,15 +30,15 @@ defmodule NotaWeb.Schema.Users do
     # end
 
     field :me, :user do
-      resolve(&User.get_me/3)
+      resolve(&Auth.get_me/3)
     end
   end
 
-  object :user_mutations do
+  object :auth_mutations do
     field :refresh_token, non_null(:string) do
       arg(:token, non_null(:string))
 
-      resolve(&User.refresh_token/3)
+      resolve(&Auth.refresh_token/3)
     end
   end
 end
