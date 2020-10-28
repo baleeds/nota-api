@@ -30,6 +30,8 @@ defmodule Nota.Annotations.Annotation do
     field(:last_synced_at, :utc_datetime)
     field(:deleted_at, :utc_datetime)
 
+    field(:is_favorite, :boolean, virtual: true)
+
     belongs_to(:verse, Verse, type: :integer)
     belongs_to(:user, User)
 
@@ -49,7 +51,7 @@ defmodule Nota.Annotations.Annotation do
     from(a in __MODULE__,
       left_join: f in AnnotationFavorite,
       on: f.user_id == ^user_id and f.annotation_id == a.id,
-      select: %{
+      select: %__MODULE__{
         id: a.id,
         text: a.text,
         verse_id: a.verse_id,
