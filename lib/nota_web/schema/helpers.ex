@@ -33,6 +33,14 @@ defmodule NotaWeb.Schema.Helpers do
     "Not found"
   end
 
+  defp format_atom(:invalid_credentials) do
+    "Incorrect email or password"
+  end
+
+  defp format_atom(:unauthenticated) do
+    "You must be authenticated to perform this action"
+  end
+
   defp format_atom(_) do
     "An unexpected error has occured"
   end

@@ -27,4 +27,24 @@ defmodule NotaWeb.Resolvers.Auth do
   end
 
   def get_me(_, _, _), do: {:error, :unknown}
+
+  def create_account(_, _, %{context: %{current_user: %{id: _user_id}}}) do
+    {:error, "Please log out before creating a new account"}
+  end
+
+  def create_account(_, %{input: input}, _) do
+    Auth.create_user(input)
+  end
+
+  def sign_in(_, _, %{context: %{current_user: %{id: _user_id}}}) do
+    {:error, "Please log out before signing in again"}
+  end
+
+  def sign_in(_, %{input: %{email: email, password: password}}, _) do
+    with {:ok, user} <- Auth.authenticate_user(email, password) do
+      Auth.sign_in(user)
+    else
+      {:error, error} -> {:error, error}
+    end
+  end
 end

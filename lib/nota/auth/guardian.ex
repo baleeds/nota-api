@@ -4,8 +4,6 @@ defmodule Nota.Auth.Guardian do
   use Guardian, otp_app: :nota
 
   alias Nota.Auth
-  alias Nota.Auth.User
-  alias Nota.Repo
 
   require Ecto
 
@@ -27,7 +25,6 @@ defmodule Nota.Auth.Guardian do
   def subject_for_token(_resource, _claims), do: {:error, "invalid JWT resource"}
 
   def resource_from_claims(%{"sub" => %{"user_id" => user_id}}) do
-    # IO.inspect(user_id, label: "resource from claims")
     case Auth.get_user(user_id) do
       nil ->
         {:error, :unauthenticated}

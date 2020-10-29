@@ -45,6 +45,7 @@ defmodule Nota.Mixfile do
       {:absinthe_phoenix, "~> 2.0"},
       {:absinthe_plug, ">= 1.5.0"},
       {:absinthe_relay, ">= 1.5.0"},
+      {:argon2_elixir, "~> 2.3.0"},
       {:corsica, "~> 1.0"},
       {:dataloader, "~> 1.0.0"},
       {:ecto_sql, "~> 3.4"},

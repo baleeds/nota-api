@@ -5,12 +5,12 @@ defmodule Nota.Repo.Migrations.CreateUsers do
 
   def change do
     create table(@table, primary_key: false) do
-      add :id, :uuid, primary_key: true
-      add :first_name, :string
-      add :last_name, :string
+      add(:id, :uuid, primary_key: true)
+      add(:first_name, :string)
+      add(:last_name, :string)
 
       add(:email, :string)
-      # add(:password_hash, :string, null: false)
+      add(:password_hash, :string, null: false)
 
       add(:jti, :binary_id)
 

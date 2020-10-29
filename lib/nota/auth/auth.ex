@@ -24,6 +24,8 @@ defmodule Nota.Auth do
   def get_users(), do: User
 
   def create_user(attrs \\ %{}) do
+    IO.inspect(attrs)
+
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
@@ -111,6 +113,32 @@ defmodule Nota.Auth do
     |> case do
       {:ok, _old_stuff, {new_token, _new_claims}} -> {:ok, new_token}
       _ -> {:error, "unable to refresh token"}
+    end
+  end
+
+  def authenticate_user(email, plain_text_password) do
+    User
+    |> where(email: ^email)
+    |> Repo.one()
+    |> IO.inspect(label: "User in auth function ===")
+    |> case do
+      nil ->
+        {:error, :invalid_credentials}
+
+      user ->
+        if Argon2.verify_pass(plain_text_password, user.password_hash) do
+          {:ok, user}
+        else
+          {:error, :invalid_credentials}
+        end
+    end
+  end
+
+  def sign_in(%User{id: user_id}) do
+    Guardian.encode_and_sign(%{user_id: user_id})
+    |> case do
+      {:ok, token, _claims} -> {:ok, %{access_token: token, user_id: user_id}}
+      {:error, error} -> {:error, error}
     end
   end
 end

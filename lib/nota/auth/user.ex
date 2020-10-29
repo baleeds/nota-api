@@ -13,6 +13,8 @@ defmodule Nota.Auth.User do
   @optional_fields ~w(
     first_name
     last_name
+    password
+    password_hash
     oauth_provider
     oauth_uid
     oauth_token
@@ -32,8 +34,8 @@ defmodule Nota.Auth.User do
 
     # Authenticatable
     field(:email, Ecto.Email)
-    # field(:password, :string, virtual: true)
-    # field(:password_hash, :string, null: false, default: "")
+    field(:password, :string, virtual: true)
+    field(:password_hash, :string, null: false, default: "")
 
     # JWT Authenticatable
     field(:jti, :binary_id, null: false)
@@ -56,9 +58,22 @@ defmodule Nota.Auth.User do
     |> validate_length(:first_name, min: 0, max: 255)
     |> validate_length(:last_name, min: 0, max: 255)
     |> validate_length(:email, min: 0, max: 255)
-    # |> validate_length(:password_hash, min: 0, max: 255)
+    |> validate_length(:password, min: 0, max: 255)
+    |> validate_length(:password_hash, min: 0, max: 255)
     |> unique_constraint(:oauth_uid, name: :users_oauth_provider_oauth_uid_key)
     |> unique_constraint(:email, name: :users_email_key)
     |> unique_constraint(:jti, name: :users_jti_key)
+    |> put_password_hash()
+  end
+
+  defp put_password_hash(
+         %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
+       ) do
+    IO.inspect(password)
+    change(changeset, password_hash: Argon2.hash_pwd_salt(password))
+  end
+
+  defp put_password_hash(changeset) do
+    IO.inspect(changeset)
   end
 end
