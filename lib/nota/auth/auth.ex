@@ -108,11 +108,14 @@ defmodule Nota.Auth do
     end
   end
 
-  def refresh_user_authorization_token(token) do
-    Guardian.refresh(token)
+  def refresh_user_authorization_token(refresh_token) do
+    Guardian.refresh(refresh_token, ttl: {1, :day})
     |> case do
-      {:ok, _old_stuff, {new_token, _new_claims}} -> {:ok, new_token}
-      _ -> {:error, "unable to refresh token"}
+      {:ok, _old_stuff, {access_token, %{"sub" => %{"user_id" => user_id}}}} ->
+        {:ok, %{access_token: access_token, refresh_token: refresh_token, user_id: user_id}}
+
+      _ ->
+        {:error, "unable to refresh token"}
     end
   end
 
@@ -135,10 +138,20 @@ defmodule Nota.Auth do
   end
 
   def sign_in(%User{id: user_id}) do
-    Guardian.encode_and_sign(%{user_id: user_id})
-    |> case do
-      {:ok, token, _claims} -> {:ok, %{access_token: token, user_id: user_id}}
-      {:error, error} -> {:error, error}
+    resource = %{user_id: user_id}
+
+    with {:ok, access_token, _claims} <-
+           Guardian.encode_and_sign(resource, %{}, ttl: {1, :day}),
+         {:ok, refresh_token, _claims} <-
+           Guardian.encode_and_sign(resource, %{}, token_type: "refresh") do
+      {:ok,
+       %{
+         access_token: access_token,
+         refresh_token: refresh_token,
+         user_id: user_id
+       }}
+    else
+      _ -> {:error, "Unable to create JWT"}
     end
   end
 end
