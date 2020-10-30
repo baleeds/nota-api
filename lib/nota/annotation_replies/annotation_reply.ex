@@ -19,5 +19,7 @@ defmodule Nota.AnnotationReplies.AnnotationReply do
     |> cast(attrs, [:annotation_id, :user_id, :text])
     |> validate_required(:text)
     |> validate_length(:text, max: 1000, message: "Reply is too long")
+    |> foreign_key_constraint(:user_id)
+    |> foreign_key_constraint(:annotation_id)
   end
 end

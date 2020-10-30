@@ -5,8 +5,6 @@ defmodule NotaWeb.Schema do
   use Absinthe.Relay.Schema, flavor: :modern
   use Absinthe.Relay.Schema.Notation, :modern
 
-  alias NotaWeb.Schema.Helpers
-
   alias Nota.Annotations
   alias Nota.Bible
   alias Nota.AnnotationReplies

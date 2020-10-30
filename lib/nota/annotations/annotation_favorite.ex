@@ -16,6 +16,8 @@ defmodule Nota.Annotations.AnnotationFavorite do
     annotation_favorite
     |> cast(attrs, [:annotation_id, :user_id])
     |> validate_required([:annotation_id, :user_id])
+    |> foreign_key_constraint(:user_id)
+    |> foreign_key_constraint(:annotation_id)
     |> unique_constraint([:user_id, :annotation_id], message: "already been favorited")
   end
 end
