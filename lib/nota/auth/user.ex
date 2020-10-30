@@ -48,6 +48,8 @@ defmodule Nota.Auth.User do
     field(:oauth_expires_at, :integer)
     field(:oauth_expires, :boolean)
 
+    field(:is_admin, :boolean, default: false)
+
     timestamps(type: :utc_datetime)
   end
 
@@ -69,11 +71,10 @@ defmodule Nota.Auth.User do
   defp put_password_hash(
          %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
        ) do
-    IO.inspect(password)
     change(changeset, password_hash: Argon2.hash_pwd_salt(password))
   end
 
   defp put_password_hash(changeset) do
-    IO.inspect(changeset)
+    changeset
   end
 end

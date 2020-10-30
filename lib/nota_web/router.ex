@@ -11,10 +11,6 @@ defmodule NotaWeb.Router do
     plug(NotaWeb.Plug.PublicPipeline)
   end
 
-  pipeline :private do
-    plug(NotaWeb.Plug.PrivatePipeline)
-  end
-
   pipeline :absinthe do
     plug(NotaWeb.Plug.AbsintheContext)
   end

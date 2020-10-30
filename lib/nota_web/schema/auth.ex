@@ -15,6 +15,7 @@ defmodule NotaWeb.Schema.Auth do
     field(:first_name, :string)
     field(:last_name, :string)
     field(:email, non_null(:string))
+    field(:is_admin, non_null(:boolean))
 
     # field(:annotations, list_of(non_null(:annotation)), resolve: dataloader(Annotations.Annotation))
   end

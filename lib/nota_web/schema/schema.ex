@@ -63,12 +63,23 @@ defmodule NotaWeb.Schema do
     [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
   end
 
-  def middleware(middleware, _field, %Absinthe.Type.Object{identifier: :mutation}) do
-    middleware ++
-      [&Helpers.format_error_tuples/2, &build_payload/2]
+  def middleware(middleware, field, %Absinthe.Type.Object{identifier: :mutation}) do
+    (middleware ++
+       [NotaWeb.Middleware.FormatErrorCodes, &build_payload/2])
+    |> ensure_auth_unless_public(field)
   end
 
   def middleware(middleware, _field, _object) do
     middleware
+  end
+
+  @public_mutations ["sign_in", "create_account", "refresh_token"]
+
+  defp ensure_auth_unless_public(middleware, %{name: name}) do
+    if Enum.member?(@public_mutations, name) do
+      middleware
+    else
+      [NotaWeb.Middleware.Auth | middleware]
+    end
   end
 end

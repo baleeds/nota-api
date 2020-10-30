@@ -22,6 +22,8 @@ defmodule Nota.Repo.Migrations.CreateUsers do
       add(:oauth_expires_at, :integer)
       add(:oauth_expires, :boolean)
 
+      add(:is_admin, :boolean, null: false, default: false)
+
       timestamps(type: :utc_datetime)
     end
 

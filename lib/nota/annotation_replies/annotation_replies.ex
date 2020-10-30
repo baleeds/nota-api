@@ -24,7 +24,6 @@ defmodule Nota.AnnotationReplies do
   def save_annotation_reply(attrs) do
     %AnnotationReply{}
     |> AnnotationReply.changeset(attrs)
-    |> IO.inspect()
     |> Repo.insert()
   end
 

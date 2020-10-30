@@ -8,7 +8,8 @@ defmodule NotaWeb.Plug.AbsintheContext do
   def init(opts), do: opts
 
   def call(%{remote_ip: remote_ip} = conn, _) do
-    case Guardian.Plug.current_resource(conn) do
+    Guardian.Plug.current_resource(conn)
+    |> case do
       nil ->
         put_private(conn, :absinthe, %{context: %{remote_ip: remote_ip, conn: conn}})
 

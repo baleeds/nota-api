@@ -24,8 +24,6 @@ defmodule Nota.Auth do
   def get_users(), do: User
 
   def create_user(attrs \\ %{}) do
-    IO.inspect(attrs)
-
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
@@ -88,7 +86,6 @@ defmodule Nota.Auth do
       oauth_expires_at: expires_at,
       oauth_expires: expires
     }
-    |> IO.inspect()
   end
 
   # TODO: this is duplicate from user resolver
@@ -123,7 +120,6 @@ defmodule Nota.Auth do
     User
     |> where(email: ^email)
     |> Repo.one()
-    |> IO.inspect(label: "User in auth function ===")
     |> case do
       nil ->
         {:error, :invalid_credentials}

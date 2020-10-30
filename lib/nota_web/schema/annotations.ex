@@ -45,6 +45,8 @@ defmodule NotaWeb.Schema.Annotations do
     connection field(:my_annotations, node_type: :annotation) do
       arg(:verse_id, :id)
 
+      middleware(NotaWeb.Middleware.Auth)
+
       resolve(&Annotations.get_my_annotations/3)
     end
 
@@ -60,6 +62,7 @@ defmodule NotaWeb.Schema.Annotations do
     connection field(:favorite_annotations, node_type: :annotation) do
       arg(:user_id, :id)
 
+      middleware(NotaWeb.Middleware.Auth)
       middleware(Absinthe.Relay.Node.ParseIDs, user_id: :user)
 
       resolve(&Annotations.get_favorite_annotations/3)
