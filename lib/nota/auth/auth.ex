@@ -5,9 +5,11 @@ defmodule Nota.Auth do
 
   import Ecto.Query, warn: false
 
+  alias Ecto.Multi
   alias Nota.Repo
   alias Nota.Auth.User
   alias Nota.Auth.Guardian
+  alias Nota.Auth.RefreshToken
 
   def data() do
     Dataloader.Ecto.new(Repo, query: &query/2)
@@ -106,13 +108,23 @@ defmodule Nota.Auth do
   end
 
   def refresh_user_authorization_token(refresh_token) do
-    Guardian.refresh(refresh_token, ttl: {1, :day})
-    |> case do
-      {:ok, _old_stuff, {access_token, %{"sub" => %{"user_id" => user_id}}}} ->
-        {:ok, %{access_token: access_token, refresh_token: refresh_token, user_id: user_id}}
+    with true <- is_refresh_token_valid?(refresh_token),
+         {:ok, _old_stuff, {access_token, %{"sub" => %{"user_id" => user_id}}}} <-
+           Guardian.refresh(refresh_token, ttl: {1, :day}) do
+      {:ok, %{access_token: access_token, refresh_token: refresh_token, user_id: user_id}}
+    else
+      false -> {:error, "Invalid refresh token"}
+      _ -> {:error, "Unable to refresh token"}
+    end
+  end
 
-      _ ->
-        {:error, "unable to refresh token"}
+  defp is_refresh_token_valid?(refresh_token) do
+    RefreshToken
+    |> where([r], r.token == ^refresh_token and r.expires_at > ^DateTime.utc_now())
+    |> Repo.one()
+    |> case do
+      nil -> false
+      _ -> true
     end
   end
 
@@ -138,8 +150,7 @@ defmodule Nota.Auth do
 
     with {:ok, access_token, _claims} <-
            Guardian.encode_and_sign(resource, %{}, ttl: {1, :day}),
-         {:ok, refresh_token, _claims} <-
-           Guardian.encode_and_sign(resource, %{}, token_type: "refresh") do
+         {:ok, %{refresh_token: %{token: refresh_token}}} <- create_refresh_token(resource) do
       {:ok,
        %{
          access_token: access_token,
@@ -147,7 +158,36 @@ defmodule Nota.Auth do
          user_id: user_id
        }}
     else
-      _ -> {:error, "Unable to create JWT"}
+      {:error, error} -> {:error, error}
+      thing -> {:error, IO.inspect(thing)}
+    end
+  end
+
+  defp create_refresh_token(resource) do
+    Multi.new()
+    |> Multi.run(:resource, fn _, _ -> {:ok, resource} end)
+    |> Multi.delete_all(
+      :deleted_tokens?,
+      where(RefreshToken, [r], r.expires_at <= ^DateTime.utc_now())
+    )
+    |> Multi.run(:refresh_token, &generate_and_store_refresh_token/2)
+    |> Repo.transaction()
+  end
+
+  defp generate_and_store_refresh_token(repo, %{resource: %{user_id: user_id} = resource}) do
+    with {:ok, token, _claims} <-
+           Guardian.encode_and_sign(resource, %{}, token_type: "refresh", ttl: {30, :days}) do
+      expires_at = DateTime.add(DateTime.utc_now(), 30 * 60 * 60 * 24, :second)
+
+      %RefreshToken{}
+      |> RefreshToken.changeset(%{
+        user_id: user_id,
+        expires_at: expires_at,
+        token: token
+      })
+      |> repo.insert()
+    else
+      _ -> {:error, "Could not create refresh token"}
     end
   end
 end
