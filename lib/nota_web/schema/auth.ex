@@ -69,6 +69,8 @@ defmodule NotaWeb.Schema.Auth do
 
   payload_object(:reset_password_payload, :boolean)
 
+  payload_object(:sign_out_payload, :boolean)
+
   object :auth_mutations do
     field :create_account, non_null(:create_account_payload) do
       arg(:input, non_null(:create_account_input))
@@ -98,6 +100,16 @@ defmodule NotaWeb.Schema.Auth do
       arg(:input, non_null(:reset_password_input))
 
       resolve(&Auth.reset_password/3)
+    end
+
+    field :sign_out_everywhere, non_null(:sign_out_payload) do
+      resolve(&Auth.sign_out_everywhere/3)
+    end
+
+    field :sign_out, non_null(:sign_out_payload) do
+      arg(:refresh_token, non_null(:string))
+
+      resolve(&Auth.sign_out/3)
     end
   end
 end

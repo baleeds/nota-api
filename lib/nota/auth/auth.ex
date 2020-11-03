@@ -211,4 +211,24 @@ defmodule Nota.Auth do
       _ -> {:error, :unknown}
     end
   end
+
+  def sign_out_everywhere(%User{id: user_id}) do
+    RefreshToken
+    |> where(user_id: ^user_id)
+    |> Repo.delete_all()
+    |> case do
+      {:error, error} -> {:error, error}
+      _ -> {:ok, true}
+    end
+  end
+
+  def sign_out(%User{id: user_id}, refresh_token) do
+    RefreshToken
+    |> where(user_id: ^user_id, token: ^refresh_token)
+    |> Repo.delete_all()
+    |> case do
+      {:error, error} -> {:error, error}
+      _ -> {:ok, true}
+    end
+  end
 end

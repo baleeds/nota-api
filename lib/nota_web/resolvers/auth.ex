@@ -62,4 +62,12 @@ defmodule NotaWeb.Resolvers.Auth do
   def reset_password(_, %{input: %{token: token, password: password}}, _) do
     Auth.reset_password(token, password)
   end
+
+  def sign_out_everywhere(_, _, %{context: %{current_user: current_user}}) do
+    Auth.sign_out_everywhere(current_user)
+  end
+
+  def sign_out(_, %{refresh_token: refresh_token}, %{context: %{current_user: current_user}}) do
+    Auth.sign_out(current_user, refresh_token)
+  end
 end
