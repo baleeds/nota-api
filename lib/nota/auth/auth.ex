@@ -190,4 +190,25 @@ defmodule Nota.Auth do
       _ -> {:error, "Could not create refresh token"}
     end
   end
+
+  def send_forgot_password(email) do
+    __MODULE__.Tx.SendForgotPassword.call(email)
+    |> Repo.transaction()
+    |> case do
+      {:ok, _} -> {:ok, true}
+      {:error, :suppress} -> {:ok, true}
+      {:error, error} -> {:error, error}
+      _ -> {:error, :unknown}
+    end
+  end
+
+  def reset_password(token, new_password) do
+    __MODULE__.Tx.ResetPassword.call(token, new_password)
+    |> Repo.transaction()
+    |> case do
+      {:ok, _} -> {:ok, true}
+      {:error, error} -> {:error, error}
+      _ -> {:error, :unknown}
+    end
+  end
 end

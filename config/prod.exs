@@ -18,6 +18,14 @@ config :nota, NotaWeb.Endpoint,
   url: [host: "example.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :nota, frontend_url: "https://biblenota.com"
+
+# Bamboo
+config :nota, Nota.Mailer,
+  adapter: Bamboo.MailgunAdapter,
+  api_key: "my_api_key",
+  domain: "mail.biblenota.com"
+
 # Do not print debug messages in production
 config :logger, level: :info
 

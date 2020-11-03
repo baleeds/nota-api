@@ -1,4 +1,4 @@
-defmodule Nota.Helpers.QueryHelpers do
+defmodule Nota.Helpers.Query do
   import Ecto.Query, warn: false
 
   def where_from_args(queryable, args, valid_keys) do

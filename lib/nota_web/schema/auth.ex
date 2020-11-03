@@ -54,11 +54,20 @@ defmodule NotaWeb.Schema.Auth do
     field(:password, non_null(:string))
   end
 
+  input_object(:reset_password_input) do
+    field(:token, non_null(:string))
+    field(:password, non_null(:string))
+  end
+
   payload_object(:create_account_payload, :user)
 
   payload_object(:sign_in_payload, :session_info)
 
   payload_object(:refresh_token_payload, :session_info)
+
+  payload_object(:send_forgot_password_payload, :boolean)
+
+  payload_object(:reset_password_payload, :boolean)
 
   object :auth_mutations do
     field :create_account, non_null(:create_account_payload) do
@@ -77,6 +86,18 @@ defmodule NotaWeb.Schema.Auth do
       arg(:refresh_token, non_null(:string))
 
       resolve(&Auth.refresh_token/3)
+    end
+
+    field :send_forgot_password, non_null(:send_forgot_password_payload) do
+      arg(:email, non_null(:string))
+
+      resolve(&Auth.send_forgot_password/3)
+    end
+
+    field :reset_password, non_null(:reset_password_payload) do
+      arg(:input, non_null(:reset_password_input))
+
+      resolve(&Auth.reset_password/3)
     end
   end
 end

@@ -8,7 +8,7 @@ defmodule Nota.Annotations do
   alias Nota.Repo
   alias Nota.Annotations.Annotation
   alias Nota.Annotations.AnnotationFavorite
-  alias Nota.Helpers.QueryHelpers
+  alias Nota.Helpers.Query
 
   def data() do
     Dataloader.Ecto.new(Repo, query: &query/2)
@@ -28,18 +28,18 @@ defmodule Nota.Annotations do
   def get_my_annotations(user_id, args) do
     Annotation.projection(user_id)
     |> where([a], a.user_id == ^user_id)
-    |> QueryHelpers.where_from_args(args, [:verse_id])
+    |> Query.where_from_args(args, [:verse_id])
   end
 
   def get_public_annotations(args) do
     Annotation.projection()
-    |> QueryHelpers.where_from_args(args, [:user_id, :verse_id])
+    |> Query.where_from_args(args, [:user_id, :verse_id])
   end
 
   def get_public_annotations(user_id, args) do
     Annotation.projection(user_id)
     |> where([a], a.user_id != ^user_id)
-    |> QueryHelpers.where_from_args(args, [:user_id, :verse_id])
+    |> Query.where_from_args(args, [:user_id, :verse_id])
   end
 
   def get_annotation(id), do: Repo.Extensions.one(Annotation.projection(), id)

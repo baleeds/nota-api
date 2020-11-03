@@ -44,3 +44,8 @@ config :nota, Nota.Repo,
   database: "nota",
   hostname: "localhost",
   pool_size: 10
+
+config :nota, frontend_url: "http://localhost:3000"
+
+# Bamboo
+config :nota, Nota.Mailer, adapter: Bamboo.LocalAdapter

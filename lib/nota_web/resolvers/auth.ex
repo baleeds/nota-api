@@ -50,4 +50,16 @@ defmodule NotaWeb.Resolvers.Auth do
       {:error, error} -> {:error, error}
     end
   end
+
+  def send_forgot_password(_, %{email: email}, _) do
+    Auth.send_forgot_password(email)
+    |> case do
+      {:ok, _} -> {:ok, true}
+      {:error, error} -> {:error, error}
+    end
+  end
+
+  def reset_password(_, %{input: %{token: token, password: password}}, _) do
+    Auth.reset_password(token, password)
+  end
 end

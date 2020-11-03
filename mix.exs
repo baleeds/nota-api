@@ -46,6 +46,7 @@ defmodule Nota.Mixfile do
       {:absinthe_plug, ">= 1.5.0"},
       {:absinthe_relay, ">= 1.5.0"},
       {:argon2_elixir, "~> 2.3.0"},
+      {:bamboo, "~> 1.1"},
       {:corsica, "~> 1.0"},
       {:dataloader, "~> 1.0.0"},
       {:ecto_sql, "~> 3.4"},
@@ -60,6 +61,7 @@ defmodule Nota.Mixfile do
       {:phoenix_live_dashboard, "~> 0.2.0"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
+      {:secure_random, "~> 0.5"},
       {:ueberauth, "~> 0.6.2"},
       {:ueberauth_facebook, "~> 0.8"},
       {:ueberauth_google, "~> 0.9"}

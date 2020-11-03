@@ -1,6 +1,10 @@
 defmodule Nota.Application do
   use Application
 
+  def applications do
+    [applications: [:bamboo]]
+  end
+
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do

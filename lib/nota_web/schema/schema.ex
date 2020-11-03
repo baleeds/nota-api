@@ -71,7 +71,13 @@ defmodule NotaWeb.Schema do
     middleware
   end
 
-  @public_mutations ["sign_in", "create_account", "refresh_token"]
+  @public_mutations [
+    "sign_in",
+    "create_account",
+    "refresh_token",
+    "send_forgot_password",
+    "reset_password"
+  ]
 
   defp ensure_auth_unless_public(middleware, %{name: name}) do
     if Enum.member?(@public_mutations, name) do
