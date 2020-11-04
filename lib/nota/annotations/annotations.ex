@@ -32,7 +32,7 @@ defmodule Nota.Annotations do
   end
 
   def get_public_annotations(args) do
-    Annotation.projection()
+    Annotation.projection(nil)
     |> Query.where_from_args(args, [:user_id, :verse_id])
   end
 
@@ -42,7 +42,11 @@ defmodule Nota.Annotations do
     |> Query.where_from_args(args, [:user_id, :verse_id])
   end
 
-  def get_annotation(id), do: Repo.Extensions.one(Annotation.projection(), id)
+  def get_annotation(id, user_id) do
+    Annotation.projection(user_id)
+    |> where(id: ^id)
+    |> Repo.Extensions.one()
+  end
 
   def get_number_of_favorites(annotation_id) do
     AnnotationFavorite

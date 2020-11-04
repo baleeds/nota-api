@@ -4,8 +4,12 @@ defmodule NotaWeb.Resolvers.Annotations do
   alias Nota.Repo
   alias Absinthe.Relay.Connection
 
+  def get(_, %{id: id}, %{context: %{current_user: %{id: user_id}}}) do
+    Annotations.get_annotation(id, user_id)
+  end
+
   def get(_, %{id: id}, _) do
-    Annotations.get_annotation(id)
+    Annotations.get_annotation(id, nil)
   end
 
   def get_my_annotations(_, args, %{context: %{current_user: %{id: user_id}}}) do
@@ -69,7 +73,7 @@ defmodule NotaWeb.Resolvers.Annotations do
     {:error, "You must be logged in to delete your annotation"}
   end
 
-  def favorite_annotation(_, %{annotation_id: annotation_id}, %{
+  def favorite_annotation(_, %{input: %{annotation_id: annotation_id}}, %{
         context: %{current_user: %{id: user_id}}
       }) do
     Annotations.favorite_annotation(annotation_id, user_id)
@@ -84,7 +88,7 @@ defmodule NotaWeb.Resolvers.Annotations do
     {:error, "You must be logged in to favorite an annotation"}
   end
 
-  def unfavorite_annotation(_, %{annotation_id: annotation_id}, %{
+  def unfavorite_annotation(_, %{input: %{annotation_id: annotation_id}}, %{
         context: %{current_user: %{id: user_id}}
       }) do
     Annotations.unfavorite_annotation(annotation_id, user_id)

@@ -47,7 +47,21 @@ defmodule Nota.Annotations.Annotation do
     |> foreign_key_constraint(:user_id)
   end
 
-  def projection(user_id \\ 0) do
+  def projection(nil) do
+    from(a in __MODULE__,
+      select: %__MODULE__{
+        id: a.id,
+        text: a.text,
+        verse_id: a.verse_id,
+        user_id: a.user_id,
+        inserted_at: a.inserted_at,
+        updated_at: a.updated_at,
+        is_favorite: false
+      }
+    )
+  end
+
+  def projection(user_id) do
     from(a in __MODULE__,
       left_join: f in AnnotationFavorite,
       on: f.user_id == ^user_id and f.annotation_id == a.id,

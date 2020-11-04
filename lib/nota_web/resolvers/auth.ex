@@ -51,7 +51,7 @@ defmodule NotaWeb.Resolvers.Auth do
     end
   end
 
-  def send_forgot_password(_, %{email: email}, _) do
+  def send_forgot_password(_, %{input: %{email: email}}, _) do
     Auth.send_forgot_password(email)
     |> case do
       {:ok, _} -> {:ok, true}
@@ -69,5 +69,17 @@ defmodule NotaWeb.Resolvers.Auth do
 
   def sign_out(_, %{refresh_token: refresh_token}, %{context: %{current_user: current_user}}) do
     Auth.sign_out(current_user, refresh_token)
+  end
+
+  def get_user_for_session(%{user_id: user_id}, _, _) do
+    Auth.get_user(user_id)
+    |> case do
+      nil -> {:error, "Could not load user"}
+      user -> {:ok, user}
+    end
+  end
+
+  def get_user_for_session(_, _, _) do
+    {:error, :unknown}
   end
 end

@@ -39,6 +39,8 @@ defmodule NotaWeb.Schema.Annotations do
     field :annotation, non_null(:annotation) do
       arg(:id, non_null(:id))
 
+      middleware(Absinthe.Relay.Node.ParseIDs, id: :annotation)
+
       resolve(&Annotations.get/3)
     end
 
@@ -79,6 +81,14 @@ defmodule NotaWeb.Schema.Annotations do
     field(:deleted_at, :datetime)
   end
 
+  input_object :favorite_annotation_input do
+    field(:annotation_id, non_null(:id))
+  end
+
+  input_object :unfavorite_annotation_input do
+    field(:annotation_id, non_null(:id))
+  end
+
   # input_object :sync_annotations_input do
   #   field(:annotations, non_null(list_of(:save_annotation_input)))
   #   field(:last_synced_at, non_null(:datetime))
@@ -108,17 +118,17 @@ defmodule NotaWeb.Schema.Annotations do
     end
 
     field :favorite_annotation, non_null(:favorite_annotation_payload) do
-      arg(:annotation_id, non_null(:id))
+      arg(:input, non_null(:favorite_annotation_input))
 
-      middleware(Absinthe.Relay.Node.ParseIDs, annotation_id: :annotation)
+      middleware(Absinthe.Relay.Node.ParseIDs, input: [annotation_id: :annotation])
 
       resolve(&Annotations.favorite_annotation/3)
     end
 
     field :unfavorite_annotation, non_null(:unfavorite_annotation_payload) do
-      arg(:annotation_id, non_null(:id))
+      arg(:input, non_null(:unfavorite_annotation_input))
 
-      middleware(Absinthe.Relay.Node.ParseIDs, annotation_id: :annotation)
+      middleware(Absinthe.Relay.Node.ParseIDs, input: [annotation_id: :annotation])
 
       resolve(&Annotations.unfavorite_annotation/3)
     end

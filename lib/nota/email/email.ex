@@ -14,7 +14,7 @@ defmodule Nota.Email do
       from: "support@biblenota.com",
       subject: "Reset Password",
       html_body:
-        "Click <a href=\"#{frontend_url()}/reset?token=#{token}\" target=\"_blank\">here</a> to reset password."
+        "Click <a href=\"#{frontend_url()}/reset-password?token=#{token}\" target=\"_blank\">here</a> to reset password."
     )
   end
 

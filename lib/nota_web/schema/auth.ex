@@ -24,6 +24,10 @@ defmodule NotaWeb.Schema.Auth do
     field(:access_token, non_null(:string))
     field(:refresh_token, :string)
     field(:user_id, :id, resolve: to_global_id(:user))
+
+    field(:user, non_null(:user)) do
+      resolve(&Auth.get_user_for_session/3)
+    end
   end
 
   object :auth_queries do
@@ -52,6 +56,10 @@ defmodule NotaWeb.Schema.Auth do
   input_object(:sign_in_input) do
     field(:email, non_null(:string))
     field(:password, non_null(:string))
+  end
+
+  input_object(:send_forgot_password_input) do
+    field(:email, non_null(:string))
   end
 
   input_object(:reset_password_input) do
@@ -91,7 +99,7 @@ defmodule NotaWeb.Schema.Auth do
     end
 
     field :send_forgot_password, non_null(:send_forgot_password_payload) do
-      arg(:email, non_null(:string))
+      arg(:input, non_null(:send_forgot_password_input))
 
       resolve(&Auth.send_forgot_password/3)
     end
