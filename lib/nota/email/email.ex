@@ -9,21 +9,23 @@ defmodule Nota.Email do
   end
 
   def reset_password(%User{email: email}, %ResetPasswordToken{token: token}) do
-    new_email(
-      to: email,
-      from: "support@biblenota.com",
-      subject: "Reset Password",
-      html_body:
-        "Click <a href=\"#{frontend_url()}/reset-password?token=#{token}\" target=\"_blank\">here</a> to reset password."
+    base_email()
+    |> to(email)
+    |> subject("Reset Password")
+    |> html_body(
+      "Click <a href=\"#{frontend_url()}/reset-password?token=#{token}\" target=\"_blank\">here</a> to reset password."
     )
   end
 
   def password_changed(%User{email: email}) do
-    new_email(
-      to: email,
-      from: "support@biblenota.com",
-      subject: "Password Successfully Reset",
-      html_body: "Your password has recently been reset."
-    )
+    base_email()
+    |> to(email)
+    |> subject("Reset Password")
+    |> html_body("Password has been successfully reset")
+  end
+
+  defp base_email() do
+    new_email()
+    |> from("Bible Nota <support@biblenota.com>")
   end
 end
