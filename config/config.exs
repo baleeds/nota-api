@@ -11,14 +11,16 @@ config :nota,
 
 # Configures the endpoint
 config :nota, NotaWeb.Endpoint,
-  url: [host: "localhost"],
-  secret_key_base: "HmbY4BSibMF8QYcHGeG7xHhj0BHle+OiCsoT0vsx5+S8kpqPBsOsobCzDhOOCuch",
+  url: [host: System.get_env("HOST"), port: System.get_env("PORT")],
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
   render_errors: [view: NotaWeb.ErrorView, accepts: ~w(json)],
   # pubsub: Nota.PubSub,
   live_view: [signing_salt: "LFzSDAuJ"]
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+config :nota, frontend_url: System.get_env("FRONTEND_URL")
 
 # Guardian
 config :nota, Nota.Auth.Guardian,
@@ -45,6 +47,14 @@ config :ueberauth, Ueberauth.Strategy.Google.OAuth,
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:user_id]
+
+config :nota, Nota.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  username: System.get_env("DB_USER"),
+  password: System.get_env("DB_PASSWORD"),
+  database: System.get_env("DB_NAME"),
+  hostname: System.get_env("DB_HOSTNAME"),
+  pool_size: 10
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

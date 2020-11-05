@@ -1,0 +1,20 @@
+export PORT=4000
+export HOST=localhost
+export FRONTEND_URL=http://localhost:3000
+
+export JWT_SECRET_KEY=
+export SECRET_KEY_BASE=
+
+export GOOGLE_CLIENT_ID=
+export GOOGLE_CLIENT_SECRET=
+
+export MAILGUN_API_KEY=
+export MAILGUN_DOMAIN=
+
+export DB_USER=
+export DB_PASSWORD=
+export DB_NAME=
+export DB_HOSTNAME=
+
+export SSL_KEYFILE_PATH=
+export SSL_CERTFILE_PATH=

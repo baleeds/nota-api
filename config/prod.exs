@@ -15,16 +15,24 @@ use Mix.Config
 # which you typically run after static files are built.
 config :nota, NotaWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  url: [host: System.get_env("HOST"), port: System.get_env("PORT")],
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  https: [
+    :inet6,
+    port: 443,
+    keyfile: System.get_env("SSL_KEYFILE_PATH"),
+    certfile: System.get_env("SSL_CERTFILE_PATH")
+  ],
+  force_ssl: [hsts: true]
 
-config :nota, frontend_url: "https://biblenota.com"
+config :phoenix, :serve_endpoints, true
 
 # Bamboo
 config :nota, Nota.Mailer,
   adapter: Bamboo.MailgunAdapter,
-  api_key: "my_api_key",
-  domain: "mail.biblenota.com"
+  api_key: System.get_env("MAILGUN_API_KEY"),
+  domain: System.get_env("MAILGUN_DOMAIN")
 
 # Do not print debug messages in production
 config :logger, level: :info

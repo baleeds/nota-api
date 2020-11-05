@@ -39,13 +39,7 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :nota, Nota.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "nota",
-  password: "abc123",
-  database: "nota",
-  hostname: "localhost",
   pool_size: 10
-
-config :nota, frontend_url: "http://localhost:3000"
 
 # Bamboo
 config :nota, Nota.Mailer, adapter: Bamboo.LocalAdapter
