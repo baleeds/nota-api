@@ -15,7 +15,7 @@ use Mix.Config
 # which you typically run after static files are built.
 config :nota, NotaWeb.Endpoint,
   url: [host: System.get_env("HOST"), port: System.get_env("PORT")],
-  http: [port: System.get_env("PORT")]
+  http: [port: System.get_env("PORT")],
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
   server: true
 
