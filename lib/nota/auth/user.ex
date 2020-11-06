@@ -57,13 +57,16 @@ defmodule Nota.Auth.User do
     struct
     |> cast(attrs, @all_fields)
     |> validate_required(@required_fields)
-    |> validate_length(:first_name, min: 0, max: 255)
-    |> validate_length(:last_name, min: 0, max: 255)
-    |> validate_length(:email, min: 0, max: 255)
+    |> validate_length(:first_name, min: 0, max: 50)
+    |> validate_length(:last_name, min: 0, max: 50)
+    |> validate_length(:email, min: 0, max: 50)
     |> validate_length(:password, min: 0, max: 255)
     |> validate_length(:password_hash, min: 0, max: 255)
     |> unique_constraint(:oauth_uid, name: :users_oauth_provider_oauth_uid_key)
-    |> unique_constraint(:email, name: :users_email_key)
+    |> unique_constraint(:email,
+      name: :users_email_key,
+      message: "email already has an associated account"
+    )
     |> unique_constraint(:jti, name: :users_jti_key)
     |> put_password_hash()
   end
