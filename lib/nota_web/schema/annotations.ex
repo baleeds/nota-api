@@ -96,9 +96,9 @@ defmodule NotaWeb.Schema.Annotations do
 
   payload_object(:save_annotation_payload, :annotation)
 
-  payload_object(:favorite_annotation_payload, :boolean)
+  payload_object(:favorite_annotation_payload, :annotation)
 
-  payload_object(:unfavorite_annotation_payload, :boolean)
+  payload_object(:unfavorite_annotation_payload, :annotation)
 
   payload_object(:delete_annotation_payload, :boolean)
 

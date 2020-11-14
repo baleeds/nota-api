@@ -34,6 +34,8 @@ defmodule NotaWeb.Schema.Auth do
     field :user, non_null(:user) do
       arg(:id, non_null(:id))
 
+      middleware(Absinthe.Relay.Node.ParseIDs, id: :user)
+
       resolve(&Auth.get_user/3)
     end
 

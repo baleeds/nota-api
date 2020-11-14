@@ -110,7 +110,9 @@ defmodule Nota.Auth do
   def refresh_user_authorization_token(refresh_token) do
     with true <- is_refresh_token_valid?(refresh_token),
          {:ok, _old_stuff, {access_token, %{"sub" => %{"user_id" => user_id}}}} <-
-           Guardian.refresh(refresh_token, ttl: {1, :day}) do
+           Guardian.exchange(refresh_token, "refresh", "access", ttl: {1, :hour}) do
+      IO.inspect(access_token, label: "Access")
+      IO.inspect(refresh_token, label: "Refresh")
       {:ok, %{access_token: access_token, refresh_token: refresh_token, user_id: user_id}}
     else
       false -> {:error, "Invalid refresh token"}
@@ -149,7 +151,7 @@ defmodule Nota.Auth do
     resource = %{user_id: user_id}
 
     with {:ok, access_token, _claims} <-
-           Guardian.encode_and_sign(resource, %{}, ttl: {1, :day}),
+           Guardian.encode_and_sign(resource, %{}, ttl: {1, :hour}),
          {:ok, %{refresh_token: %{token: refresh_token}}} <- create_refresh_token(resource) do
       {:ok,
        %{

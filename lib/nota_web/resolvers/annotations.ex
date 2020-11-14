@@ -73,13 +73,14 @@ defmodule NotaWeb.Resolvers.Annotations do
     {:error, "You must be logged in to delete your annotation"}
   end
 
-  def favorite_annotation(_, %{input: %{annotation_id: annotation_id}}, %{
-        context: %{current_user: %{id: user_id}}
-      }) do
+  def favorite_annotation(
+        _,
+        %{input: %{annotation_id: annotation_id}},
+        %{context: %{current_user: %{id: user_id}}} = context
+      ) do
     Annotations.favorite_annotation(annotation_id, user_id)
-    # |> IO.puts()
     |> case do
-      {:ok, _favorite_annotation} -> {:ok, true}
+      {:ok, _favorite_annotation} -> get(%{}, %{id: annotation_id}, context)
       {:error, error} -> {:error, error}
     end
   end
@@ -88,12 +89,14 @@ defmodule NotaWeb.Resolvers.Annotations do
     {:error, "You must be logged in to favorite an annotation"}
   end
 
-  def unfavorite_annotation(_, %{input: %{annotation_id: annotation_id}}, %{
-        context: %{current_user: %{id: user_id}}
-      }) do
+  def unfavorite_annotation(
+        _,
+        %{input: %{annotation_id: annotation_id}},
+        %{context: %{current_user: %{id: user_id}}} = context
+      ) do
     Annotations.unfavorite_annotation(annotation_id, user_id)
     |> case do
-      {:ok, _unfavorite_annotation} -> {:ok, true}
+      {:ok, _unfavorite_annotation} -> get(%{}, %{id: annotation_id}, context)
       {:error, error} -> {:error, error}
     end
   end
