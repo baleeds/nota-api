@@ -37,6 +37,12 @@ defmodule Nota.Auth do
     |> Repo.update()
   end
 
+  def update_user_by_id(id, attrs) do
+    get_user!(id)
+    |> User.changeset(attrs)
+    |> Repo.update()
+  end
+
   def upsert_user(auth) do
     with {:ok, user_or_nil} <- find_user_by_oauth(auth),
          attrs <- get_user_changes(auth) do
@@ -211,6 +217,25 @@ defmodule Nota.Auth do
       {:ok, _} -> {:ok, true}
       {:error, error} -> {:error, error}
       _ -> {:error, :unknown}
+    end
+  end
+
+  def change_password(user_id, old_password, new_password) do
+    User
+    |> where(id: ^user_id)
+    |> Repo.one()
+    |> case do
+      nil ->
+        {:error, :unknown}
+
+      user ->
+        if Argon2.verify_pass(old_password, user.password_hash) do
+          user
+          |> User.changeset(%{password: new_password})
+          |> Repo.update()
+        else
+          {:error, :invalid_password}
+        end
     end
   end
 
