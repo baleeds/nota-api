@@ -26,6 +26,7 @@ defmodule NotaWeb.Schema do
   end
 
   mutation do
+    import_fields(:bible_mutations)
     import_fields(:annotations_mutations)
     import_fields(:auth_mutations)
     import_fields(:annotation_replies_mutations)
@@ -52,6 +53,7 @@ defmodule NotaWeb.Schema do
       Dataloader.new()
       |> Dataloader.add_source(Bible.Verse, Bible.data())
       |> Dataloader.add_source(Annotations.Annotation, Annotations.data())
+      |> Dataloader.add_source(Bible.VerseFavorite, Bible.verse_favorite_data())
       |> Dataloader.add_source(Auth.User, Auth.data())
 
     Map.put(ctx, :loader, loader)

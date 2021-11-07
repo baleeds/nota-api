@@ -32,6 +32,7 @@ defmodule Nota.Repo.Extensions do
     with {:ok, item} <- one(queryable) do
       item
       |> Ecto.Changeset.change(attrs)
+      |> IO.inspect()
       |> Repo.update(repo_update_opts)
     else
       {:error, :not_found} -> {:error, :not_found}

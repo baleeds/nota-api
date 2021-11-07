@@ -61,7 +61,7 @@ defmodule NotaWeb.Resolvers.Annotations do
     end
   end
 
-  def save(_, _, _), do: {:error, "Unauthorized"}
+  def save(_, _, _), do: {:error, :unknown}
 
   def delete_annotation(_, %{annotation_id: annotation_id}, %{
         context: %{current_user: %{id: user_id}}
