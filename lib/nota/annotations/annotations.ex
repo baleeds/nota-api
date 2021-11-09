@@ -15,7 +15,8 @@ defmodule Nota.Annotations do
   end
 
   def query(_queryable, %{user_id: user_id}) do
-    Annotation.projection(user_id)
+    Annotation
+    |> Annotation.include_is_favorite(user_id)
     |> where([a], a.user_id == ^user_id)
   end
 
@@ -26,24 +27,28 @@ defmodule Nota.Annotations do
   end
 
   def get_my_annotations(user_id, args) do
-    Annotation.projection(user_id)
+    Annotation
+    |> Annotation.include_is_favorite(user_id)
     |> where([a], a.user_id == ^user_id)
     |> Query.where_from_args(args, [:verse_id])
   end
 
   def get_public_annotations(args) do
-    Annotation.projection(nil)
+    Annotation
+    |> Annotation.include_is_favorite(nil)
     |> Query.where_from_args(args, [:user_id, :verse_id])
   end
 
   def get_public_annotations(user_id, args) do
-    Annotation.projection(user_id)
+    Annotation
+    |> Annotation.include_is_favorite(user_id)
     |> where([a], a.user_id != ^user_id)
     |> Query.where_from_args(args, [:user_id, :verse_id])
   end
 
   def get_annotation(id, user_id) do
-    Annotation.projection(user_id)
+    Annotation
+    |> Annotation.include_is_favorite(user_id)
     |> where(id: ^id)
     |> Repo.Extensions.one()
   end
@@ -89,7 +94,8 @@ defmodule Nota.Annotations do
   end
 
   def get_favorite_annotations(user_id) do
-    Annotation.projection(user_id)
+    Annotation
+    |> Annotation.include_is_favorite(user_id)
     |> where([a, f], fragment("? IS NOT NULL", f.id))
   end
 

@@ -12,7 +12,9 @@ defmodule NotaWeb.Resolvers.Annotations do
     Annotations.get_annotation(id, nil)
   end
 
-  def get_my_annotations(_, args, %{context: %{current_user: %{id: user_id}}}) do
+  def get_my_annotations(_, args, %{context: %{current_user: %{id: user_id}} = context}) do
+    IO.inspect(context)
+
     Annotations.get_my_annotations(user_id, args)
     |> Connection.from_query(&Repo.all/1, args)
   end

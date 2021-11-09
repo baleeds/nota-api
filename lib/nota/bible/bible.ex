@@ -9,22 +9,31 @@ defmodule Nota.Bible do
     Dataloader.Ecto.new(Repo, query: &query/2)
   end
 
+  def query(queryable, %{user_id: user_id}) do
+    queryable
+    |> Verse.include_is_bookmarked(user_id)
+  end
+
   def query(queryable, _params) do
     queryable
   end
 
-  def verse_favorite_data() do
-    Dataloader.Ecto.new(Repo, query: &verse_favorite_query/2)
+  # def verse_favorite_data() do
+  #   Dataloader.Ecto.new(Repo, query: &verse_favorite_query/2)
+  # end
+
+  # def verse_favorite_query(queryable, params) do
+  #   IO.inspect(queryable)
+  #   IO.inspect(params)
+
+  #   queryable
+  # end
+
+  def get_verse(id, %{current_user_id: user_id}) do
+    Verse
+    |> Verse.include_is_bookmarked(user_id)
+    |> Repo.get(id)
   end
-
-  def verse_favorite_query(queryable, params) do
-    IO.inspect(queryable)
-    IO.inspect(params)
-
-    queryable
-  end
-
-  def get_verse(id), do: Repo.get(Verse, id)
 
   # def get_verses(%{chapter_number: chapter_number, book_number: book_number}) do
   #   query = from v in Verse,

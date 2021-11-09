@@ -1,8 +1,8 @@
 defmodule NotaWeb.Resolvers.Bible do
   alias Nota.Bible
 
-  def get_verse(_, %{id: id}, _context) do
-    Bible.get_verse(id)
+  def get_verse(_, %{id: id}, %{context: context}) do
+    Bible.get_verse(id, context)
     |> case do
       nil -> {:error, "Error retrieving verse"}
       verse -> {:ok, verse}
@@ -18,11 +18,11 @@ defmodule NotaWeb.Resolvers.Bible do
   end
 
   def bookmark_verse(_, %{input: %{verse_id: verse_id}}, %{
-        context: %{current_user: %{id: user_id}}
+        context: %{current_user: %{id: user_id}} = context
       }) do
     Bible.bookmark_verse(user_id, verse_id)
     |> case do
-      {:ok, _} -> {:ok, Bible.get_verse(verse_id)}
+      {:ok, _} -> {:ok, Bible.get_verse(verse_id, context)}
       {:error, error} -> {:error, error}
     end
   end
@@ -30,11 +30,11 @@ defmodule NotaWeb.Resolvers.Bible do
   def bookmark_verse(_, _, _), do: {:error, :unknown}
 
   def unbookmark_verse(_, %{input: %{verse_id: verse_id}}, %{
-        context: %{current_user: %{id: user_id}}
+        context: %{current_user: %{id: user_id}} = context
       }) do
     Bible.unbookmark_verse(user_id, verse_id)
     |> case do
-      {:ok, _} -> {:ok, Bible.get_verse(verse_id)}
+      {:ok, _} -> {:ok, Bible.get_verse(verse_id, context)}
       {:error, error} -> {:error, error}
     end
   end
