@@ -30,6 +30,8 @@ defmodule NotaWeb.Schema.Bible do
     field(:verse_number, non_null(:integer))
     field(:text, non_null(:string))
     field(:is_bookmarked, non_null(:boolean))
+    field(:is_annotated, non_null(:boolean))
+    field(:is_annotated_by_me, non_null(:boolean))
 
     # field(:is_bookmarked, non_null(:boolean)) do
     #   resolve(&Bible.is_verse_bookmarked/3)

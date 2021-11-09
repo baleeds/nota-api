@@ -9,8 +9,8 @@ defmodule NotaWeb.Resolvers.Bible do
     end
   end
 
-  def get_verses_by(_, params, _) do
-    Bible.get_verses(params)
+  def get_verses_by(_, params, %{context: context}) do
+    Bible.get_verses(params, context)
     |> case do
       nil -> {:error, "Error retrieving verses"}
       verses -> {:ok, verses}

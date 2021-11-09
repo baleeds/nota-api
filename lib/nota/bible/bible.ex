@@ -12,10 +12,13 @@ defmodule Nota.Bible do
   def query(queryable, %{user_id: user_id}) do
     queryable
     |> Verse.include_is_bookmarked(user_id)
+    |> Verse.include_is_annotated(user_id)
   end
 
   def query(queryable, _params) do
     queryable
+    |> Verse.include_is_bookmarked(nil)
+    |> Verse.include_is_annotated(nil)
   end
 
   # def verse_favorite_data() do
@@ -32,6 +35,7 @@ defmodule Nota.Bible do
   def get_verse(id, %{current_user_id: user_id}) do
     Verse
     |> Verse.include_is_bookmarked(user_id)
+    |> Verse.include_is_annotated(user_id)
     |> Repo.get(id)
   end
 
@@ -43,13 +47,17 @@ defmodule Nota.Bible do
   #   Repo.all(query)
   # end
 
-  def get_verses(%{chapter_number: chapter_number, book_number: book_number}) do
+  def get_verses(%{chapter_number: chapter_number, book_number: book_number}, %{
+        current_user_id: user_id
+      }) do
     Verse
+    |> Verse.include_is_bookmarked(user_id)
+    |> Verse.include_is_annotated(user_id)
     |> where(book_number: ^book_number, chapter_number: ^chapter_number)
     |> Repo.all()
   end
 
-  def get_verses(_) do
+  def get_verses(_, _) do
     {:error, "invalid query for verses"}
   end
 
