@@ -1,4 +1,4 @@
-defmodule Nota.Annotations do
+defmodule Nota.Services.Annotations do
   @moduledoc """
   The Annotations context.
   """
@@ -6,8 +6,7 @@ defmodule Nota.Annotations do
   import Ecto.Query, warn: false
 
   alias Nota.Repo
-  alias Nota.Annotations.Annotation
-  alias Nota.Annotations.AnnotationFavorite
+  alias Nota.Models.{Annotation, AnnotationFavorite}
   alias Nota.Helpers.Query
 
   def data() do

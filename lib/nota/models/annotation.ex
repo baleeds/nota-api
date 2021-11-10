@@ -1,11 +1,7 @@
-defmodule Nota.Annotations.Annotation do
+defmodule Nota.Models.Annotation do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
-
-  alias Nota.Bible.Verse
-  alias Nota.Auth.User
-  alias Nota.Annotations.AnnotationFavorite
 
   @required_fields ~w(
     verse_id
@@ -32,8 +28,8 @@ defmodule Nota.Annotations.Annotation do
 
     field(:is_favorite, :boolean, virtual: true)
 
-    belongs_to(:verse, Verse, type: :integer)
-    belongs_to(:user, User)
+    belongs_to(:verse, Nota.Models.Verse, type: :integer)
+    belongs_to(:user, Nota.Models.User)
 
     timestamps(type: :utc_datetime)
   end
@@ -55,7 +51,7 @@ defmodule Nota.Annotations.Annotation do
 
   def include_is_favorite(query, user_id) do
     from(a in query,
-      left_join: f in AnnotationFavorite,
+      left_join: f in Nota.Models.AnnotationFavorite,
       on: f.user_id == ^user_id and f.annotation_id == a.id,
       select_merge: %{is_favorite: fragment("? IS NOT NULL", f.id)}
     )

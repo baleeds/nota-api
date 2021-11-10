@@ -1,9 +1,9 @@
-defmodule Nota.Auth.Guardian do
+defmodule Nota.Services.Auth.Guardian do
   @moduledoc false
 
   use Guardian, otp_app: :nota
 
-  alias Nota.Auth
+  alias Nota.Services.Auth
 
   require Ecto
 

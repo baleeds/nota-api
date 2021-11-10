@@ -1,10 +1,7 @@
-defmodule Nota.Bible.Verse do
+defmodule Nota.Models.Verse do
   use Ecto.Schema
 
   import Ecto.Query
-
-  alias Nota.Annotations.Annotation
-  alias Nota.Bible.VerseFavorite
 
   schema "verses" do
     field(:book_number, :integer)
@@ -12,8 +9,8 @@ defmodule Nota.Bible.Verse do
     field(:verse_number, :integer)
     field(:text, :string)
 
-    has_many(:annotations, Annotation)
-    has_many(:verse_favorites, VerseFavorite)
+    has_many(:annotations, Nota.Models.Annotation)
+    has_many(:verse_favorites, Nota.Models.VerseFavorite)
 
     field(:is_bookmarked, :boolean, virtual: true)
     field(:is_annotated, :boolean, virtual: true)
@@ -28,7 +25,7 @@ defmodule Nota.Bible.Verse do
 
   def include_is_bookmarked(query, user_id) do
     from(a in query,
-      left_join: f in VerseFavorite,
+      left_join: f in Nota.Models.VerseFavorite,
       on: f.user_id == ^user_id and f.verse_id == a.id,
       select_merge: %{is_bookmarked: fragment("? IS NOT NULL", f.id)}
     )
@@ -37,7 +34,7 @@ defmodule Nota.Bible.Verse do
   def include_is_annotated(query, user_id) do
     from(v in query,
       distinct: v.id,
-      left_join: a in Annotation,
+      left_join: a in Nota.Models.Annotation,
       on: a.verse_id == v.id,
       select_merge: %{is_annotated: fragment("? IS NOT NULL", a.id)}
     )
@@ -50,7 +47,7 @@ defmodule Nota.Bible.Verse do
 
   defp include_is_annotated_by_me(query, user_id) do
     from(v in query,
-      left_join: ma in Annotation,
+      left_join: ma in Nota.Models.Annotation,
       on: ma.verse_id == v.id and ma.user_id == ^user_id,
       select_merge: %{is_annotated_by_me: fragment("? IS NOT NULL", ma.id)}
     )

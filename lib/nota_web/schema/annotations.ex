@@ -4,8 +4,7 @@ defmodule NotaWeb.Schema.Annotations do
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :modern
 
-  alias Nota.Bible
-  alias Nota.Auth
+  alias Nota.Models
 
   alias NotaWeb.Resolvers.Annotations
 
@@ -31,8 +30,8 @@ defmodule NotaWeb.Schema.Annotations do
       resolve(&Annotations.get_number_of_favorites/3)
     end
 
-    field(:verse, non_null(:verse), resolve: dataloader(Bible.Verse))
-    field(:user, non_null(:user), resolve: dataloader(Auth.User))
+    field(:verse, non_null(:verse), resolve: dataloader(Models.Verse))
+    field(:user, non_null(:user), resolve: dataloader(Models.User))
   end
 
   object :annotations_queries do

@@ -1,5 +1,5 @@
 defmodule NotaWeb.Resolvers.Auth do
-  alias Nota.Auth
+  alias Nota.Services.Auth
 
   def get_users(_, _, _) do
     Auth.get_users()
@@ -102,7 +102,7 @@ defmodule NotaWeb.Resolvers.Auth do
       }) do
     Auth.change_password(user_id, old_password, new_password)
     |> case do
-      {:ok, user} -> {:ok, true}
+      {:ok, _user} -> {:ok, true}
       {:error, error} -> {:error, error}
     end
   end

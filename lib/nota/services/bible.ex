@@ -1,9 +1,8 @@
-defmodule Nota.Bible do
+defmodule Nota.Services.Bible do
   import Ecto.Query, warn: false
 
   alias Nota.Repo
-  alias Nota.Bible.Verse
-  alias Nota.Bible.VerseFavorite
+  alias Nota.Models.{Verse, VerseFavorite}
 
   def data() do
     Dataloader.Ecto.new(Repo, query: &query/2)

@@ -1,6 +1,5 @@
 defmodule NotaWeb.Resolvers.Annotations do
-  alias Nota.Annotations
-  alias Nota.AnnotationReplies
+  alias Nota.Services.{Annotations, AnnotationReplies}
   alias Nota.Repo
   alias Absinthe.Relay.Connection
 

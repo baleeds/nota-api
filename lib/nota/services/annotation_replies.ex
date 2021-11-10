@@ -1,8 +1,8 @@
-defmodule Nota.AnnotationReplies do
+defmodule Nota.Services.AnnotationReplies do
   import Ecto.Query, warn: false
 
   alias Nota.Repo
-  alias Nota.AnnotationReplies.AnnotationReply
+  alias Nota.Models.AnnotationReply
 
   def get_annotation_replies(annotation_id) do
     AnnotationReply

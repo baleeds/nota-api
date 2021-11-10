@@ -5,10 +5,8 @@ defmodule NotaWeb.Schema do
   use Absinthe.Relay.Schema, flavor: :modern
   use Absinthe.Relay.Schema.Notation, :modern
 
-  alias Nota.Annotations
-  alias Nota.Bible
-  alias Nota.AnnotationReplies
-  alias Nota.Auth
+  alias Nota.Models
+  alias Nota.Services
 
   import_types(AbsintheErrorPayload.ValidationMessageTypes)
   import_types(Absinthe.Type.Custom)
@@ -34,13 +32,13 @@ defmodule NotaWeb.Schema do
 
   node interface do
     resolve_type(fn
-      %Annotations.Annotation{}, _ ->
+      %Models.Annotation{}, _ ->
         :annotation
 
-      %Auth.User{}, _ ->
+      %Models.User{}, _ ->
         :user
 
-      %AnnotationReplies.AnnotationReply{}, _ ->
+      %Models.AnnotationReply{}, _ ->
         :annotation_reply
 
       _, _ ->
@@ -51,9 +49,9 @@ defmodule NotaWeb.Schema do
   def context(ctx) do
     loader =
       Dataloader.new()
-      |> Dataloader.add_source(Bible.Verse, Bible.data())
-      |> Dataloader.add_source(Annotations.Annotation, Annotations.data())
-      |> Dataloader.add_source(Auth.User, Auth.data())
+      |> Dataloader.add_source(Models.Verse, Services.Bible.data())
+      |> Dataloader.add_source(Models.Annotation, Services.Annotations.data())
+      |> Dataloader.add_source(Models.User, Services.Auth.data())
 
     Map.put(ctx, :loader, loader)
   end

@@ -1,4 +1,4 @@
-defmodule Nota.AnnotationReplies.AnnotationReply do
+defmodule Nota.Models.AnnotationReply do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -7,8 +7,8 @@ defmodule Nota.AnnotationReplies.AnnotationReply do
   schema "annotation_replies" do
     field(:text, :string)
 
-    belongs_to(:user, Nota.Auth.User)
-    belongs_to(:annotation, Nota.Annotations.Annotation)
+    belongs_to(:user, User)
+    belongs_to(:annotation, Nota.Models.Annotation)
 
     timestamps(type: :utc_datetime)
   end
