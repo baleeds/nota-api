@@ -2,11 +2,13 @@ defmodule Nota.Models.AnnotationFavorite do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Nota.Models.{User, Annotation}
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "annotation_favorites" do
     belongs_to(:annotation, Annotation)
-    belongs_to(:user, Nota.Models.User)
+    belongs_to(:user, User)
 
     timestamps(type: :utc_datetime)
   end

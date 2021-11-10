@@ -2,13 +2,15 @@ defmodule Nota.Models.RefreshToken do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Nota.Models.User
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "refresh_tokens" do
     field(:token, :string)
     field(:expires_at, :utc_datetime)
 
-    belongs_to(:user, Nota.Models.User)
+    belongs_to(:user, User)
   end
 
   def changeset(refresh_token, attrs) do

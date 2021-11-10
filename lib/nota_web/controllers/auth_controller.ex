@@ -7,7 +7,6 @@ defmodule NotaWeb.Controllers.AuthController do
 
   alias Nota.Services.Auth
 
-  # import Nota.Helpers, only: [utc_now: 0]
   # import NotaWeb.Resolvers.Helpers, only: [transform_errors: 1]
 
   # TODO: this is duplicate of the email helpers
