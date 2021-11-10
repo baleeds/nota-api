@@ -219,25 +219,6 @@ defmodule Nota.Services.Auth do
     end
   end
 
-  def change_password(user_id, old_password, new_password) do
-    User
-    |> where(id: ^user_id)
-    |> Repo.one()
-    |> case do
-      nil ->
-        {:error, :unknown}
-
-      user ->
-        if Argon2.verify_pass(old_password, user.password_hash) do
-          user
-          |> User.changeset(%{password: new_password})
-          |> Repo.update()
-        else
-          {:error, :invalid_password}
-        end
-    end
-  end
-
   def sign_out_everywhere(%User{id: user_id}) do
     RefreshToken
     |> where(user_id: ^user_id)

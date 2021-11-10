@@ -15,6 +15,7 @@ defmodule NotaWeb.Schema do
   import_types(__MODULE__.Annotations)
   import_types(__MODULE__.Auth)
   import_types(__MODULE__.AnnotationReplies)
+  import_types(__MODULE__.UserSettings)
 
   query do
     import_fields(:bible_queries)
@@ -28,6 +29,7 @@ defmodule NotaWeb.Schema do
     import_fields(:annotations_mutations)
     import_fields(:auth_mutations)
     import_fields(:annotation_replies_mutations)
+    import_fields(:user_settings_mutations)
   end
 
   node interface do
