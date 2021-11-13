@@ -8,8 +8,8 @@ defmodule NotaWeb.Schema.Annotations do
 
   alias NotaWeb.Resolvers.Annotations
 
-  import Absinthe.Resolution.Helpers, only: [dataloader: 1]
-  import NotaWeb.Schema.Helpers, only: [to_global_id: 1]
+  import Absinthe.Resolution.Helpers
+  import NotaWeb.Schema.Helpers
 
   connection(node_type: :annotation)
 
@@ -30,7 +30,7 @@ defmodule NotaWeb.Schema.Annotations do
       resolve(&Annotations.get_number_of_favorites/3)
     end
 
-    field(:verse, non_null(:verse), resolve: dataloader(Models.Verse))
+    field(:verse, non_null(:verse), resolve: dataloader_with_context(Models.Verse))
     field(:user, non_null(:user), resolve: dataloader(Models.User))
   end
 

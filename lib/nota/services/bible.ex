@@ -8,13 +8,15 @@ defmodule Nota.Services.Bible do
     Dataloader.Ecto.new(Repo, query: &query/2)
   end
 
-  def query(queryable, %{user_id: user_id}) do
+  def query(queryable, %{current_user_id: current_user_id}) do
     queryable
-    |> Verse.include_is_bookmarked(user_id)
-    |> Verse.include_is_annotated(user_id)
+    |> Verse.include_is_bookmarked(current_user_id)
+    |> Verse.include_is_annotated(current_user_id)
   end
 
-  def query(queryable, _params) do
+  def query(queryable, _context) do
+    IO.inspect("running")
+
     queryable
     |> Verse.include_is_bookmarked(nil)
     |> Verse.include_is_annotated(nil)
