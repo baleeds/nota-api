@@ -18,7 +18,7 @@ defmodule Nota.Services.AnnotationReplies do
   def save_annotation_reply(%{id: id, user_id: user_id} = attrs) do
     AnnotationReply
     |> where(id: ^id, user_id: ^user_id)
-    |> Repo.Extensions.update_one(attrs)
+    |> Repo.Extensions.update_one(&AnnotationReply.changeset/2, attrs)
   end
 
   def save_annotation_reply(attrs) do

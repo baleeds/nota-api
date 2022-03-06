@@ -29,12 +29,16 @@ defmodule Nota.Services.Annotations do
     Annotation
     |> Annotation.include_is_favorite(user_id)
     |> where([a], a.user_id == ^user_id)
+    |> order_by([a, f], desc_nulls_last: f.inserted_at)
+    |> order_by([a, f], desc: a.inserted_at)
     |> Query.where_from_args(args, [:verse_id])
   end
 
   def get_public_annotations(args) do
     Annotation
     |> Annotation.include_is_favorite(nil)
+    |> order_by([a, f], desc_nulls_last: f.inserted_at)
+    |> order_by([a, f], desc: a.inserted_at)
     |> Query.where_from_args(args, [:user_id, :verse_id])
   end
 
@@ -42,6 +46,8 @@ defmodule Nota.Services.Annotations do
     Annotation
     |> Annotation.include_is_favorite(user_id)
     |> where([a], a.user_id != ^user_id)
+    |> order_by([a, f], desc_nulls_last: f.inserted_at)
+    |> order_by([a, f], desc: a.inserted_at)
     |> Query.where_from_args(args, [:user_id, :verse_id])
   end
 
@@ -61,7 +67,7 @@ defmodule Nota.Services.Annotations do
   def save_annotation(%{id: id, user_id: user_id} = attrs) do
     Annotation
     |> where(id: ^id, user_id: ^user_id)
-    |> Repo.Extensions.update_one(attrs)
+    |> Repo.Extensions.update_one(&Annotation.changeset/2, attrs)
   end
 
   def save_annotation(attrs) do
@@ -95,6 +101,7 @@ defmodule Nota.Services.Annotations do
   def get_favorite_annotations(user_id) do
     Annotation
     |> Annotation.include_is_favorite(user_id)
+    |> order_by([a, f], desc: f.inserted_at)
     |> where([a, f], fragment("? IS NOT NULL", f.id))
   end
 

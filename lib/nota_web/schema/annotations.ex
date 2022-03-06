@@ -105,6 +105,8 @@ defmodule NotaWeb.Schema.Annotations do
     field :save_annotation, non_null(:save_annotation_payload) do
       arg(:input, non_null(:save_annotation_input))
 
+      middleware(Absinthe.Relay.Node.ParseIDs, input: [id: :annotation])
+
       resolve(&Annotations.save/3)
     end
 
