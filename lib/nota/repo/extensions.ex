@@ -28,11 +28,11 @@ defmodule Nota.Repo.Extensions do
   Returns {:error, :not_found} if the item doesn't exist.  Otherwise, returns the updated record, or a
   changeset in the event of validation failure.
   """
-  def update_one(queryable, attrs, repo_update_opts \\ []) do
+  def update_one(queryable, changeset_fn, attrs, repo_update_opts \\ [])
+      when is_function(changeset_fn) and is_map(attrs) do
     with {:ok, item} <- one(queryable) do
       item
-      |> Ecto.Changeset.change(attrs)
-      |> IO.inspect()
+      |> changeset_fn.(attrs)
       |> Repo.update(repo_update_opts)
     else
       {:error, :not_found} -> {:error, :not_found}

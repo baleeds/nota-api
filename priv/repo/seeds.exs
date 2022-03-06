@@ -1,6 +1,5 @@
 alias Nota.Repo
-alias Nota.Annotations.Annotation
-alias Nota.Auth.User
+alias Nota.Models.{Annotation, User}
 
 query =
   "copy verses(id, book_number, chapter_number, verse_number, text) from '#{File.cwd!()}/priv/repo/data/t_web.csv' DELIMITER ',' CSV HEADER;"

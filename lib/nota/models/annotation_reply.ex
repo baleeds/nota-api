@@ -1,14 +1,16 @@
-defmodule Nota.AnnotationReplies.AnnotationReply do
+defmodule Nota.Models.AnnotationReply do
   use Ecto.Schema
   import Ecto.Changeset
+
+  alias Nota.Models.{Annotation, User}
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "annotation_replies" do
     field(:text, :string)
 
-    belongs_to(:user, Nota.Auth.User)
-    belongs_to(:annotation, Nota.Annotations.Annotation)
+    belongs_to(:user, User)
+    belongs_to(:annotation, Annotation)
 
     timestamps(type: :utc_datetime)
   end

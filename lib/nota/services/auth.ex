@@ -1,4 +1,4 @@
-defmodule Nota.Auth do
+defmodule Nota.Services.Auth do
   @moduledoc """
   The Auth context.
   """
@@ -7,9 +7,8 @@ defmodule Nota.Auth do
 
   alias Ecto.Multi
   alias Nota.Repo
-  alias Nota.Auth.User
-  alias Nota.Auth.Guardian
-  alias Nota.Auth.RefreshToken
+  alias Nota.Models.{User, RefreshToken}
+  alias Nota.Services.Auth.Guardian
 
   def data() do
     Dataloader.Ecto.new(Repo, query: &query/2)
@@ -217,25 +216,6 @@ defmodule Nota.Auth do
       {:ok, _} -> {:ok, true}
       {:error, error} -> {:error, error}
       _ -> {:error, :unknown}
-    end
-  end
-
-  def change_password(user_id, old_password, new_password) do
-    User
-    |> where(id: ^user_id)
-    |> Repo.one()
-    |> case do
-      nil ->
-        {:error, :unknown}
-
-      user ->
-        if Argon2.verify_pass(old_password, user.password_hash) do
-          user
-          |> User.changeset(%{password: new_password})
-          |> Repo.update()
-        else
-          {:error, :invalid_password}
-        end
     end
   end
 

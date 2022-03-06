@@ -7,8 +7,8 @@ defmodule NotaWeb.Schema.AnnotationReplies do
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
   alias NotaWeb.Resolvers.AnnotationReplies
-  alias Nota.Annotations
-  alias Nota.Auth
+
+  alias Nota.Models
 
   connection(node_type: :annotation_reply)
 
@@ -19,8 +19,8 @@ defmodule NotaWeb.Schema.AnnotationReplies do
     field(:inserted_at, non_null(:datetime))
     field(:updated_at, non_null(:datetime))
 
-    field(:annotation, non_null(:annotation), resolve: dataloader(Annotations.Annotation))
-    field(:user, non_null(:user), resolve: dataloader(Auth.User))
+    field(:annotation, non_null(:annotation), resolve: dataloader(Models.Annotation))
+    field(:user, non_null(:user), resolve: dataloader(Models.User))
   end
 
   object :annotation_replies_queries do

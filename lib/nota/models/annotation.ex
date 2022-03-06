@@ -1,11 +1,9 @@
-defmodule Nota.Annotations.Annotation do
+defmodule Nota.Models.Annotation do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Nota.Bible.Verse
-  alias Nota.Auth.User
-  alias Nota.Annotations.AnnotationFavorite
+  alias Nota.Models.{Verse, User, AnnotationFavorite}
 
   @required_fields ~w(
     verse_id

@@ -1,12 +1,14 @@
-defmodule Nota.Bible.VerseFavorite do
+defmodule Nota.Models.VerseFavorite do
   use Ecto.Schema
   import Ecto.Changeset
+
+  alias Nota.Models.{Verse, User}
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "verse_favorites" do
-    belongs_to(:verse, Nota.Bible.Verse, type: :integer)
-    belongs_to(:user, Nota.Auth.User)
+    belongs_to(:verse, Verse, type: :integer)
+    belongs_to(:user, User)
 
     timestamps(type: :utc_datetime)
   end

@@ -6,8 +6,6 @@ defmodule NotaWeb.Schema.Bible do
 
   alias NotaWeb.Resolvers.Bible
 
-  import Absinthe.Resolution.Helpers, only: [dataloader: 1]
-
   object :bible_queries do
     field :verse, non_null(:verse) do
       arg(:id, non_null(:id))
@@ -32,11 +30,6 @@ defmodule NotaWeb.Schema.Bible do
     field(:is_bookmarked, non_null(:boolean))
     field(:is_annotated, non_null(:boolean))
     field(:is_annotated_by_me, non_null(:boolean))
-
-    # field(:is_bookmarked, non_null(:boolean)) do
-    #   resolve(&Bible.is_verse_bookmarked/3)
-    # end
-    # field(:is_bookmarked, non_null(:boolean), resolve: dataloader(Nota.Bible.VerseFavorite))
   end
 
   input_object :bookmark_verse_input do

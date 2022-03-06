@@ -1,10 +1,9 @@
-defmodule Nota.Bible.Verse do
+defmodule Nota.Models.Verse do
   use Ecto.Schema
 
   import Ecto.Query
 
-  alias Nota.Annotations.Annotation
-  alias Nota.Bible.VerseFavorite
+  alias Nota.Models.{Annotation, VerseFavorite}
 
   schema "verses" do
     field(:book_number, :integer)

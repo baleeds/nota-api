@@ -1,5 +1,5 @@
 defmodule NotaWeb.Resolvers.Auth do
-  alias Nota.Auth
+  alias Nota.Services.Auth
 
   def get_users(_, _, _) do
     Auth.get_users()
@@ -80,34 +80,6 @@ defmodule NotaWeb.Resolvers.Auth do
   end
 
   def get_user_for_session(_, _, _) do
-    {:error, :unknown}
-  end
-
-  def change_display_name(_, %{input: %{first_name: first_name, last_name: last_name}}, %{
-        context: %{current_user: %{id: user_id}}
-      }) do
-    Auth.update_user_by_id(user_id, %{first_name: first_name, last_name: last_name})
-    |> case do
-      {:ok, user} -> {:ok, user}
-      {:error, error} -> {:error, error}
-    end
-  end
-
-  def change_display_name(_, _, _) do
-    {:error, :unknown}
-  end
-
-  def change_password(_, %{input: %{old_password: old_password, new_password: new_password}}, %{
-        context: %{current_user: %{id: user_id}}
-      }) do
-    Auth.change_password(user_id, old_password, new_password)
-    |> case do
-      {:ok, user} -> {:ok, true}
-      {:error, error} -> {:error, error}
-    end
-  end
-
-  def change_password(_, _, _) do
     {:error, :unknown}
   end
 end

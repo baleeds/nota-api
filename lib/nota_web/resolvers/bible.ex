@@ -1,5 +1,5 @@
 defmodule NotaWeb.Resolvers.Bible do
-  alias Nota.Bible
+  alias Nota.Services.Bible
 
   def get_verse(_, %{id: id}, %{context: context}) do
     Bible.get_verse(id, context)
