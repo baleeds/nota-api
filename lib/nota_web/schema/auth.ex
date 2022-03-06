@@ -6,7 +6,6 @@ defmodule NotaWeb.Schema.Auth do
 
   alias NotaWeb.Resolvers.Auth
 
-  # import Absinthe.Resolution.Helpers, only: [dataloader: 1]
   import NotaWeb.Schema.Helpers, only: [to_global_id: 1]
 
   connection(node_type: :user)

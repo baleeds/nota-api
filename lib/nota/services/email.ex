@@ -1,8 +1,7 @@
-defmodule Nota.Email do
+defmodule Nota.Services.Email do
   import Bamboo.Email
 
-  alias Nota.Auth.User
-  alias Nota.Auth.ResetPasswordToken
+  alias Nota.Models.{User, ResetPasswordToken}
 
   def frontend_url do
     Application.fetch_env!(:nota, :frontend_url)

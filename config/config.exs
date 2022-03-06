@@ -23,15 +23,15 @@ config :phoenix, :json_library, Jason
 config :nota, frontend_url: System.get_env("FRONTEND_URL")
 
 # Guardian
-config :nota, Nota.Auth.Guardian,
+config :nota, Nota.Services.Auth.Guardian,
   issuer: "nota",
   secret_key: System.get_env("JWT_SECRET_KEY"),
   ttl: {4, :weeks},
   allowed_algos: ["HS256"]
 
-config :nota, Nota.Auth.AccessPipeline,
-  module: Nota.Auth.Guardian,
-  error_handler: Nota.Auth.ErrorHandler
+config :nota, Nota.Services.Auth.AccessPipeline,
+  module: Nota.Services.Auth.Guardian,
+  error_handler: Nota.Services.Auth.ErrorHandler
 
 # Ueberauth
 config :ueberauth, Ueberauth,

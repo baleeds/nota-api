@@ -1,11 +1,9 @@
-defmodule Nota.Annotations.Annotation do
+defmodule Nota.Models.Annotation do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Nota.Bible.Verse
-  alias Nota.Auth.User
-  alias Nota.Annotations.AnnotationFavorite
+  alias Nota.Models.{Verse, User, AnnotationFavorite}
 
   @required_fields ~w(
     verse_id
@@ -47,33 +45,17 @@ defmodule Nota.Annotations.Annotation do
     |> foreign_key_constraint(:user_id)
   end
 
-  def projection(nil) do
-    from(a in __MODULE__,
-      select: %__MODULE__{
-        id: a.id,
-        text: a.text,
-        verse_id: a.verse_id,
-        user_id: a.user_id,
-        inserted_at: a.inserted_at,
-        updated_at: a.updated_at,
-        is_favorite: false
-      }
+  def include_is_favorite(query, nil) do
+    from(a in query,
+      select_merge: %{is_favorite: false}
     )
   end
 
-  def projection(user_id) do
-    from(a in __MODULE__,
+  def include_is_favorite(query, user_id) do
+    from(a in query,
       left_join: f in AnnotationFavorite,
       on: f.user_id == ^user_id and f.annotation_id == a.id,
-      select: %__MODULE__{
-        id: a.id,
-        text: a.text,
-        verse_id: a.verse_id,
-        user_id: a.user_id,
-        inserted_at: a.inserted_at,
-        updated_at: a.updated_at,
-        is_favorite: fragment("? IS NOT NULL", f.id)
-      }
+      select_merge: %{is_favorite: fragment("? IS NOT NULL", f.id)}
     )
   end
 end

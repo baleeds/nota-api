@@ -4,13 +4,12 @@ defmodule NotaWeb.Schema.Annotations do
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :modern
 
-  alias Nota.Bible
-  alias Nota.Auth
+  alias Nota.Models
 
   alias NotaWeb.Resolvers.Annotations
 
-  import Absinthe.Resolution.Helpers, only: [dataloader: 1]
-  import NotaWeb.Schema.Helpers, only: [to_global_id: 1]
+  import Absinthe.Resolution.Helpers
+  import NotaWeb.Schema.Helpers
 
   connection(node_type: :annotation)
 
@@ -31,8 +30,8 @@ defmodule NotaWeb.Schema.Annotations do
       resolve(&Annotations.get_number_of_favorites/3)
     end
 
-    field(:verse, non_null(:verse), resolve: dataloader(Bible.Verse))
-    field(:user, non_null(:user), resolve: dataloader(Auth.User))
+    field(:verse, non_null(:verse), resolve: dataloader_with_context(Models.Verse))
+    field(:user, non_null(:user), resolve: dataloader(Models.User))
   end
 
   object :annotations_queries do
@@ -105,6 +104,8 @@ defmodule NotaWeb.Schema.Annotations do
   object :annotations_mutations do
     field :save_annotation, non_null(:save_annotation_payload) do
       arg(:input, non_null(:save_annotation_input))
+
+      middleware(Absinthe.Relay.Node.ParseIDs, input: [id: :annotation])
 
       resolve(&Annotations.save/3)
     end

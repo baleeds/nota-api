@@ -1,12 +1,11 @@
-defmodule Nota.Auth.Tx.ResetPassword do
+defmodule Nota.Services.Auth.Tx.ResetPassword do
   import Ecto.Query, warn: false
 
   alias Ecto.Multi
-  alias Nota.Auth.User
-  alias Nota.Auth.RefreshToken
-  alias Nota.Auth.ResetPasswordToken
+  alias Nota.Models.{User, RefreshToken, ResetPasswordToken}
   alias Nota.Helpers
-  alias Nota.Email
+  alias Nota.Services.Email
+  alias Nota.Mailer
 
   def call(token, new_password) do
     Multi.new()
@@ -57,7 +56,7 @@ defmodule Nota.Auth.Tx.ResetPassword do
 
   defp send_success_email_tx(_repo, %{user: user}) do
     Email.password_changed(user)
-    |> Nota.Mailer.deliver_later()
+    |> Mailer.deliver_later()
 
     {:ok, true}
   end

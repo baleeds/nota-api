@@ -5,10 +5,8 @@ defmodule NotaWeb.Schema do
   use Absinthe.Relay.Schema, flavor: :modern
   use Absinthe.Relay.Schema.Notation, :modern
 
-  alias Nota.Annotations
-  alias Nota.Bible
-  alias Nota.AnnotationReplies
-  alias Nota.Auth
+  alias Nota.Models
+  alias Nota.Services
 
   import_types(AbsintheErrorPayload.ValidationMessageTypes)
   import_types(Absinthe.Type.Custom)
@@ -17,6 +15,7 @@ defmodule NotaWeb.Schema do
   import_types(__MODULE__.Annotations)
   import_types(__MODULE__.Auth)
   import_types(__MODULE__.AnnotationReplies)
+  import_types(__MODULE__.UserSettings)
 
   query do
     import_fields(:bible_queries)
@@ -26,20 +25,22 @@ defmodule NotaWeb.Schema do
   end
 
   mutation do
+    import_fields(:bible_mutations)
     import_fields(:annotations_mutations)
     import_fields(:auth_mutations)
     import_fields(:annotation_replies_mutations)
+    import_fields(:user_settings_mutations)
   end
 
   node interface do
     resolve_type(fn
-      %Annotations.Annotation{}, _ ->
+      %Models.Annotation{}, _ ->
         :annotation
 
-      %Auth.User{}, _ ->
+      %Models.User{}, _ ->
         :user
 
-      %AnnotationReplies.AnnotationReply{}, _ ->
+      %Models.AnnotationReply{}, _ ->
         :annotation_reply
 
       _, _ ->
@@ -50,9 +51,9 @@ defmodule NotaWeb.Schema do
   def context(ctx) do
     loader =
       Dataloader.new()
-      |> Dataloader.add_source(Bible.Verse, Bible.data())
-      |> Dataloader.add_source(Annotations.Annotation, Annotations.data())
-      |> Dataloader.add_source(Auth.User, Auth.data())
+      |> Dataloader.add_source(Models.Verse, Services.Bible.data())
+      |> Dataloader.add_source(Models.Annotation, Services.Annotations.data())
+      |> Dataloader.add_source(Models.User, Services.Auth.data())
 
     Map.put(ctx, :loader, loader)
   end

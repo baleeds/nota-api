@@ -1,4 +1,4 @@
-defmodule Nota.Auth do
+defmodule Nota.Services.Auth do
   @moduledoc """
   The Auth context.
   """
@@ -7,9 +7,8 @@ defmodule Nota.Auth do
 
   alias Ecto.Multi
   alias Nota.Repo
-  alias Nota.Auth.User
-  alias Nota.Auth.Guardian
-  alias Nota.Auth.RefreshToken
+  alias Nota.Models.{User, RefreshToken}
+  alias Nota.Services.Auth.Guardian
 
   def data() do
     Dataloader.Ecto.new(Repo, query: &query/2)
@@ -33,6 +32,12 @@ defmodule Nota.Auth do
 
   def update_user(%User{} = user, attrs) do
     user
+    |> User.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def update_user_by_id(id, attrs) do
+    get_user!(id)
     |> User.changeset(attrs)
     |> Repo.update()
   end

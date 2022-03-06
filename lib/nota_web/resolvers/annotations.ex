@@ -1,6 +1,5 @@
 defmodule NotaWeb.Resolvers.Annotations do
-  alias Nota.Annotations
-  alias Nota.AnnotationReplies
+  alias Nota.Services.{Annotations, AnnotationReplies}
   alias Nota.Repo
   alias Absinthe.Relay.Connection
 
@@ -12,7 +11,9 @@ defmodule NotaWeb.Resolvers.Annotations do
     Annotations.get_annotation(id, nil)
   end
 
-  def get_my_annotations(_, args, %{context: %{current_user: %{id: user_id}}}) do
+  def get_my_annotations(_, args, %{context: %{current_user: %{id: user_id}} = context}) do
+    IO.inspect(context)
+
     Annotations.get_my_annotations(user_id, args)
     |> Connection.from_query(&Repo.all/1, args)
   end
@@ -61,7 +62,7 @@ defmodule NotaWeb.Resolvers.Annotations do
     end
   end
 
-  def save(_, _, _), do: {:error, "Unauthorized"}
+  def save(_, _, _), do: {:error, :unknown}
 
   def delete_annotation(_, %{annotation_id: annotation_id}, %{
         context: %{current_user: %{id: user_id}}

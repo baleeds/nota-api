@@ -19,6 +19,10 @@ defmodule NotaWeb.Middleware.FormatErrorCodes do
     "Incorrect email or password"
   end
 
+  defp format_atom(:invalid_password) do
+    "Password is incorrect or invalid"
+  end
+
   defp format_atom(:unauthenticated) do
     "You must be authenticated to perform this action"
   end

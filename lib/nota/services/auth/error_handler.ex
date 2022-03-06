@@ -1,4 +1,4 @@
-defmodule Nota.Auth.ErrorHandler do
+defmodule Nota.Services.Auth.ErrorHandler do
   @moduledoc false
 
   import Plug.Conn

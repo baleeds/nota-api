@@ -1,8 +1,7 @@
-defmodule Nota.Auth.User do
+defmodule Nota.Models.User do
   use Ecto.Schema
 
   alias __MODULE__
-  # alias Nota.Annotations.Annotation
 
   import Ecto.Changeset
 
