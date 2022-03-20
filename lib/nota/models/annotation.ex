@@ -29,6 +29,7 @@ defmodule Nota.Models.Annotation do
     field(:deleted_at, :utc_datetime)
 
     field(:is_favorite, :boolean, virtual: true)
+    field(:is_mine, :boolean, virtual: true)
 
     belongs_to(:verse, Verse, type: :integer)
     belongs_to(:user, User)
@@ -47,7 +48,9 @@ defmodule Nota.Models.Annotation do
 
   def include_is_favorite(query, nil) do
     from(a in query,
-      select_merge: %{is_favorite: false}
+      left_join: f in AnnotationFavorite,
+      on: true == false,
+      select_merge: %{is_favorite: fragment("? IS NOT NULL", f.id)}
     )
   end
 
@@ -57,5 +60,45 @@ defmodule Nota.Models.Annotation do
       on: f.user_id == ^user_id and f.annotation_id == a.id,
       select_merge: %{is_favorite: fragment("? IS NOT NULL", f.id)}
     )
+  end
+
+  def include_is_mine(query, nil) do
+    from(a in query,
+      select_merge: %{is_mine: false}
+    )
+  end
+
+  def include_is_mine(query, user_id) do
+    from(a in query,
+      select_merge: %{is_mine: a.user_id == ^user_id}
+    )
+  end
+
+  def order_by_is_mine(query, nil) do
+    query
+  end
+
+  def order_by_is_mine(query, user_id) do
+    query
+    |> order_by([a], desc: a.user_id == ^user_id)
+  end
+
+  def where_is_favorite(query, %{is_favorite: is_favorite}) do
+    query
+    |> where([a, f], fragment("? IS NOT NULL", f.id) == ^is_favorite)
+  end
+
+  def where_is_favorite(query, _) do
+    query
+  end
+
+  def where_is_mine(query, %{current_user_id: current_user_id, is_mine: is_mine})
+      when not is_nil(current_user_id) do
+    query
+    |> where([a], a.user_id == ^current_user_id == ^is_mine)
+  end
+
+  def where_is_mine(query, _) do
+    query
   end
 end

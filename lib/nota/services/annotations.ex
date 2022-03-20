@@ -25,6 +25,20 @@ defmodule Nota.Services.Annotations do
     queryable
   end
 
+  def get_annotations(args) do
+    current_user_id = Map.get(args, :current_user_id)
+
+    Annotation
+    |> Annotation.include_is_favorite(current_user_id)
+    |> Annotation.include_is_mine(current_user_id)
+    |> Annotation.order_by_is_mine(current_user_id)
+    |> order_by([a, f], desc_nulls_last: f.inserted_at)
+    |> order_by([a, f], desc: a.inserted_at)
+    |> Annotation.where_is_favorite(args)
+    |> Annotation.where_is_mine(args)
+    |> Query.where_from_args(args, [:verse_id, :user_id])
+  end
+
   def get_my_annotations(user_id, args) do
     Annotation
     |> Annotation.include_is_favorite(user_id)

@@ -19,6 +19,7 @@ defmodule NotaWeb.Schema.Annotations do
     field(:user_id, non_null(:id), resolve: to_global_id(:user))
 
     field(:is_favorite, non_null(:boolean))
+    field(:is_mine, non_null(:boolean))
     field(:inserted_at, non_null(:datetime))
     field(:updated_at, non_null(:datetime))
 
@@ -43,30 +44,15 @@ defmodule NotaWeb.Schema.Annotations do
       resolve(&Annotations.get/3)
     end
 
-    connection field(:my_annotations, node_type: :annotation) do
-      arg(:verse_id, :id)
-
-      middleware(NotaWeb.Middleware.Auth)
-
-      resolve(&Annotations.get_my_annotations/3)
-    end
-
-    connection field(:public_annotations, node_type: :annotation) do
+    connection field(:annotations, node_type: :annotation) do
       arg(:user_id, :id)
       arg(:verse_id, :id)
+      arg(:is_favorite, :boolean)
+      arg(:is_mine, :boolean)
 
       middleware(Absinthe.Relay.Node.ParseIDs, user_id: :user)
 
-      resolve(&Annotations.get_public_annotations/3)
-    end
-
-    connection field(:favorite_annotations, node_type: :annotation) do
-      arg(:user_id, :id)
-
-      middleware(NotaWeb.Middleware.Auth)
-      middleware(Absinthe.Relay.Node.ParseIDs, user_id: :user)
-
-      resolve(&Annotations.get_favorite_annotations/3)
+      resolve(&Annotations.get_annotations/3)
     end
   end
 

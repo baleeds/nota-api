@@ -32,6 +32,18 @@ defmodule NotaWeb.Resolvers.Annotations do
     |> Connection.from_query(&Repo.all/1, args)
   end
 
+  def get_annotations(_, args, %{context: %{current_user: %{id: user_id}}}) do
+    args
+    |> Map.put(:current_user_id, user_id)
+    |> Annotations.get_annotations()
+    |> Connection.from_query(&Repo.all/1, args)
+  end
+
+  def get_annotations(_, args, _) do
+    Annotations.get_annotations(args)
+    |> Connection.from_query(&Repo.all/1, args)
+  end
+
   def get_number_of_replies(%{id: annotation_id}, _, _) do
     AnnotationReplies.get_number_of_replies(annotation_id)
     |> case do
@@ -56,10 +68,6 @@ defmodule NotaWeb.Resolvers.Annotations do
     input
     |> Map.put(:user_id, user_id)
     |> Annotations.save_annotation()
-    |> case do
-      {:ok, annotation} -> {:ok, annotation}
-      e -> e
-    end
   end
 
   def save(_, _, _), do: {:error, :unknown}
