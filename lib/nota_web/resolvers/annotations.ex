@@ -68,6 +68,10 @@ defmodule NotaWeb.Resolvers.Annotations do
     input
     |> Map.put(:user_id, user_id)
     |> Annotations.save_annotation()
+    |> case do
+      {:ok, annotation} -> Annotations.get_annotation(annotation.id, user_id)
+      {:error, error} -> {:error, error}
+    end
   end
 
   def save(_, _, _), do: {:error, :unknown}

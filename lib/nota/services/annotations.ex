@@ -66,8 +66,7 @@ defmodule Nota.Services.Annotations do
   end
 
   def get_annotation(id, user_id) do
-    Annotation
-    |> Annotation.include_is_favorite(user_id)
+    get_annotations(%{current_user_id: user_id})
     |> where(id: ^id)
     |> Repo.Extensions.one()
   end
